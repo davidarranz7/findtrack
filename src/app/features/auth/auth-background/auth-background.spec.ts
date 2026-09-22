@@ -1,11 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
 import { vi } from 'vitest';
-import { Login } from './login';
+import { AuthBackground } from './auth-background';
 
-describe('Login', () => {
-  let component: Login;
-  let fixture: ComponentFixture<Login>;
+describe('AuthBackground', () => {
+  let component: AuthBackground;
+  let fixture: ComponentFixture<AuthBackground>;
 
   beforeEach(async () => {
     Object.defineProperty(window, 'matchMedia', {
@@ -23,11 +22,10 @@ describe('Login', () => {
     });
 
     await TestBed.configureTestingModule({
-      imports: [Login],
-      providers: [provideRouter([])],
+      imports: [AuthBackground],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Login);
+    fixture = TestBed.createComponent(AuthBackground);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

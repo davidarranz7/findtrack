@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.auth-container {
+  max-width: 430px;
+}
+
+.form-control {
+  border-color: #d8dee8;
+
+  &:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.12);
+  }
+
+  &::placeholder {
+    color: #9aa5b1;
+  }
+}
+
+.form-check-input {
+  &:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.12);
+  }
+}
+
+a {
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
