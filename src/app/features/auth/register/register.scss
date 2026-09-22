@@ -1,0 +1,153 @@
+:host {
+  display: block;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 440px;
+}
+
+.card {
+  border-color: #e7ebf0;
+}
+
+.form-label {
+  margin-bottom: 0.4rem;
+}
+
+.form-control {
+  border-color: #d8dee8;
+
+  &:focus {
+    z-index: 3;
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.12);
+  }
+
+  &::placeholder {
+    color: #9aa5b1;
+  }
+}
+
+.password-toggle {
+  width: 44px;
+  border-color: #d8dee8;
+  color: #6c757d;
+  background: #fff;
+
+  &:hover {
+    border-color: #d8dee8;
+    color: var(--bs-primary);
+    background: #f8f9fa;
+  }
+
+  &:focus {
+    z-index: 3;
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.12);
+  }
+
+  i {
+    font-size: 1rem;
+  }
+}
+
+.password-strength {
+  padding: 0.75rem;
+  border: 1px solid #e7ebf0;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+}
+
+.password-progress {
+  height: 6px;
+  overflow: hidden;
+  background: #e9ecef;
+  border-radius: 999px;
+
+  .progress-bar {
+    border-radius: 999px;
+    transition:
+      width 0.25s ease,
+      background-color 0.25s ease;
+  }
+}
+
+.password-strength-label {
+  transition: color 0.25s ease;
+}
+
+.password-strength-weak {
+  .password-strength-label {
+    color: var(--bs-danger);
+  }
+
+  .progress-bar {
+    background: var(--bs-danger);
+  }
+}
+
+.password-strength-minimum {
+  .password-strength-label {
+    color: var(--bs-orange);
+  }
+
+  .progress-bar {
+    background: var(--bs-orange);
+  }
+}
+
+.password-strength-medium {
+  .password-strength-label {
+    color: #9a7500;
+  }
+
+  .progress-bar {
+    background: var(--bs-warning);
+  }
+}
+
+.password-strength-excellent {
+  .password-strength-label {
+    color: var(--bs-success);
+  }
+
+  .progress-bar {
+    background: var(--bs-success);
+  }
+}
+
+.password-requirements {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1rem;
+}
+
+.requirement {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #7b8794;
+  transition: color 0.2s ease;
+
+  i {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+  }
+
+  &.requirement-valid {
+    color: var(--bs-success);
+  }
+}
+
+a {
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .password-requirements {
+    grid-template-columns: 1fr;
+  }
+}

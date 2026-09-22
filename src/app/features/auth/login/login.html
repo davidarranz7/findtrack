@@ -10,30 +10,25 @@
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="mb-3">
-            <label for="email" class="form-label small fw-medium text-dark">
-              Correo electrónico
+            <label for="identifier" class="form-label small fw-medium text-dark">
+              Usuario o correo electrónico
             </label>
 
             <input
-              id="email"
-              type="email"
+              id="identifier"
+              type="text"
               class="form-control form-control-sm py-2"
-              formControlName="email"
-              placeholder="tu@email.com"
-              autocomplete="email"
+              formControlName="identifier"
+              placeholder="Usuario o correo electrónico"
+              autocomplete="username"
             />
 
             @if (
-              loginForm.controls.email.touched && loginForm.controls.email.hasError('required')
+              loginForm.controls.identifier.touched &&
+              loginForm.controls.identifier.hasError('required')
             ) {
               <small class="text-danger d-block mt-1">
-                El correo electrónico es obligatorio.
-              </small>
-            }
-
-            @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('email')) {
-              <small class="text-danger d-block mt-1">
-                Introduce un correo electrónico válido.
+                Introduce tu usuario o correo electrónico.
               </small>
             }
           </div>
@@ -41,29 +36,36 @@
           <div class="mb-3">
             <label for="password" class="form-label small fw-medium text-dark"> Contraseña </label>
 
-            <input
-              id="password"
-              type="password"
-              class="form-control form-control-sm py-2"
-              formControlName="password"
-              placeholder="Introduce tu contraseña"
-              autocomplete="current-password"
-            />
+            <div class="input-group">
+              <input
+                id="password"
+                [type]="showPassword() ? 'text' : 'password'"
+                class="form-control form-control-sm py-2"
+                formControlName="password"
+                placeholder="Introduce tu contraseña"
+                autocomplete="current-password"
+              />
+
+              <button
+                type="button"
+                class="btn btn-outline-secondary password-toggle"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                [attr.aria-pressed]="showPassword()"
+              >
+                <i
+                  class="bi"
+                  [class.bi-eye]="!showPassword()"
+                  [class.bi-eye-slash]="showPassword()"
+                ></i>
+              </button>
+            </div>
 
             @if (
               loginForm.controls.password.touched &&
               loginForm.controls.password.hasError('required')
             ) {
               <small class="text-danger d-block mt-1"> La contraseña es obligatoria. </small>
-            }
-
-            @if (
-              loginForm.controls.password.touched &&
-              loginForm.controls.password.hasError('minlength')
-            ) {
-              <small class="text-danger d-block mt-1">
-                La contraseña debe tener al menos 8 caracteres.
-              </small>
             }
           </div>
 
@@ -85,7 +87,6 @@
 
         <div class="text-center mt-4 small text-secondary">
           <span>¿No tienes cuenta?</span>
-
           <a routerLink="/register" class="text-primary text-decoration-none fw-medium ms-1">
             Crear una cuenta
           </a>

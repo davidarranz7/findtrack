@@ -1,1 +1,251 @@
-<p>register works!</p>
+<app-auth-background>
+  <div class="auth-container w-100">
+    <app-brand class="mb-4" />
+
+    <section class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4 p-sm-5">
+        <header class="text-center mb-4">
+          <h1 class="h4 fw-bold text-dark mb-0">Crear cuenta</h1>
+        </header>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="username" class="form-label small fw-medium text-dark">Usuario</label>
+            <input
+              id="username"
+              type="text"
+              class="form-control form-control-sm py-2"
+              formControlName="username"
+              placeholder="Elige un nombre de usuario"
+              autocomplete="username"
+            />
+
+            @if (
+              registerForm.controls.username.touched &&
+              registerForm.controls.username.hasError('required')
+            ) {
+              <small class="text-danger d-block mt-1">El usuario es obligatorio.</small>
+            }
+
+            @if (
+              registerForm.controls.username.touched &&
+              registerForm.controls.username.hasError('minlength')
+            ) {
+              <small class="text-danger d-block mt-1"
+                >El usuario debe tener al menos 4 caracteres.</small
+              >
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label small fw-medium text-dark"
+              >Correo electrónico</label
+            >
+            <input
+              id="email"
+              type="email"
+              class="form-control form-control-sm py-2"
+              formControlName="email"
+              placeholder="tu@email.com"
+              autocomplete="email"
+            />
+
+            @if (
+              registerForm.controls.email.touched &&
+              registerForm.controls.email.hasError('required')
+            ) {
+              <small class="text-danger d-block mt-1">El correo electrónico es obligatorio.</small>
+            }
+
+            @if (
+              registerForm.controls.email.touched && registerForm.controls.email.hasError('email')
+            ) {
+              <small class="text-danger d-block mt-1"
+                >Introduce un correo electrónico válido.</small
+              >
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label small fw-medium text-dark">Contraseña</label>
+
+            <div class="input-group">
+              <input
+                id="password"
+                [type]="showPassword() ? 'text' : 'password'"
+                class="form-control form-control-sm py-2"
+                formControlName="password"
+                placeholder="Introduce una contraseña"
+                autocomplete="new-password"
+              />
+
+              <button
+                type="button"
+                class="btn btn-outline-secondary password-toggle"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                [attr.aria-pressed]="showPassword()"
+              >
+                <i
+                  class="bi"
+                  [class.bi-eye]="!showPassword()"
+                  [class.bi-eye-slash]="showPassword()"
+                ></i>
+              </button>
+            </div>
+
+            @if (
+              registerForm.controls.password.touched &&
+              registerForm.controls.password.hasError('required')
+            ) {
+              <small class="text-danger d-block mt-1">La contraseña es obligatoria.</small>
+            }
+
+            @if (
+              registerForm.controls.password.touched &&
+              registerForm.controls.password.hasError('minlength')
+            ) {
+              <small class="text-danger d-block mt-1"
+                >La contraseña debe tener al menos 8 caracteres.</small
+              >
+            }
+
+            @if (registerForm.controls.password.value.length > 0) {
+              <div
+                class="password-strength mt-3"
+                [class.password-strength-weak]="passwordStrength().level === 'weak'"
+                [class.password-strength-minimum]="passwordStrength().level === 'minimum'"
+                [class.password-strength-medium]="passwordStrength().level === 'medium'"
+                [class.password-strength-excellent]="passwordStrength().level === 'excellent'"
+              >
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="small text-secondary">Seguridad de la contraseña</span>
+                  <span class="password-strength-label small fw-semibold">
+                    {{ passwordStrength().label }}
+                  </span>
+                </div>
+
+                <div
+                  class="progress password-progress"
+                  role="progressbar"
+                  aria-label="Seguridad de la contraseña"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [attr.aria-valuenow]="passwordStrength().percentage"
+                >
+                  <div class="progress-bar" [style.width.%]="passwordStrength().percentage"></div>
+                </div>
+
+                <div class="password-requirements mt-3">
+                  <div
+                    class="requirement small"
+                    [class.requirement-valid]="passwordRequirements().length"
+                  >
+                    <i
+                      class="bi"
+                      [class.bi-check-circle-fill]="passwordRequirements().length"
+                      [class.bi-circle]="!passwordRequirements().length"
+                    ></i>
+                    <span>8 caracteres como mínimo</span>
+                  </div>
+
+                  <div
+                    class="requirement small"
+                    [class.requirement-valid]="passwordRequirements().uppercase"
+                  >
+                    <i
+                      class="bi"
+                      [class.bi-check-circle-fill]="passwordRequirements().uppercase"
+                      [class.bi-circle]="!passwordRequirements().uppercase"
+                    ></i>
+                    <span>Una letra mayúscula</span>
+                  </div>
+
+                  <div
+                    class="requirement small"
+                    [class.requirement-valid]="passwordRequirements().number"
+                  >
+                    <i
+                      class="bi"
+                      [class.bi-check-circle-fill]="passwordRequirements().number"
+                      [class.bi-circle]="!passwordRequirements().number"
+                    ></i>
+                    <span>Un número</span>
+                  </div>
+
+                  <div
+                    class="requirement small"
+                    [class.requirement-valid]="passwordRequirements().specialCharacter"
+                  >
+                    <i
+                      class="bi"
+                      [class.bi-check-circle-fill]="passwordRequirements().specialCharacter"
+                      [class.bi-circle]="!passwordRequirements().specialCharacter"
+                    ></i>
+                    <span>Un carácter especial</span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="mb-4">
+            <label for="confirmPassword" class="form-label small fw-medium text-dark"
+              >Confirmar contraseña</label
+            >
+
+            <div class="input-group">
+              <input
+                id="confirmPassword"
+                [type]="showConfirmPassword() ? 'text' : 'password'"
+                class="form-control form-control-sm py-2"
+                formControlName="confirmPassword"
+                placeholder="Repite la contraseña"
+                autocomplete="new-password"
+              />
+
+              <button
+                type="button"
+                class="btn btn-outline-secondary password-toggle"
+                (click)="toggleConfirmPasswordVisibility()"
+                [attr.aria-label]="
+                  showConfirmPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'
+                "
+                [attr.aria-pressed]="showConfirmPassword()"
+              >
+                <i
+                  class="bi"
+                  [class.bi-eye]="!showConfirmPassword()"
+                  [class.bi-eye-slash]="showConfirmPassword()"
+                ></i>
+              </button>
+            </div>
+
+            @if (
+              registerForm.controls.confirmPassword.touched &&
+              registerForm.controls.confirmPassword.hasError('required')
+            ) {
+              <small class="text-danger d-block mt-1">Confirma tu contraseña.</small>
+            }
+
+            @if (
+              registerForm.controls.confirmPassword.touched &&
+              registerForm.hasError('passwordsMismatch')
+            ) {
+              <small class="text-danger d-block mt-1">Las contraseñas no coinciden.</small>
+            }
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-medium">Crear cuenta</button>
+        </form>
+
+        <div class="text-center mt-4 small text-secondary">
+          <span>¿Ya tienes cuenta?</span>
+          <a routerLink="/login" class="text-primary text-decoration-none fw-medium ms-1"
+            >Iniciar sesión</a
+          >
+        </div>
+      </div>
+    </section>
+  </div>
+</app-auth-background>

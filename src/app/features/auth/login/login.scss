@@ -3,19 +3,52 @@
 }
 
 .auth-container {
+  width: 100%;
   max-width: 430px;
+}
+
+.card {
+  border-color: #e7ebf0;
+}
+
+.form-label {
+  margin-bottom: 0.4rem;
 }
 
 .form-control {
   border-color: #d8dee8;
 
   &:focus {
+    z-index: 3;
     border-color: var(--bs-primary);
     box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.12);
   }
 
   &::placeholder {
     color: #9aa5b1;
+  }
+}
+
+.password-toggle {
+  width: 44px;
+  border-color: #d8dee8;
+  color: #6c757d;
+  background: #fff;
+
+  &:hover {
+    border-color: #d8dee8;
+    color: var(--bs-primary);
+    background: #f8f9fa;
+  }
+
+  &:focus {
+    z-index: 3;
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.12);
+  }
+
+  i {
+    font-size: 1rem;
   }
 }
 

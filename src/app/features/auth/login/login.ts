@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AuthBackground } from '../auth-background/auth-background';
 import { AppBrand } from '../../../shared/ui/app-brand/app-brand';
+import { AuthBackground } from '../auth-background/auth-background';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +13,17 @@ import { AppBrand } from '../../../shared/ui/app-brand/app-brand';
 export class Login {
   private readonly formBuilder = inject(FormBuilder);
 
+  protected readonly showPassword = signal(false);
+
   protected readonly loginForm = this.formBuilder.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
+    identifier: ['', Validators.required],
+    password: ['', Validators.required],
     rememberMe: [false],
   });
+
+  protected togglePasswordVisibility(): void {
+    this.showPassword.update((visible) => !visible);
+  }
 
   protected onSubmit(): void {
     if (this.loginForm.invalid) {
