@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.sidebar {
+  width: 250px;
+  padding: 1rem;
+}
+
+.sidebar-brand {
+  padding: 0.25rem 0.5rem 1.5rem;
+}
+
+.sidebar-navigation {
+  .nav-link {
+    padding: 0.65rem 0.75rem;
+    border-radius: 0.5rem;
+    color: #5f6673;
+    font-size: 0.875rem;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    &:hover {
+      background-color: #f3f6fb;
+      color: #212529;
+    }
+
+    &.active {
+      background-color: var(--bs-primary);
+      color: #fff;
+    }
+  }
+}
