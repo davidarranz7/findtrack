@@ -14,7 +14,7 @@ describe('AppShell', () => {
 
     fixture = TestBed.createComponent(AppShell);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -23,6 +23,13 @@ describe('AppShell', () => {
 
   it('should render the sidebar', () => {
     const compiled = fixture.nativeElement as HTMLElement;
+
     expect(compiled.querySelector('app-sidebar')).toBeTruthy();
+  });
+
+  it('should render the header', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-header')).toBeTruthy();
   });
 });

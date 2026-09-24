@@ -1,8 +1,10 @@
 <div class="app-shell d-flex">
   <app-sidebar />
 
-  <div class="app-content flex-grow-1">
-    <main class="h-100">
+  <div class="app-content d-flex flex-column flex-grow-1">
+    <app-header />
+
+    <main class="app-main flex-grow-1">
       <router-outlet />
     </main>
   </div>

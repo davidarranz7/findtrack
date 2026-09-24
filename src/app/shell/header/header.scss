@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+.app-header {
+  height: 64px;
+}
+
+.header-actions {
+  min-width: 0;
+}
+
+.header-search {
+  width: 100%;
+  max-width: 320px;
+}
+
+.header-action-button {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+}
