@@ -1,7 +1,181 @@
 {
-  "users": [],
-  "transactions": [],
-  "budgets": [],
-  "categories": [],
+  "users": [
+    {
+      "id": "user-1",
+      "username": "demo",
+      "email": "demo@finora.app",
+      "password": "Demo123!"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "transaction-1",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2200,
+      "description": "Nómina septiembre",
+      "categoryId": "category-salary",
+      "date": "2026-09-01",
+      "paymentMethod": "bankTransfer",
+      "tagIds": ["tag-recurring"],
+      "notes": ""
+    },
+    {
+      "id": "transaction-2",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 350,
+      "description": "Proyecto freelance",
+      "categoryId": "category-freelance",
+      "date": "2026-09-05",
+      "paymentMethod": "bankTransfer",
+      "tagIds": [],
+      "notes": ""
+    },
+    {
+      "id": "transaction-3",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 750,
+      "description": "Alquiler",
+      "categoryId": "category-housing",
+      "date": "2026-09-02",
+      "paymentMethod": "bankTransfer",
+      "tagIds": ["tag-essential", "tag-recurring"],
+      "notes": ""
+    },
+    {
+      "id": "transaction-4",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 165.4,
+      "description": "Supermercado",
+      "categoryId": "category-food",
+      "date": "2026-09-08",
+      "paymentMethod": "card",
+      "tagIds": ["tag-essential"],
+      "notes": ""
+    },
+    {
+      "id": "transaction-5",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 45,
+      "description": "Transporte",
+      "categoryId": "category-transport",
+      "date": "2026-09-12",
+      "paymentMethod": "card",
+      "tagIds": ["tag-essential"],
+      "notes": ""
+    },
+    {
+      "id": "transaction-6",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 62.5,
+      "description": "Cena",
+      "categoryId": "category-leisure",
+      "date": "2026-09-18",
+      "paymentMethod": "card",
+      "tagIds": ["tag-personal"],
+      "notes": ""
+    }
+  ],
+  "budgets": [
+    {
+      "id": "budget-1",
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 300,
+      "month": "2026-09"
+    },
+    {
+      "id": "budget-2",
+      "userId": "user-1",
+      "categoryId": "category-transport",
+      "amount": 100,
+      "month": "2026-09"
+    },
+    {
+      "id": "budget-3",
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 150,
+      "month": "2026-09"
+    },
+    {
+      "id": "budget-4",
+      "userId": "user-1",
+      "categoryId": "category-health",
+      "amount": 80,
+      "month": "2026-09"
+    }
+  ],
+  "categories": [
+    {
+      "id": "category-salary",
+      "userId": null,
+      "name": "Salario",
+      "type": "income",
+      "icon": "bi-wallet2",
+      "color": "#198754"
+    },
+    {
+      "id": "category-freelance",
+      "userId": null,
+      "name": "Freelance",
+      "type": "income",
+      "icon": "bi-laptop",
+      "color": "#0d6efd"
+    },
+    {
+      "id": "category-housing",
+      "userId": null,
+      "name": "Vivienda",
+      "type": "expense",
+      "icon": "bi-house",
+      "color": "#dc3545"
+    },
+    {
+      "id": "category-food",
+      "userId": null,
+      "name": "Alimentación",
+      "type": "expense",
+      "icon": "bi-basket",
+      "color": "#fd7e14"
+    },
+    {
+      "id": "category-transport",
+      "userId": null,
+      "name": "Transporte",
+      "type": "expense",
+      "icon": "bi-car-front",
+      "color": "#6f42c1"
+    },
+    {
+      "id": "category-leisure",
+      "userId": null,
+      "name": "Ocio",
+      "type": "expense",
+      "icon": "bi-controller",
+      "color": "#d63384"
+    },
+    {
+      "id": "category-health",
+      "userId": null,
+      "name": "Salud",
+      "type": "expense",
+      "icon": "bi-heart-pulse",
+      "color": "#20c997"
+    },
+    {
+      "id": "category-other",
+      "userId": null,
+      "name": "Otros",
+      "type": "both",
+      "icon": "bi-three-dots",
+      "color": "#6c757d"
+    }
+  ],
   "tags": []
 }
