@@ -1,27 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Overview } from './overview';
 
-import { Dashboard } from './dashboard';
-
-describe('Dashboard', () => {
-  let component: Dashboard;
-  let fixture: ComponentFixture<Dashboard>;
+describe('Overview', () => {
+  let component: Overview;
+  let fixture: ComponentFixture<Overview>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Dashboard],
+      imports: [Overview],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Dashboard);
+    fixture = TestBed.createComponent(Overview);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render the dashboard title', () => {
+  it('should render the overview title', () => {
     const compiled = fixture.nativeElement as HTMLElement;
+
     expect(compiled.querySelector('h1')?.textContent).toContain('Resumen');
   });
 });

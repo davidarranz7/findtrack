@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AppBrand } from '../../../shared/ui/app-brand/app-brand';
+import { AppBrand } from '../../../shared/app-brand/app-brand';
 import { AuthBackground } from '../auth-background/auth-background';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AppBrand } from '../../shared/ui/app-brand/app-brand';
+import { AppBrand } from '../../shared/app-brand/app-brand';
 
 interface NavigationItem {
   label: string;

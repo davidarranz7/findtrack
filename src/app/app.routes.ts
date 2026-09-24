@@ -11,9 +11,9 @@ export const routes: Routes = [
       import('./shell/app-shell/app-shell').then((component) => component.AppShell),
     children: [
       {
-        path: 'dashboard',
+        path: '',
         loadChildren: () =>
-          import('./features/dashboard/dashboard.routes').then((routes) => routes.DASHBOARD_ROUTES),
+          import('./features/finance/finance.routes').then((routes) => routes.FINANCE_ROUTES),
       },
     ],
   },
