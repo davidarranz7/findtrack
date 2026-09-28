@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { map, Observable, switchMap, throwError } from 'rxjs';
+import { map, Observable, switchMap, tap, throwError } from 'rxjs';
 
 import { User } from '../models/user';
 
@@ -69,6 +69,32 @@ export class AuthService {
         username: createdUser.username,
         email: createdUser.email,
       })),
+    );
+  }
+
+  login(identifier: string, password: string): Observable<AuthenticatedUser> {
+    const normalizedIdentifier = identifier.trim().toLowerCase();
+
+    return this.http.get<User[]>(this.apiUrl).pipe(
+      map((users) => {
+        const user = users.find(
+          (currentUser) =>
+            (currentUser.username.toLowerCase() === normalizedIdentifier ||
+              currentUser.email.toLowerCase() === normalizedIdentifier) &&
+            currentUser.password === password,
+        );
+
+        if (!user) {
+          throw new Error('INVALID_CREDENTIALS');
+        }
+
+        return {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        };
+      }),
+      tap((user) => this.currentUserState.set(user)),
     );
   }
 

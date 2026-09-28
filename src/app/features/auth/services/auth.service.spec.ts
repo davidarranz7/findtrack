@@ -169,4 +169,104 @@ describe('AuthService', () => {
 
     expect(receivedError?.message).toBe('EMAIL_ALREADY_EXISTS');
   });
+
+  it('should login with username', () => {
+    let result:
+      | {
+          id: string;
+          username: string;
+          email: string;
+        }
+      | undefined;
+
+    service.login('demo', 'Demo123!').subscribe((user) => {
+      result = user;
+    });
+
+    const request = httpTesting.expectOne('http://localhost:3000/users');
+
+    expect(request.request.method).toBe('GET');
+
+    request.flush([
+      {
+        id: 'user-1',
+        username: 'demo',
+        email: 'demo@finora.app',
+        password: 'Demo123!',
+      },
+    ]);
+
+    expect(result).toEqual({
+      id: 'user-1',
+      username: 'demo',
+      email: 'demo@finora.app',
+    });
+
+    expect(service.currentUser()).toEqual(result);
+    expect(service.isAuthenticated()).toBe(true);
+  });
+
+  it('should login with email', () => {
+    let result:
+      | {
+          id: string;
+          username: string;
+          email: string;
+        }
+      | undefined;
+
+    service.login('DEMO@FINORA.APP', 'Demo123!').subscribe((user) => {
+      result = user;
+    });
+
+    const request = httpTesting.expectOne('http://localhost:3000/users');
+
+    expect(request.request.method).toBe('GET');
+
+    request.flush([
+      {
+        id: 'user-1',
+        username: 'demo',
+        email: 'demo@finora.app',
+        password: 'Demo123!',
+      },
+    ]);
+
+    expect(result).toEqual({
+      id: 'user-1',
+      username: 'demo',
+      email: 'demo@finora.app',
+    });
+
+    expect(service.currentUser()).toEqual(result);
+    expect(service.isAuthenticated()).toBe(true);
+  });
+
+  it('should reject invalid credentials', () => {
+    let receivedError: Error | undefined;
+
+    service.login('demo', 'WrongPassword').subscribe({
+      error: (error: Error) => {
+        receivedError = error;
+      },
+    });
+
+    const request = httpTesting.expectOne('http://localhost:3000/users');
+
+    expect(request.request.method).toBe('GET');
+
+    request.flush([
+      {
+        id: 'user-1',
+        username: 'demo',
+        email: 'demo@finora.app',
+        password: 'Demo123!',
+      },
+    ]);
+
+    expect(receivedError?.message).toBe('INVALID_CREDENTIALS');
+
+    expect(service.currentUser()).toBeNull();
+    expect(service.isAuthenticated()).toBe(false);
+  });
 });

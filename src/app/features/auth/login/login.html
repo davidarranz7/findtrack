@@ -8,7 +8,7 @@
           <h1 class="h4 fw-bold text-dark mb-0">Iniciar sesión</h1>
         </header>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="isSubmitting()">
           <div class="mb-3">
             <label for="identifier" class="form-label small fw-medium text-dark">
               Usuario o correo electrónico
@@ -57,6 +57,7 @@
                   class="bi"
                   [class.bi-eye]="!showPassword()"
                   [class.bi-eye-slash]="showPassword()"
+                  aria-hidden="true"
                 ></i>
               </button>
             </div>
@@ -82,11 +83,32 @@
             </label>
           </div>
 
-          <button type="submit" class="btn btn-primary w-100 py-2 fw-medium">Iniciar sesión</button>
+          @if (loginError()) {
+            <div class="alert alert-danger py-2 small" role="alert" aria-live="assertive">
+              <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
+
+              {{ loginError() }}
+            </div>
+          }
+
+          <button
+            type="submit"
+            class="btn btn-primary w-100 py-2 fw-medium"
+            [disabled]="isSubmitting()"
+          >
+            @if (isSubmitting()) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+              Iniciando sesión...
+            } @else {
+              Iniciar sesión
+            }
+          </button>
         </form>
 
         <div class="text-center mt-4 small text-secondary">
           <span>¿No tienes cuenta?</span>
+
           <a routerLink="/register" class="text-primary text-decoration-none fw-medium ms-1">
             Crear una cuenta
           </a>
