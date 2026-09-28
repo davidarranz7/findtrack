@@ -10,7 +10,8 @@
 
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <div class="mb-3">
-            <label for="username" class="form-label small fw-medium text-dark">Usuario</label>
+            <label for="username" class="form-label small fw-medium text-dark"> Usuario </label>
+
             <input
               id="username"
               type="text"
@@ -24,23 +25,68 @@
               registerForm.controls.username.touched &&
               registerForm.controls.username.hasError('required')
             ) {
-              <small class="text-danger d-block mt-1">El usuario es obligatorio.</small>
+              <small class="text-danger d-block mt-1"> El usuario es obligatorio. </small>
             }
 
             @if (
               registerForm.controls.username.touched &&
               registerForm.controls.username.hasError('minlength')
             ) {
-              <small class="text-danger d-block mt-1"
-                >El usuario debe tener al menos 4 caracteres.</small
+              <small class="text-danger d-block mt-1">
+                El usuario debe tener al menos 4 caracteres.
+              </small>
+            }
+
+            @if (usernameAvailability() === 'checking') {
+              <div
+                class="availability-status availability-checking"
+                role="status"
+                aria-live="polite"
               >
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+                <span>Comprobando disponibilidad...</span>
+              </div>
+            }
+
+            @if (usernameAvailability() === 'available') {
+              <div
+                class="availability-status availability-available"
+                role="status"
+                aria-live="polite"
+              >
+                <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+
+                <span>Nombre de usuario disponible.</span>
+              </div>
+            }
+
+            @if (usernameAvailability() === 'unavailable') {
+              <div class="availability-status availability-unavailable" role="alert">
+                <i class="bi bi-x-circle-fill" aria-hidden="true"></i>
+
+                <span>Este nombre de usuario ya está en uso.</span>
+              </div>
+            }
+
+            @if (usernameAvailability() === 'error') {
+              <div
+                class="availability-status availability-checking"
+                role="status"
+                aria-live="polite"
+              >
+                <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+                <span>No se ha podido comprobar la disponibilidad.</span>
+              </div>
             }
           </div>
 
           <div class="mb-3">
-            <label for="email" class="form-label small fw-medium text-dark"
-              >Correo electrónico</label
-            >
+            <label for="email" class="form-label small fw-medium text-dark">
+              Correo electrónico
+            </label>
+
             <input
               id="email"
               type="email"
@@ -54,20 +100,54 @@
               registerForm.controls.email.touched &&
               registerForm.controls.email.hasError('required')
             ) {
-              <small class="text-danger d-block mt-1">El correo electrónico es obligatorio.</small>
+              <small class="text-danger d-block mt-1">
+                El correo electrónico es obligatorio.
+              </small>
             }
 
             @if (
               registerForm.controls.email.touched && registerForm.controls.email.hasError('email')
             ) {
-              <small class="text-danger d-block mt-1"
-                >Introduce un correo electrónico válido.</small
+              <small class="text-danger d-block mt-1">
+                Introduce un correo electrónico válido.
+              </small>
+            }
+
+            @if (emailAvailability() === 'checking') {
+              <div
+                class="availability-status availability-checking"
+                role="status"
+                aria-live="polite"
               >
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+                <span>Comprobando correo electrónico...</span>
+              </div>
+            }
+
+            @if (emailAvailability() === 'unavailable') {
+              <div class="availability-status availability-unavailable" role="alert">
+                <i class="bi bi-x-circle-fill" aria-hidden="true"></i>
+
+                <span>Este correo electrónico ya está registrado.</span>
+              </div>
+            }
+
+            @if (emailAvailability() === 'error') {
+              <div
+                class="availability-status availability-checking"
+                role="status"
+                aria-live="polite"
+              >
+                <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+                <span>No se ha podido comprobar el correo electrónico.</span>
+              </div>
             }
           </div>
 
           <div class="mb-3">
-            <label for="password" class="form-label small fw-medium text-dark">Contraseña</label>
+            <label for="password" class="form-label small fw-medium text-dark"> Contraseña </label>
 
             <div class="input-group">
               <input
@@ -98,16 +178,16 @@
               registerForm.controls.password.touched &&
               registerForm.controls.password.hasError('required')
             ) {
-              <small class="text-danger d-block mt-1">La contraseña es obligatoria.</small>
+              <small class="text-danger d-block mt-1"> La contraseña es obligatoria. </small>
             }
 
             @if (
               registerForm.controls.password.touched &&
               registerForm.controls.password.hasError('minlength')
             ) {
-              <small class="text-danger d-block mt-1"
-                >La contraseña debe tener al menos 8 caracteres.</small
-              >
+              <small class="text-danger d-block mt-1">
+                La contraseña debe tener al menos 8 caracteres.
+              </small>
             }
 
             @if (registerForm.controls.password.value.length > 0) {
@@ -116,10 +196,12 @@
                 [class.password-strength-weak]="passwordStrength().level === 'weak'"
                 [class.password-strength-minimum]="passwordStrength().level === 'minimum'"
                 [class.password-strength-medium]="passwordStrength().level === 'medium'"
+                [class.password-strength-strong]="passwordStrength().level === 'strong'"
                 [class.password-strength-excellent]="passwordStrength().level === 'excellent'"
               >
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="small text-secondary">Seguridad de la contraseña</span>
+                  <span class="small text-secondary"> Seguridad de la contraseña </span>
+
                   <span class="password-strength-label small fw-semibold">
                     {{ passwordStrength().label }}
                   </span>
@@ -146,6 +228,7 @@
                       [class.bi-check-circle-fill]="passwordRequirements().length"
                       [class.bi-circle]="!passwordRequirements().length"
                     ></i>
+
                     <span>8 caracteres como mínimo</span>
                   </div>
 
@@ -158,6 +241,7 @@
                       [class.bi-check-circle-fill]="passwordRequirements().uppercase"
                       [class.bi-circle]="!passwordRequirements().uppercase"
                     ></i>
+
                     <span>Una letra mayúscula</span>
                   </div>
 
@@ -170,6 +254,7 @@
                       [class.bi-check-circle-fill]="passwordRequirements().number"
                       [class.bi-circle]="!passwordRequirements().number"
                     ></i>
+
                     <span>Un número</span>
                   </div>
 
@@ -182,6 +267,7 @@
                       [class.bi-check-circle-fill]="passwordRequirements().specialCharacter"
                       [class.bi-circle]="!passwordRequirements().specialCharacter"
                     ></i>
+
                     <span>Un carácter especial</span>
                   </div>
                 </div>
@@ -190,9 +276,9 @@
           </div>
 
           <div class="mb-4">
-            <label for="confirmPassword" class="form-label small fw-medium text-dark"
-              >Confirmar contraseña</label
-            >
+            <label for="confirmPassword" class="form-label small fw-medium text-dark">
+              Confirmar contraseña
+            </label>
 
             <div class="input-group">
               <input
@@ -225,25 +311,44 @@
               registerForm.controls.confirmPassword.touched &&
               registerForm.controls.confirmPassword.hasError('required')
             ) {
-              <small class="text-danger d-block mt-1">Confirma tu contraseña.</small>
+              <small class="text-danger d-block mt-1"> Confirma tu contraseña. </small>
             }
 
             @if (
               registerForm.controls.confirmPassword.touched &&
               registerForm.hasError('passwordsMismatch')
             ) {
-              <small class="text-danger d-block mt-1">Las contraseñas no coinciden.</small>
+              <small class="text-danger d-block mt-1"> Las contraseñas no coinciden. </small>
             }
           </div>
 
-          <button type="submit" class="btn btn-primary w-100 py-2 fw-medium">Crear cuenta</button>
+          @if (submitError()) {
+            <div class="alert alert-danger py-2 small" role="alert">
+              {{ submitError() }}
+            </div>
+          }
+
+          <button
+            type="submit"
+            class="btn btn-primary w-100 py-2 fw-medium"
+            [disabled]="isSubmitting() || isCheckingAvailability()"
+          >
+            @if (isSubmitting()) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+              Creando cuenta...
+            } @else {
+              Crear cuenta
+            }
+          </button>
         </form>
 
         <div class="text-center mt-4 small text-secondary">
           <span>¿Ya tienes cuenta?</span>
-          <a routerLink="/login" class="text-primary text-decoration-none fw-medium ms-1"
-            >Iniciar sesión</a
-          >
+
+          <a routerLink="/login" class="text-primary text-decoration-none fw-medium ms-1">
+            Iniciar sesión
+          </a>
         </div>
       </div>
     </section>

@@ -5,6 +5,24 @@
       "username": "demo",
       "email": "demo@finora.app",
       "password": "Demo123!"
+    },
+    {
+      "username": "priemro",
+      "email": "primero@gmail.com",
+      "password": "Piedra123.",
+      "id": "VvJQII-Tx9I"
+    },
+    {
+      "username": "primero",
+      "email": "primero1@gmail.com",
+      "password": "Piedra123.",
+      "id": "rXirHvenoQU"
+    },
+    {
+      "username": "segundo",
+      "email": "segundo@gmail.com",
+      "password": "Piedra123.",
+      "id": "aqhXpvZtCOk"
     }
   ],
   "transactions": [
@@ -177,5 +195,6 @@
       "color": "#6c757d"
     }
   ],
-  "tags": []
+  "tags": [],
+  "$schema": "./node_modules/json-server/schema.json"
 }
