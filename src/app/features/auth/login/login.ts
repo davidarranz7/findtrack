@@ -7,6 +7,8 @@ import { AppBrand } from '../../../shared/app-brand/app-brand';
 import { AuthBackground } from '../auth-background/auth-background';
 import { AuthService } from '../services/auth.service';
 
+type LoginView = 'remembered-account' | 'remembered-password' | 'credentials';
+
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule, RouterLink, AuthBackground, AppBrand],
@@ -19,6 +21,12 @@ export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
+  protected readonly rememberedAccount = this.authService.rememberedAccount;
+
+  protected readonly loginView = signal<LoginView>(
+    this.rememberedAccount() ? 'remembered-account' : 'credentials',
+  );
+
   protected readonly showPassword = signal(false);
   protected readonly isSubmitting = signal(false);
   protected readonly loginError = signal<string | null>(null);
@@ -28,6 +36,36 @@ export class Login {
     password: ['', Validators.required],
     rememberMe: [false],
   });
+
+  protected continueWithRememberedAccount(): void {
+    const account = this.rememberedAccount();
+
+    if (!account) {
+      this.loginView.set('credentials');
+      return;
+    }
+
+    this.loginForm.reset({
+      identifier: account.email,
+      password: '',
+      rememberMe: true,
+    });
+
+    this.loginError.set(null);
+    this.loginView.set('remembered-password');
+  }
+
+  protected useAnotherAccount(): void {
+    this.loginForm.reset({
+      identifier: '',
+      password: '',
+      rememberMe: false,
+    });
+
+    this.loginError.set(null);
+    this.showPassword.set(false);
+    this.loginView.set('credentials');
+  }
 
   protected togglePasswordVisibility(): void {
     this.showPassword.update((visible) => !visible);
@@ -39,13 +77,13 @@ export class Login {
       return;
     }
 
-    const { identifier, password } = this.loginForm.getRawValue();
+    const { identifier, password, rememberMe } = this.loginForm.getRawValue();
 
     this.isSubmitting.set(true);
     this.loginError.set(null);
 
     forkJoin({
-      user: this.authService.login(identifier, password),
+      user: this.authService.login(identifier, password, rememberMe),
       minimumDelay: timer(1200),
     })
       .pipe(finalize(() => this.isSubmitting.set(false)))

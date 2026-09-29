@@ -4,115 +4,269 @@
 
     <section class="card border-0 shadow-sm rounded-4">
       <div class="card-body p-4 p-sm-5">
-        <header class="text-center mb-4">
-          <h1 class="h4 fw-bold text-dark mb-0">Iniciar sesión</h1>
-        </header>
+        @if (loginView() === 'remembered-account') {
+          <header class="text-center mb-4">
+            <h1 class="h4 fw-bold text-dark mb-1">Te damos la bienvenida</h1>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="isSubmitting()">
-          <div class="mb-3">
-            <label for="identifier" class="form-label small fw-medium text-dark">
-              Usuario o correo electrónico
-            </label>
+            <p class="small text-secondary mb-0">Continúa con tu cuenta guardada</p>
+          </header>
 
-            <input
-              id="identifier"
-              type="text"
-              class="form-control form-control-sm py-2"
-              formControlName="identifier"
-              placeholder="Usuario o correo electrónico"
-              autocomplete="username"
-            />
+          @if (rememberedAccount(); as account) {
+            <div class="border rounded-3 p-3 mb-3 bg-light">
+              <div class="d-flex align-items-center gap-3">
+                <div
+                  class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center flex-shrink-0"
+                  style="width: 44px; height: 44px"
+                >
+                  <i class="bi bi-person-fill" aria-hidden="true"></i>
+                </div>
 
-            @if (
-              loginForm.controls.identifier.touched &&
-              loginForm.controls.identifier.hasError('required')
-            ) {
-              <small class="text-danger d-block mt-1">
-                Introduce tu usuario o correo electrónico.
-              </small>
-            }
-          </div>
+                <div class="min-w-0">
+                  <div class="fw-semibold text-dark">
+                    {{ account.username }}
+                  </div>
 
-          <div class="mb-3">
-            <label for="password" class="form-label small fw-medium text-dark"> Contraseña </label>
-
-            <div class="input-group">
-              <input
-                id="password"
-                [type]="showPassword() ? 'text' : 'password'"
-                class="form-control form-control-sm py-2"
-                formControlName="password"
-                placeholder="Introduce tu contraseña"
-                autocomplete="current-password"
-              />
-
-              <button
-                type="button"
-                class="btn btn-outline-secondary password-toggle"
-                (click)="togglePasswordVisibility()"
-                [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
-                [attr.aria-pressed]="showPassword()"
-              >
-                <i
-                  class="bi"
-                  [class.bi-eye]="!showPassword()"
-                  [class.bi-eye-slash]="showPassword()"
-                  aria-hidden="true"
-                ></i>
-              </button>
+                  <div class="small text-secondary text-truncate">
+                    {{ account.email }}
+                  </div>
+                </div>
+              </div>
             </div>
 
-            @if (
-              loginForm.controls.password.touched &&
-              loginForm.controls.password.hasError('required')
-            ) {
-              <small class="text-danger d-block mt-1"> La contraseña es obligatoria. </small>
+            <button
+              type="button"
+              class="btn btn-primary w-100 py-2 fw-medium mb-3"
+              (click)="continueWithRememberedAccount()"
+            >
+              Continuar como {{ account.username }}
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-link w-100 text-decoration-none small"
+              (click)="useAnotherAccount()"
+            >
+              Usar otra cuenta
+            </button>
+          }
+        } @else if (loginView() === 'remembered-password') {
+          <header class="text-center mb-4">
+            <h1 class="h4 fw-bold text-dark mb-1">Iniciar sesión</h1>
+
+            @if (rememberedAccount(); as account) {
+              <p class="small text-secondary mb-0">
+                Continúa como
+                <span class="fw-medium text-dark">
+                  {{ account.username }}
+                </span>
+              </p>
             }
-          </div>
+          </header>
 
-          <div class="form-check mb-4">
-            <input
-              id="rememberMe"
-              type="checkbox"
-              class="form-check-input"
-              formControlName="rememberMe"
-            />
+          @if (rememberedAccount(); as account) {
+            <div class="d-flex align-items-center gap-3 border rounded-3 p-3 mb-4 bg-light">
+              <div
+                class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center flex-shrink-0"
+                style="width: 44px; height: 44px"
+              >
+                <i class="bi bi-person-fill" aria-hidden="true"></i>
+              </div>
 
-            <label for="rememberMe" class="form-check-label small text-secondary">
-              Recordarme
-            </label>
-          </div>
+              <div class="min-w-0">
+                <div class="fw-semibold text-dark">
+                  {{ account.username }}
+                </div>
 
-          @if (loginError()) {
-            <div class="alert alert-danger py-2 small" role="alert" aria-live="assertive">
-              <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
-
-              {{ loginError() }}
+                <div class="small text-secondary text-truncate">
+                  {{ account.email }}
+                </div>
+              </div>
             </div>
           }
 
-          <button
-            type="submit"
-            class="btn btn-primary w-100 py-2 fw-medium"
-            [disabled]="isSubmitting()"
-          >
-            @if (isSubmitting()) {
-              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="isSubmitting()">
+            <div class="mb-4">
+              <label for="rememberedPassword" class="form-label small fw-medium text-dark">
+                Contraseña
+              </label>
 
-              Iniciando sesión...
-            } @else {
-              Iniciar sesión
+              <div class="input-group">
+                <input
+                  id="rememberedPassword"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  class="form-control form-control-sm py-2"
+                  formControlName="password"
+                  placeholder="Introduce tu contraseña"
+                  autocomplete="current-password"
+                />
+
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary password-toggle"
+                  (click)="togglePasswordVisibility()"
+                  [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                  [attr.aria-pressed]="showPassword()"
+                >
+                  <i
+                    class="bi"
+                    [class.bi-eye]="!showPassword()"
+                    [class.bi-eye-slash]="showPassword()"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+              </div>
+
+              @if (
+                loginForm.controls.password.touched &&
+                loginForm.controls.password.hasError('required')
+              ) {
+                <small class="text-danger d-block mt-1"> La contraseña es obligatoria. </small>
+              }
+            </div>
+
+            @if (loginError()) {
+              <div class="alert alert-danger py-2 small" role="alert" aria-live="assertive">
+                <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
+
+                {{ loginError() }}
+              </div>
             }
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100 py-2 fw-medium"
+              [disabled]="isSubmitting()"
+            >
+              @if (isSubmitting()) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+                Iniciando sesión...
+              } @else {
+                Iniciar sesión
+              }
+            </button>
+          </form>
+
+          <button
+            type="button"
+            class="btn btn-link w-100 text-decoration-none small mt-3"
+            (click)="useAnotherAccount()"
+          >
+            Usar otra cuenta
           </button>
-        </form>
+        } @else {
+          <header class="text-center mb-4">
+            <h1 class="h4 fw-bold text-dark mb-0">Iniciar sesión</h1>
+          </header>
 
-        <div class="text-center mt-4 small text-secondary">
-          <span>¿No tienes cuenta?</span>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="isSubmitting()">
+            <div class="mb-3">
+              <label for="identifier" class="form-label small fw-medium text-dark">
+                Usuario o correo electrónico
+              </label>
 
-          <a routerLink="/register" class="text-primary text-decoration-none fw-medium ms-1">
-            Crear una cuenta
-          </a>
-        </div>
+              <input
+                id="identifier"
+                type="text"
+                class="form-control form-control-sm py-2"
+                formControlName="identifier"
+                placeholder="Usuario o correo electrónico"
+                autocomplete="username"
+              />
+
+              @if (
+                loginForm.controls.identifier.touched &&
+                loginForm.controls.identifier.hasError('required')
+              ) {
+                <small class="text-danger d-block mt-1">
+                  Introduce tu usuario o correo electrónico.
+                </small>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label small fw-medium text-dark">
+                Contraseña
+              </label>
+
+              <div class="input-group">
+                <input
+                  id="password"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  class="form-control form-control-sm py-2"
+                  formControlName="password"
+                  placeholder="Introduce tu contraseña"
+                  autocomplete="current-password"
+                />
+
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary password-toggle"
+                  (click)="togglePasswordVisibility()"
+                  [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                  [attr.aria-pressed]="showPassword()"
+                >
+                  <i
+                    class="bi"
+                    [class.bi-eye]="!showPassword()"
+                    [class.bi-eye-slash]="showPassword()"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+              </div>
+
+              @if (
+                loginForm.controls.password.touched &&
+                loginForm.controls.password.hasError('required')
+              ) {
+                <small class="text-danger d-block mt-1"> La contraseña es obligatoria. </small>
+              }
+            </div>
+
+            <div class="form-check mb-4">
+              <input
+                id="rememberMe"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="rememberMe"
+              />
+
+              <label for="rememberMe" class="form-check-label small text-secondary">
+                Recordar esta cuenta
+              </label>
+            </div>
+
+            @if (loginError()) {
+              <div class="alert alert-danger py-2 small" role="alert" aria-live="assertive">
+                <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
+
+                {{ loginError() }}
+              </div>
+            }
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100 py-2 fw-medium"
+              [disabled]="isSubmitting()"
+            >
+              @if (isSubmitting()) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+                Iniciando sesión...
+              } @else {
+                Iniciar sesión
+              }
+            </button>
+          </form>
+
+          <div class="text-center mt-4 small text-secondary">
+            <span>¿No tienes cuenta?</span>
+
+            <a routerLink="/register" class="text-primary text-decoration-none fw-medium ms-1">
+              Crear una cuenta
+            </a>
+          </div>
+        }
       </div>
     </section>
   </div>
