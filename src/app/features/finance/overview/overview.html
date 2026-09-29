@@ -1,4 +1,274 @@
 <section class="overview">
-  <h1 class="h4 fw-bold text-dark mb-1">Resumen</h1>
-  <p class="text-secondary mb-0">Vista general de tus finanzas personales.</p>
+  <header class="overview-header">
+    <div>
+      <h1 class="overview-title">Buenos días, {{ userName() }}</h1>
+
+      <p class="overview-subtitle mb-0">Resumen financiero de {{ currentMonthLabel }}</p>
+    </div>
+
+    <div class="overview-header-actions">
+      <button type="button" class="month-selector btn btn-white" disabled>
+        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+
+        <span class="d-flex align-items-center gap-2">
+          <i class="bi bi-calendar3" aria-hidden="true"></i>
+
+          {{ currentMonthLabel }}
+        </span>
+
+        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary new-transaction-button"
+        (click)="openTransactionForm()"
+      >
+        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+
+        Nueva transacción
+      </button>
+    </div>
+  </header>
+
+  <section class="budget-alert" aria-label="Estado de presupuestos">
+    <div class="budget-alert-icon">
+      <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+    </div>
+
+    <div class="flex-grow-1">
+      <p class="budget-alert-title mb-1">Seguimiento de presupuestos</p>
+
+      <p class="budget-alert-text mb-0">
+        Las alertas aparecerán cuando un presupuesto se acerque a su límite.
+      </p>
+    </div>
+  </section>
+
+  @if (loadError()) {
+    <div class="alert alert-danger d-flex align-items-center gap-2 mb-0" role="alert">
+      <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+      <span>{{ loadError() }}</span>
+    </div>
+  }
+
+  <section class="summary-grid" aria-label="Resumen financiero">
+    <article class="summary-card">
+      <div class="summary-card-header">
+        <span class="summary-label"> Balance disponible </span>
+
+        <span class="summary-icon summary-icon-balance">
+          <i class="bi bi-wallet2" aria-hidden="true"></i>
+        </span>
+      </div>
+
+      @if (isLoading()) {
+        <div class="spinner-border spinner-border-sm text-primary my-2" role="status">
+          <span class="visually-hidden"> Cargando... </span>
+        </div>
+      } @else {
+        <p class="summary-value mb-1">
+          {{ formattedBalance() }}
+        </p>
+      }
+
+      <p class="summary-description mb-0">Balance acumulado de tus movimientos</p>
+    </article>
+
+    <article class="summary-card">
+      <div class="summary-card-header">
+        <span class="summary-label"> Ingresos totales </span>
+
+        <span class="summary-icon summary-icon-income">
+          <i class="bi bi-arrow-down" aria-hidden="true"></i>
+        </span>
+      </div>
+
+      @if (isLoading()) {
+        <div class="spinner-border spinner-border-sm text-success my-2" role="status">
+          <span class="visually-hidden"> Cargando... </span>
+        </div>
+      } @else {
+        <p class="summary-value mb-1">
+          {{ formattedIncome() }}
+        </p>
+      }
+
+      <p class="summary-description mb-0">Ingresos de {{ currentMonthLabel }}</p>
+    </article>
+
+    <article class="summary-card">
+      <div class="summary-card-header">
+        <span class="summary-label"> Gastos totales </span>
+
+        <span class="summary-icon summary-icon-expense">
+          <i class="bi bi-arrow-up" aria-hidden="true"></i>
+        </span>
+      </div>
+
+      @if (isLoading()) {
+        <div class="spinner-border spinner-border-sm text-danger my-2" role="status">
+          <span class="visually-hidden"> Cargando... </span>
+        </div>
+      } @else {
+        <p class="summary-value mb-1">
+          {{ formattedExpenses() }}
+        </p>
+      }
+
+      <p class="summary-description mb-0">Gastos de {{ currentMonthLabel }}</p>
+    </article>
+
+    <article class="summary-card">
+      <div class="summary-card-header">
+        <span class="summary-label"> Ahorro del mes </span>
+
+        <span class="summary-icon summary-icon-saving">
+          <i class="bi bi-piggy-bank" aria-hidden="true"></i>
+        </span>
+      </div>
+
+      @if (isLoading()) {
+        <div class="spinner-border spinner-border-sm text-primary my-2" role="status">
+          <span class="visually-hidden"> Cargando... </span>
+        </div>
+      } @else {
+        <p class="summary-value mb-1">
+          {{ formattedSavings() }}
+        </p>
+      }
+
+      <p class="summary-description mb-0">Ingresos menos gastos del mes</p>
+    </article>
+  </section>
+
+  <section class="charts-grid">
+    <article class="overview-card income-expense-card">
+      <header class="card-heading">
+        <div>
+          <h2 class="card-title">Ingresos vs Gastos</h2>
+
+          <p class="card-subtitle mb-0">Histórico de rendimiento mensual</p>
+        </div>
+
+        <div class="chart-legend">
+          <span>
+            <span class="legend-dot legend-income"></span>
+
+            Ingresos
+          </span>
+
+          <span>
+            <span class="legend-dot legend-expense"></span>
+
+            Gastos
+          </span>
+        </div>
+      </header>
+
+      <div class="chart-placeholder">
+        <i class="bi bi-bar-chart" aria-hidden="true"></i>
+
+        <div>
+          <p class="chart-placeholder-title mb-1">Todavía no hay datos para mostrar</p>
+
+          <p class="chart-placeholder-text mb-0">
+            Aquí aparecerá la evolución mensual de ingresos y gastos.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="overview-card expense-distribution-card">
+      <header class="card-heading">
+        <div>
+          <h2 class="card-title">Distribución de Gastos</h2>
+
+          <p class="card-subtitle mb-0">Desglose por categoría del mes</p>
+        </div>
+      </header>
+
+      <div class="chart-placeholder">
+        <i class="bi bi-pie-chart" aria-hidden="true"></i>
+
+        <div>
+          <p class="chart-placeholder-title mb-1">Sin distribución disponible</p>
+
+          <p class="chart-placeholder-text mb-0">
+            Los gastos se agruparán automáticamente por categoría.
+          </p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="details-grid">
+    <article class="overview-card">
+      <header class="card-heading">
+        <div>
+          <h2 class="card-title">Presupuestos del Mes</h2>
+
+          <p class="card-subtitle mb-0">Límites y consumo actual</p>
+        </div>
+
+        <button
+          type="button"
+          class="card-action-button"
+          aria-label="Opciones de presupuestos"
+          disabled
+        >
+          <i class="bi bi-sliders2" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <i class="bi bi-wallet2" aria-hidden="true"></i>
+        </div>
+
+        <p class="empty-state-title mb-1">Sin presupuestos disponibles</p>
+
+        <p class="empty-state-text mb-0">
+          Aquí podrás consultar el progreso de tus presupuestos mensuales.
+        </p>
+      </div>
+    </article>
+
+    <article class="overview-card">
+      <header class="card-heading">
+        <div>
+          <h2 class="card-title">Últimas Transacciones</h2>
+
+          <p class="card-subtitle mb-0">Movimientos registrados recientemente</p>
+        </div>
+
+        <button type="button" class="view-all-button" disabled>Ver todas</button>
+      </header>
+
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <i class="bi bi-receipt" aria-hidden="true"></i>
+        </div>
+
+        <p class="empty-state-title mb-1">Sin transacciones disponibles</p>
+
+        <p class="empty-state-text mb-0">Tus últimos movimientos aparecerán en esta sección.</p>
+      </div>
+    </article>
+  </section>
 </section>
+
+@if (isTransactionFormOpen()) {
+  <div
+    class="transaction-modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Nueva transacción"
+  >
+    <app-transaction-form
+      (closed)="closeTransactionForm()"
+      (created)="handleTransactionCreated($event)"
+    />
+  </div>
+}

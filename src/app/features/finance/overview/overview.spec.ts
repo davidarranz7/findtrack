@@ -22,6 +22,6 @@ describe('Overview', () => {
   it('should render the overview title', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('h1')?.textContent).toContain('Resumen');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Buenos días');
   });
 });

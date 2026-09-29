@@ -1,0 +1,321 @@
+<div class="transaction-modal">
+  <header class="transaction-header">
+    <div class="transaction-header-icon">
+      <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+    </div>
+
+    <div class="flex-grow-1">
+      <h2 class="transaction-title mb-1">Nueva transacción</h2>
+
+      <p class="transaction-subtitle mb-0">
+        Registra un nuevo movimiento de ingreso o gasto personal
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="close-button"
+      aria-label="Cerrar"
+      [disabled]="isSubmitting()"
+      (click)="close()"
+    >
+      <i class="bi bi-x-lg" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="isSubmitting()">
+    <div class="transaction-type-selector" role="group" aria-label="Tipo de transacción">
+      <button
+        type="button"
+        class="transaction-type-button expense-button"
+        [class.active]="transactionForm.controls.type.value === 'expense'"
+        (click)="selectType('expense')"
+      >
+        <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+
+        Gasto
+      </button>
+
+      <button
+        type="button"
+        class="transaction-type-button income-button"
+        [class.active]="transactionForm.controls.type.value === 'income'"
+        (click)="selectType('income')"
+      >
+        <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+
+        Ingreso
+      </button>
+    </div>
+
+    <div class="amount-section">
+      <div class="amount-heading">
+        <label for="amount" class="amount-label"> Importe (€) * </label>
+
+        @if (
+          transactionForm.controls.amount.touched && transactionForm.controls.amount.hasError('min')
+        ) {
+          <span class="amount-error">
+            <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+            Debe ser mayor que 0 €
+          </span>
+        }
+      </div>
+
+      <div
+        class="amount-input-wrapper"
+        [class.expense-amount]="transactionForm.controls.type.value === 'expense'"
+        [class.income-amount]="transactionForm.controls.type.value === 'income'"
+      >
+        <input
+          id="amount"
+          type="number"
+          class="amount-input"
+          formControlName="amount"
+          min="0.01"
+          step="0.01"
+          inputmode="decimal"
+          placeholder="0,00"
+        />
+
+        <span class="amount-currency"> € </span>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="description" class="transaction-label"> Descripción / Concepto * </label>
+
+      <div class="field-input-wrapper">
+        <i class="bi bi-receipt field-icon" aria-hidden="true"></i>
+
+        <input
+          id="description"
+          type="text"
+          class="field-input"
+          formControlName="description"
+          [placeholder]="
+            transactionForm.controls.type.value === 'expense'
+              ? 'Ej. Compra semanal Mercadona'
+              : 'Ej. Nómina septiembre'
+          "
+          maxlength="120"
+        />
+      </div>
+
+      @if (
+        transactionForm.controls.description.touched &&
+        transactionForm.controls.description.hasError('required')
+      ) {
+        <small class="field-error"> Introduce un concepto para la transacción. </small>
+      }
+    </div>
+
+    <div class="transaction-row">
+      <div class="form-field">
+        <label for="category" class="transaction-label">
+          @if (transactionForm.controls.type.value === 'expense') {
+            Categoría *
+          } @else {
+            Origen del ingreso *
+          }
+        </label>
+
+        <div class="field-input-wrapper">
+          <i class="bi bi-tag field-icon" aria-hidden="true"></i>
+
+          <select id="category" class="field-input field-select" formControlName="categoryId">
+            <option value="" disabled>
+              @if (isLoadingCategories()) {
+                Cargando categorías...
+              } @else if (transactionForm.controls.type.value === 'expense') {
+                Selecciona una categoría
+              } @else {
+                Selecciona el origen
+              }
+            </option>
+
+            @for (category of filteredCategories(); track category.id) {
+              <option [value]="category.id">
+                {{ category.name }}
+              </option>
+            }
+          </select>
+        </div>
+
+        @if (categoryLoadError()) {
+          <small class="field-error">
+            {{ categoryLoadError() }}
+          </small>
+        } @else if (
+          transactionForm.controls.categoryId.touched &&
+          transactionForm.controls.categoryId.hasError('required')
+        ) {
+          <small class="field-error">
+            @if (transactionForm.controls.type.value === 'expense') {
+              Selecciona una categoría.
+            } @else {
+              Selecciona el origen del ingreso.
+            }
+          </small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="transactionDate" class="transaction-label"> Fecha * </label>
+
+        <div class="field-input-wrapper">
+          <i class="bi bi-calendar3 field-icon" aria-hidden="true"></i>
+
+          <input id="transactionDate" type="date" class="field-input" formControlName="date" />
+        </div>
+
+        @if (
+          transactionForm.controls.date.touched &&
+          transactionForm.controls.date.hasError('required')
+        ) {
+          <small class="field-error"> Selecciona una fecha. </small>
+        }
+      </div>
+    </div>
+
+    <div class="form-field">
+      <span class="transaction-label">
+        @if (transactionForm.controls.type.value === 'expense') {
+          Método de pago *
+        } @else {
+          Método de cobro *
+        }
+      </span>
+
+      <div class="payment-methods" role="group" aria-label="Método de pago o cobro">
+        <button
+          type="button"
+          class="payment-method-button"
+          [class.active]="transactionForm.controls.paymentMethod.value === 'cash'"
+          (click)="selectPaymentMethod('cash')"
+        >
+          <i class="bi bi-cash" aria-hidden="true"></i>
+
+          Efectivo
+        </button>
+
+        <button
+          type="button"
+          class="payment-method-button"
+          [class.active]="transactionForm.controls.paymentMethod.value === 'card'"
+          (click)="selectPaymentMethod('card')"
+        >
+          <i class="bi bi-credit-card" aria-hidden="true"></i>
+
+          Tarjeta
+        </button>
+
+        <button
+          type="button"
+          class="payment-method-button"
+          [class.active]="transactionForm.controls.paymentMethod.value === 'bankTransfer'"
+          (click)="selectPaymentMethod('bankTransfer')"
+        >
+          <i class="bi bi-bank" aria-hidden="true"></i>
+
+          Transferencia
+        </button>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <span class="transaction-label">
+        Etiquetas
+        <span class="optional-label"> (opcional) </span>
+      </span>
+
+      @if (isLoadingTags()) {
+        <div class="tags-status">
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+          Cargando etiquetas...
+        </div>
+      } @else if (tagLoadError()) {
+        <small class="field-error">
+          {{ tagLoadError() }}
+        </small>
+      } @else if (tags().length === 0) {
+        <p class="empty-tags mb-0">Todavía no tienes etiquetas creadas.</p>
+      } @else {
+        <div class="tag-list">
+          @for (tag of tags(); track tag.id) {
+            <button
+              type="button"
+              class="tag-button"
+              [class.active]="isTagSelected(tag.id)"
+              [attr.aria-pressed]="isTagSelected(tag.id)"
+              (click)="toggleTag(tag.id)"
+            >
+              <i class="bi bi-tag-fill" aria-hidden="true"></i>
+
+              {{ tag.name }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-field">
+      <div class="notes-heading">
+        <label for="notes" class="transaction-label">
+          Notas adicionales
+          <span class="optional-label"> (opcional) </span>
+        </label>
+
+        <span class="character-counter">
+          {{ transactionForm.controls.notes.value.length }}/500
+        </span>
+      </div>
+
+      <textarea
+        id="notes"
+        class="notes-input"
+        formControlName="notes"
+        maxlength="500"
+        rows="3"
+        placeholder="Añade cualquier detalle relevante sobre esta transacción..."
+      ></textarea>
+    </div>
+
+    @if (submitError()) {
+      <div class="alert alert-danger py-2 small" role="alert" aria-live="assertive">
+        <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
+
+        {{ submitError() }}
+      </div>
+    }
+
+    <footer class="transaction-footer">
+      <button
+        type="button"
+        class="btn btn-light cancel-button"
+        [disabled]="isSubmitting()"
+        (click)="close()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary save-button"
+        [disabled]="isSubmitting() || isLoadingCategories()"
+      >
+        @if (isSubmitting()) {
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+          Guardando...
+        } @else {
+          <i class="bi bi-check-lg" aria-hidden="true"></i>
+
+          Guardar transacción
+        }
+      </button>
+    </footer>
+  </form>
+</div>
