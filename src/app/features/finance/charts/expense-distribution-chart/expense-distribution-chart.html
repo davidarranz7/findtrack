@@ -1,0 +1,27 @@
+<div class="expense-distribution">
+  <div class="chart-container">
+    <canvas #chartCanvas role="img" aria-label="Distribución de gastos por categoría"></canvas>
+
+    <div class="chart-center" aria-hidden="true">
+      <strong>
+        {{ formattedTotal() }}
+      </strong>
+
+      <span>Total</span>
+    </div>
+  </div>
+
+  <div class="distribution-legend" aria-label="Categorías de gasto">
+    @for (item of items(); track item.categoryId) {
+      <div class="legend-item">
+        <span class="category-color" [style.background-color]="item.color"></span>
+
+        <span class="category-name">
+          {{ item.categoryName }}
+        </span>
+
+        <span class="category-percentage"> {{ item.percentage.toFixed(1) }}% </span>
+      </div>
+    }
+  </div>
+</div>

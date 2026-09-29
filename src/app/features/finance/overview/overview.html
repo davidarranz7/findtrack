@@ -185,21 +185,39 @@
         <div>
           <h2 class="card-title">Distribución de Gastos</h2>
 
-          <p class="card-subtitle mb-0">Desglose por categoría del mes</p>
+          <p class="card-subtitle mb-0">
+            Desglose por categoría de
+            {{ currentMonthLabel }}
+          </p>
         </div>
       </header>
 
-      <div class="chart-placeholder">
-        <i class="bi bi-pie-chart" aria-hidden="true"></i>
+      @if (isLoading()) {
+        <div class="chart-placeholder">
+          <span class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </span>
 
-        <div>
-          <p class="chart-placeholder-title mb-1">Sin distribución disponible</p>
-
-          <p class="chart-placeholder-text mb-0">
-            Los gastos se agruparán automáticamente por categoría.
-          </p>
+          <p class="chart-placeholder-text mb-0">Cargando distribución...</p>
         </div>
-      </div>
+      } @else if (expenseDistribution().length === 0) {
+        <div class="chart-placeholder">
+          <i class="bi bi-pie-chart" aria-hidden="true"></i>
+
+          <div>
+            <p class="chart-placeholder-title mb-1">Sin distribución disponible</p>
+
+            <p class="chart-placeholder-text mb-0">
+              Los gastos se agruparán automáticamente por categoría.
+            </p>
+          </div>
+        </div>
+      } @else {
+        <app-expense-distribution-chart
+          [items]="expenseDistribution()"
+          [total]="monthlyExpenses()"
+        />
+      }
     </article>
   </section>
 
@@ -246,15 +264,68 @@
         <button type="button" class="view-all-button" disabled>Ver todas</button>
       </header>
 
-      <div class="empty-state">
-        <div class="empty-state-icon">
-          <i class="bi bi-receipt" aria-hidden="true"></i>
+      @if (isLoading()) {
+        <div class="transactions-loading">
+          <span class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></span>
+
+          <span> Cargando movimientos... </span>
         </div>
+      } @else if (latestTransactions().length === 0) {
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <i class="bi bi-receipt" aria-hidden="true"></i>
+          </div>
 
-        <p class="empty-state-title mb-1">Sin transacciones disponibles</p>
+          <p class="empty-state-title mb-1">Sin transacciones disponibles</p>
 
-        <p class="empty-state-text mb-0">Tus últimos movimientos aparecerán en esta sección.</p>
-      </div>
+          <p class="empty-state-text mb-0">Tus últimos movimientos aparecerán en esta sección.</p>
+        </div>
+      } @else {
+        <div class="recent-transactions">
+          @for (transaction of latestTransactions(); track transaction.id) {
+            <div class="recent-transaction">
+              <div
+                class="transaction-icon"
+                [class.transaction-icon-income]="transaction.type === 'income'"
+                [class.transaction-icon-expense]="transaction.type === 'expense'"
+              >
+                <i
+                  class="bi"
+                  [class.bi-arrow-down-left]="transaction.type === 'income'"
+                  [class.bi-arrow-up-right]="transaction.type === 'expense'"
+                  aria-hidden="true"
+                ></i>
+              </div>
+
+              <div class="transaction-information">
+                <p class="transaction-description mb-0">
+                  {{ transaction.description }}
+                </p>
+
+                <div class="transaction-meta">
+                  <span>
+                    {{ formatTransactionDate(transaction.date) }}
+                  </span>
+
+                  <span aria-hidden="true"> · </span>
+
+                  <span>
+                    {{ getCategoryName(transaction.categoryId) }}
+                  </span>
+                </div>
+              </div>
+
+              <span
+                class="transaction-amount"
+                [class.transaction-amount-income]="transaction.type === 'income'"
+                [class.transaction-amount-expense]="transaction.type === 'expense'"
+              >
+                {{ formatTransactionAmount(transaction) }}
+              </span>
+            </div>
+          }
+        </div>
+      }
     </article>
   </section>
 </section>

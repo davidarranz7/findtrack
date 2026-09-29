@@ -10,13 +10,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../auth/services/auth.service';
-import { Transaction } from '../models';
+import {
+  ExpenseDistributionChart,
+  type ExpenseDistributionItem,
+} from '../charts/expense-distribution-chart/expense-distribution-chart';
+import { Category, Transaction } from '../models';
+import { CategoryService } from '../services/category.service';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionForm } from '../transactions/transaction-form/transaction-form';
 
 @Component({
   selector: 'app-overview',
-  imports: [TransactionForm],
+  imports: [TransactionForm, ExpenseDistributionChart],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +29,7 @@ import { TransactionForm } from '../transactions/transaction-form/transaction-fo
 export class Overview {
   private readonly authService = inject(AuthService);
   private readonly transactionService = inject(TransactionService);
+  private readonly categoryService = inject(CategoryService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly currentDate = new Date();
@@ -37,9 +43,16 @@ export class Overview {
     currency: 'EUR',
   });
 
+  private readonly dateFormatter = new Intl.DateTimeFormat('es-ES', {
+    day: 'numeric',
+    month: 'short',
+  });
+
   protected readonly currentUser = this.authService.currentUser;
 
   protected readonly transactions = signal<Transaction[]>([]);
+
+  protected readonly categories = signal<Category[]>([]);
 
   protected readonly isLoading = signal(true);
 
@@ -53,6 +66,14 @@ export class Overview {
 
   protected readonly monthlyTransactions = computed(() =>
     this.transactions().filter((transaction) => transaction.date.startsWith(this.currentMonthKey)),
+  );
+
+  protected readonly latestTransactions = computed(() =>
+    [...this.transactions()]
+      .sort((firstTransaction, secondTransaction) =>
+        secondTransaction.date.localeCompare(firstTransaction.date),
+      )
+      .slice(0, 5),
   );
 
   protected readonly availableBalance = computed(() =>
@@ -77,6 +98,40 @@ export class Overview {
 
   protected readonly monthlySavings = computed(() => this.monthlyIncome() - this.monthlyExpenses());
 
+  protected readonly expenseDistribution = computed<ExpenseDistributionItem[]>(() => {
+    const expenses = this.monthlyTransactions().filter(
+      (transaction) => transaction.type === 'expense',
+    );
+
+    const totalExpenses = this.monthlyExpenses();
+
+    if (expenses.length === 0 || totalExpenses === 0) {
+      return [];
+    }
+
+    const amountsByCategory = new Map<string, number>();
+
+    for (const transaction of expenses) {
+      const currentAmount = amountsByCategory.get(transaction.categoryId) ?? 0;
+
+      amountsByCategory.set(transaction.categoryId, currentAmount + transaction.amount);
+    }
+
+    return Array.from(amountsByCategory.entries(), ([categoryId, amount]) => {
+      const category = this.categories().find(
+        (currentCategory) => currentCategory.id === categoryId,
+      );
+
+      return {
+        categoryId,
+        categoryName: category?.name ?? 'Sin categoría',
+        amount,
+        percentage: (amount / totalExpenses) * 100,
+        color: category?.color ?? '#6c757d',
+      };
+    }).sort((firstCategory, secondCategory) => secondCategory.amount - firstCategory.amount);
+  });
+
   protected readonly formattedBalance = computed(() =>
     this.currencyFormatter.format(this.availableBalance()),
   );
@@ -95,6 +150,7 @@ export class Overview {
 
   constructor() {
     this.loadTransactions();
+    this.loadCategories();
   }
 
   protected openTransactionForm(): void {
@@ -109,6 +165,28 @@ export class Overview {
     this.transactions.update((transactions) => [transaction, ...transactions]);
 
     this.closeTransactionForm();
+  }
+
+  protected getCategoryName(categoryId: string): string {
+    return (
+      this.categories().find((category) => category.id === categoryId)?.name ?? 'Sin categoría'
+    );
+  }
+
+  protected formatTransactionAmount(transaction: Transaction): string {
+    const amount = this.currencyFormatter.format(transaction.amount);
+
+    return transaction.type === 'income' ? `+${amount}` : `-${amount}`;
+  }
+
+  protected formatTransactionDate(date: string): string {
+    if (date === this.getTodayDate()) {
+      return 'Hoy';
+    }
+
+    const [year, month, day] = date.split('-').map(Number);
+
+    return this.dateFormatter.format(new Date(year, month - 1, day));
   }
 
   private loadTransactions(): void {
@@ -136,6 +214,23 @@ export class Overview {
       });
   }
 
+  private loadCategories(): void {
+    const userId = this.currentUser()?.id;
+
+    if (!userId) {
+      return;
+    }
+
+    this.categoryService
+      .getCategories(userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (categories) => {
+          this.categories.set(categories);
+        },
+      });
+  }
+
   private getCurrentMonthLabel(): string {
     const month = new Intl.DateTimeFormat('es-ES', {
       month: 'long',
@@ -144,5 +239,13 @@ export class Overview {
     const formattedMonth = month.charAt(0).toUpperCase() + month.slice(1);
 
     return `${formattedMonth} ${this.currentDate.getFullYear()}`;
+  }
+
+  private getTodayDate(): string {
+    const year = this.currentDate.getFullYear();
+    const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(this.currentDate.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 }
