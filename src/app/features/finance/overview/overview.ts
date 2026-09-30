@@ -14,6 +14,10 @@ import {
   ExpenseDistributionChart,
   type ExpenseDistributionItem,
 } from '../charts/expense-distribution-chart/expense-distribution-chart';
+import {
+  IncomeExpenseChart,
+  type IncomeExpenseChartItem,
+} from '../charts/income-expense-chart/income-expense-chart';
 import { Category, Transaction } from '../models';
 import { CategoryService } from '../services/category.service';
 import { TransactionService } from '../services/transaction.service';
@@ -21,7 +25,7 @@ import { TransactionForm } from '../transactions/transaction-form/transaction-fo
 
 @Component({
   selector: 'app-overview',
-  imports: [TransactionForm, ExpenseDistributionChart],
+  imports: [TransactionForm, ExpenseDistributionChart, IncomeExpenseChart],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +41,10 @@ export class Overview {
   private readonly currentMonthKey = `${this.currentDate.getFullYear()}-${String(
     this.currentDate.getMonth() + 1,
   ).padStart(2, '0')}`;
+
+  private readonly recentMonths = this.getRecentMonths(6);
+
+  private readonly recentMonthKeys = new Set(this.recentMonths.map((month) => month.key));
 
   private readonly currencyFormatter = new Intl.NumberFormat('es-ES', {
     style: 'currency',
@@ -97,6 +105,51 @@ export class Overview {
   );
 
   protected readonly monthlySavings = computed(() => this.monthlyIncome() - this.monthlyExpenses());
+
+  protected readonly incomeExpenseHistory = computed<IncomeExpenseChartItem[]>(() => {
+    const totalsByMonth = new Map<
+      string,
+      {
+        income: number;
+        expense: number;
+      }
+    >();
+
+    for (const transaction of this.transactions()) {
+      const monthKey = transaction.date.slice(0, 7);
+
+      if (!this.recentMonthKeys.has(monthKey)) {
+        continue;
+      }
+
+      const totals = totalsByMonth.get(monthKey) ?? {
+        income: 0,
+        expense: 0,
+      };
+
+      if (transaction.type === 'income') {
+        totals.income += transaction.amount;
+      } else {
+        totals.expense += transaction.amount;
+      }
+
+      totalsByMonth.set(monthKey, totals);
+    }
+
+    return this.recentMonths.map((month) => {
+      const totals = totalsByMonth.get(month.key);
+
+      return {
+        label: month.label,
+        income: totals?.income ?? 0,
+        expense: totals?.expense ?? 0,
+      };
+    });
+  });
+
+  protected readonly hasIncomeExpenseData = computed(() =>
+    this.incomeExpenseHistory().some((month) => month.income > 0 || month.expense > 0),
+  );
 
   protected readonly expenseDistribution = computed<ExpenseDistributionItem[]>(() => {
     const expenses = this.monthlyTransactions().filter(
@@ -231,6 +284,36 @@ export class Overview {
       });
   }
 
+  private getRecentMonths(count: number): {
+    key: string;
+    label: string;
+  }[] {
+    const monthFormatter = new Intl.DateTimeFormat('es-ES', {
+      month: 'short',
+    });
+
+    return Array.from({ length: count }, (_, index) => {
+      const monthsAgo = count - 1 - index;
+
+      const date = new Date(
+        this.currentDate.getFullYear(),
+        this.currentDate.getMonth() - monthsAgo,
+        1,
+      );
+
+      const month = monthFormatter.format(date).replace('.', '');
+
+      const label = month.charAt(0).toUpperCase() + month.slice(1);
+
+      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+      return {
+        key,
+        label,
+      };
+    });
+  }
+
   private getCurrentMonthLabel(): string {
     const month = new Intl.DateTimeFormat('es-ES', {
       month: 'long',
@@ -243,7 +326,9 @@ export class Overview {
 
   private getTodayDate(): string {
     const year = this.currentDate.getFullYear();
+
     const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+
     const day = String(this.currentDate.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;

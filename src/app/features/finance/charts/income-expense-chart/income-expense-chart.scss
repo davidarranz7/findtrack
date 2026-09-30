@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.income-expense-chart {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  margin-top: 1rem;
+}
+
+.income-expense-chart canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 575.98px) {
+  .income-expense-chart {
+    height: 210px;
+  }
+}

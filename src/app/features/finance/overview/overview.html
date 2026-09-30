@@ -149,7 +149,7 @@
         <div>
           <h2 class="card-title">Ingresos vs Gastos</h2>
 
-          <p class="card-subtitle mb-0">Histórico de rendimiento mensual</p>
+          <p class="card-subtitle mb-0">Evolución de los últimos 6 meses</p>
         </div>
 
         <div class="chart-legend">
@@ -167,17 +167,29 @@
         </div>
       </header>
 
-      <div class="chart-placeholder">
-        <i class="bi bi-bar-chart" aria-hidden="true"></i>
+      @if (isLoading()) {
+        <div class="chart-placeholder">
+          <span class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </span>
 
-        <div>
-          <p class="chart-placeholder-title mb-1">Todavía no hay datos para mostrar</p>
-
-          <p class="chart-placeholder-text mb-0">
-            Aquí aparecerá la evolución mensual de ingresos y gastos.
-          </p>
+          <p class="chart-placeholder-text mb-0">Cargando histórico...</p>
         </div>
-      </div>
+      } @else if (!hasIncomeExpenseData()) {
+        <div class="chart-placeholder">
+          <i class="bi bi-bar-chart" aria-hidden="true"></i>
+
+          <div>
+            <p class="chart-placeholder-title mb-1">Todavía no hay datos para mostrar</p>
+
+            <p class="chart-placeholder-text mb-0">
+              Aquí aparecerá la evolución mensual de ingresos y gastos.
+            </p>
+          </div>
+        </div>
+      } @else {
+        <app-income-expense-chart [items]="incomeExpenseHistory()" />
+      }
     </article>
 
     <article class="overview-card expense-distribution-card">
