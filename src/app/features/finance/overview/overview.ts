@@ -103,6 +103,10 @@ export class Overview {
 
   protected readonly userName = computed(() => this.currentUser()?.username ?? 'Usuario');
 
+  protected readonly canGoToNextMonth = computed(
+    () => this.selectedMonthKey() < this.getMonthKey(this.currentDate),
+  );
+
   protected get currentMonthLabel(): string {
     return this.getMonthLabel(this.selectedMonth());
   }
@@ -331,6 +335,10 @@ export class Overview {
   }
 
   protected nextMonth(): void {
+    if (!this.canGoToNextMonth()) {
+      return;
+    }
+
     this.changeMonth(1);
   }
 
