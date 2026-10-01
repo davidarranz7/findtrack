@@ -113,8 +113,14 @@ export class Overview {
     ),
   );
 
+  protected readonly transactionsUpToSelectedMonth = computed(() =>
+    this.transactions().filter(
+      (transaction) => transaction.date.slice(0, 7) <= this.selectedMonthKey(),
+    ),
+  );
+
   protected readonly latestTransactions = computed(() =>
-    [...this.transactions()]
+    [...this.monthlyTransactions()]
       .sort((firstTransaction, secondTransaction) =>
         secondTransaction.date.localeCompare(firstTransaction.date),
       )
@@ -122,7 +128,7 @@ export class Overview {
   );
 
   protected readonly availableBalance = computed(() =>
-    this.transactions().reduce((balance, transaction) => {
+    this.transactionsUpToSelectedMonth().reduce((balance, transaction) => {
       return transaction.type === 'income'
         ? balance + transaction.amount
         : balance - transaction.amount;
