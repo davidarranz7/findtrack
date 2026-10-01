@@ -18,10 +18,32 @@ import {
   IncomeExpenseChart,
   type IncomeExpenseChartItem,
 } from '../charts/income-expense-chart/income-expense-chart';
-import { Category, Transaction } from '../models';
+import { Budget, Category, Transaction } from '../models';
+import { BudgetService } from '../services/budget.service';
 import { CategoryService } from '../services/category.service';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionForm } from '../transactions/transaction-form/transaction-form';
+
+type BudgetStatus = 'safe' | 'warning' | 'exceeded';
+
+type BudgetAlertStatus = 'none' | 'safe' | 'warning' | 'exceeded';
+
+interface BudgetProgressItem {
+  budgetId: string;
+  categoryId: string;
+  categoryName: string;
+  categoryColor: string;
+  limit: number;
+  spent: number;
+  remaining: number;
+  percentage: number;
+  status: BudgetStatus;
+}
+
+interface BudgetAlertState {
+  status: BudgetAlertStatus;
+  budget: BudgetProgressItem | null;
+}
 
 @Component({
   selector: 'app-overview',
@@ -34,17 +56,22 @@ export class Overview {
   private readonly authService = inject(AuthService);
   private readonly transactionService = inject(TransactionService);
   private readonly categoryService = inject(CategoryService);
+  private readonly budgetService = inject(BudgetService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly currentDate = new Date();
 
-  private readonly currentMonthKey = `${this.currentDate.getFullYear()}-${String(
-    this.currentDate.getMonth() + 1,
-  ).padStart(2, '0')}`;
+  private readonly selectedMonth = signal(
+    new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1),
+  );
 
-  private readonly recentMonths = this.getRecentMonths(6);
+  private readonly selectedMonthKey = computed(() => this.getMonthKey(this.selectedMonth()));
 
-  private readonly recentMonthKeys = new Set(this.recentMonths.map((month) => month.key));
+  private readonly recentMonths = computed(() => this.getRecentMonths(this.selectedMonth(), 6));
+
+  private readonly recentMonthKeys = computed(
+    () => new Set(this.recentMonths().map((month) => month.key)),
+  );
 
   private readonly currencyFormatter = new Intl.NumberFormat('es-ES', {
     style: 'currency',
@@ -62,18 +89,28 @@ export class Overview {
 
   protected readonly categories = signal<Category[]>([]);
 
+  protected readonly budgets = signal<Budget[]>([]);
+
   protected readonly isLoading = signal(true);
 
+  protected readonly isLoadingBudgets = signal(true);
+
   protected readonly loadError = signal<string | null>(null);
+
+  protected readonly budgetLoadError = signal<string | null>(null);
 
   protected readonly isTransactionFormOpen = signal(false);
 
   protected readonly userName = computed(() => this.currentUser()?.username ?? 'Usuario');
 
-  protected readonly currentMonthLabel = this.getCurrentMonthLabel();
+  protected get currentMonthLabel(): string {
+    return this.getMonthLabel(this.selectedMonth());
+  }
 
   protected readonly monthlyTransactions = computed(() =>
-    this.transactions().filter((transaction) => transaction.date.startsWith(this.currentMonthKey)),
+    this.transactions().filter((transaction) =>
+      transaction.date.startsWith(this.selectedMonthKey()),
+    ),
   );
 
   protected readonly latestTransactions = computed(() =>
@@ -115,10 +152,12 @@ export class Overview {
       }
     >();
 
+    const recentMonthKeys = this.recentMonthKeys();
+
     for (const transaction of this.transactions()) {
       const monthKey = transaction.date.slice(0, 7);
 
-      if (!this.recentMonthKeys.has(monthKey)) {
+      if (!recentMonthKeys.has(monthKey)) {
         continue;
       }
 
@@ -136,7 +175,7 @@ export class Overview {
       totalsByMonth.set(monthKey, totals);
     }
 
-    return this.recentMonths.map((month) => {
+    return this.recentMonths().map((month) => {
       const totals = totalsByMonth.get(month.key);
 
       return {
@@ -185,6 +224,80 @@ export class Overview {
     }).sort((firstCategory, secondCategory) => secondCategory.amount - firstCategory.amount);
   });
 
+  protected readonly budgetProgress = computed<BudgetProgressItem[]>(() => {
+    const expenses = this.monthlyTransactions().filter(
+      (transaction) => transaction.type === 'expense',
+    );
+
+    return this.budgets()
+      .map((budget) => {
+        const category = this.categories().find(
+          (currentCategory) => currentCategory.id === budget.categoryId,
+        );
+
+        const spent = expenses
+          .filter((transaction) => transaction.categoryId === budget.categoryId)
+          .reduce((total, transaction) => total + transaction.amount, 0);
+
+        const percentage = budget.amount > 0 ? (spent / budget.amount) * 100 : 0;
+
+        let status: BudgetStatus = 'safe';
+
+        if (percentage >= 100) {
+          status = 'exceeded';
+        } else if (percentage >= 80) {
+          status = 'warning';
+        }
+
+        return {
+          budgetId: budget.id,
+          categoryId: budget.categoryId,
+          categoryName: category?.name ?? 'Sin categoría',
+          categoryColor: category?.color ?? '#6c757d',
+          limit: budget.amount,
+          spent,
+          remaining: budget.amount - spent,
+          percentage,
+          status,
+        };
+      })
+      .sort((firstBudget, secondBudget) => secondBudget.percentage - firstBudget.percentage);
+  });
+
+  protected readonly budgetAlert = computed<BudgetAlertState>(() => {
+    const budgets = this.budgetProgress();
+
+    if (budgets.length === 0) {
+      return {
+        status: 'none',
+        budget: null,
+      };
+    }
+
+    const exceededBudget = budgets.find((budget) => budget.status === 'exceeded');
+
+    if (exceededBudget) {
+      return {
+        status: 'exceeded',
+        budget: exceededBudget,
+      };
+    }
+
+    const warningBudget = budgets.find((budget) => budget.status === 'warning');
+
+    if (warningBudget) {
+      return {
+        status: 'warning',
+        budget: warningBudget,
+      };
+    }
+
+    return {
+      status: 'safe',
+      budget: budgets[0],
+    };
+  });
+
   protected readonly formattedBalance = computed(() =>
     this.currencyFormatter.format(this.availableBalance()),
   );
@@ -204,6 +317,15 @@ export class Overview {
   constructor() {
     this.loadTransactions();
     this.loadCategories();
+    this.loadBudgets();
+  }
+
+  protected previousMonth(): void {
+    this.changeMonth(-1);
+  }
+
+  protected nextMonth(): void {
+    this.changeMonth(1);
   }
 
   protected openTransactionForm(): void {
@@ -232,6 +354,10 @@ export class Overview {
     return transaction.type === 'income' ? `+${amount}` : `-${amount}`;
   }
 
+  protected formatCurrency(amount: number): string {
+    return this.currencyFormatter.format(amount);
+  }
+
   protected formatTransactionDate(date: string): string {
     if (date === this.getTodayDate()) {
       return 'Hoy';
@@ -242,12 +368,24 @@ export class Overview {
     return this.dateFormatter.format(new Date(year, month - 1, day));
   }
 
+  private changeMonth(offset: number): void {
+    const currentMonth = this.selectedMonth();
+
+    this.selectedMonth.set(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + offset, 1),
+    );
+
+    this.loadBudgets();
+  }
+
   private loadTransactions(): void {
     const userId = this.currentUser()?.id;
 
     if (!userId) {
       this.isLoading.set(false);
+
       this.loadError.set('No se ha podido identificar al usuario actual.');
+
       return;
     }
 
@@ -284,7 +422,42 @@ export class Overview {
       });
   }
 
-  private getRecentMonths(count: number): {
+  private loadBudgets(): void {
+    const userId = this.currentUser()?.id;
+
+    if (!userId) {
+      this.isLoadingBudgets.set(false);
+
+      this.budgetLoadError.set('No se ha podido identificar al usuario actual.');
+
+      return;
+    }
+
+    this.isLoadingBudgets.set(true);
+    this.budgetLoadError.set(null);
+
+    this.budgetService
+      .getBudgets(userId, this.selectedMonthKey())
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isLoadingBudgets.set(false)),
+      )
+      .subscribe({
+        next: (budgets) => {
+          this.budgets.set(budgets);
+        },
+        error: () => {
+          this.budgets.set([]);
+
+          this.budgetLoadError.set('No se han podido cargar tus presupuestos.');
+        },
+      });
+  }
+
+  private getRecentMonths(
+    referenceDate: Date,
+    count: number,
+  ): {
     key: string;
     label: string;
   }[] {
@@ -295,33 +468,31 @@ export class Overview {
     return Array.from({ length: count }, (_, index) => {
       const monthsAgo = count - 1 - index;
 
-      const date = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth() - monthsAgo,
-        1,
-      );
+      const date = new Date(referenceDate.getFullYear(), referenceDate.getMonth() - monthsAgo, 1);
 
       const month = monthFormatter.format(date).replace('.', '');
 
       const label = month.charAt(0).toUpperCase() + month.slice(1);
 
-      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-
       return {
-        key,
+        key: this.getMonthKey(date),
         label,
       };
     });
   }
 
-  private getCurrentMonthLabel(): string {
+  private getMonthKey(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  }
+
+  private getMonthLabel(date: Date): string {
     const month = new Intl.DateTimeFormat('es-ES', {
       month: 'long',
-    }).format(this.currentDate);
+    }).format(date);
 
     const formattedMonth = month.charAt(0).toUpperCase() + month.slice(1);
 
-    return `${formattedMonth} ${this.currentDate.getFullYear()}`;
+    return `${formattedMonth} ${date.getFullYear()}`;
   }
 
   private getTodayDate(): string {

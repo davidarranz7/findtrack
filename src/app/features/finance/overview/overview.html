@@ -7,8 +7,15 @@
     </div>
 
     <div class="overview-header-actions">
-      <button type="button" class="month-selector btn btn-white" disabled>
-        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+      <div class="month-selector" aria-label="Seleccionar mes">
+        <button
+          type="button"
+          class="btn btn-link p-0 text-secondary"
+          aria-label="Mes anterior"
+          (click)="previousMonth()"
+        >
+          <i class="bi bi-chevron-left" aria-hidden="true"></i>
+        </button>
 
         <span class="d-flex align-items-center gap-2">
           <i class="bi bi-calendar3" aria-hidden="true"></i>
@@ -16,8 +23,15 @@
           {{ currentMonthLabel }}
         </span>
 
-        <i class="bi bi-chevron-right" aria-hidden="true"></i>
-      </button>
+        <button
+          type="button"
+          class="btn btn-link p-0 text-secondary"
+          aria-label="Mes siguiente"
+          (click)="nextMonth()"
+        >
+          <i class="bi bi-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
 
       <button
         type="button"
@@ -31,25 +45,63 @@
     </div>
   </header>
 
-  <section class="budget-alert" aria-label="Estado de presupuestos">
-    <div class="budget-alert-icon">
-      <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
-    </div>
+  @if (!isLoadingBudgets() && budgetProgress().length > 0) {
+    @if (budgetAlert(); as alert) {
+      <section
+        class="budget-alert"
+        [class.budget-alert-safe]="alert.status === 'safe'"
+        [class.budget-alert-warning]="alert.status === 'warning'"
+        [class.budget-alert-exceeded]="alert.status === 'exceeded'"
+        aria-label="Estado de presupuestos"
+      >
+        <div class="budget-alert-icon">
+          @if (alert.status === 'safe') {
+            <i class="bi bi-check-circle" aria-hidden="true"></i>
+          } @else if (alert.status === 'warning') {
+            <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+          } @else {
+            <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+          }
+        </div>
 
-    <div class="flex-grow-1">
-      <p class="budget-alert-title mb-1">Seguimiento de presupuestos</p>
+        <div class="flex-grow-1">
+          @if (alert.status === 'safe') {
+            <p class="budget-alert-title mb-1">Tus presupuestos están bajo control</p>
 
-      <p class="budget-alert-text mb-0">
-        Las alertas aparecerán cuando un presupuesto se acerque a su límite.
-      </p>
-    </div>
-  </section>
+            <p class="budget-alert-text mb-0">
+              Ningún presupuesto ha alcanzado todavía el 80 % de su límite.
+            </p>
+          }
+
+          @if (alert.status === 'warning' && alert.budget; as budget) {
+            <p class="budget-alert-title mb-1">Te estás acercando al límite</p>
+
+            <p class="budget-alert-text mb-0">
+              {{ budget.categoryName }} lleva consumido el {{ budget.percentage.toFixed(0) }} % de
+              su presupuesto.
+            </p>
+          }
+
+          @if (alert.status === 'exceeded' && alert.budget; as budget) {
+            <p class="budget-alert-title mb-1">Presupuesto superado</p>
+
+            <p class="budget-alert-text mb-0">
+              Has superado el presupuesto de
+              {{ budget.categoryName }} en {{ formatCurrency(-budget.remaining) }}.
+            </p>
+          }
+        </div>
+      </section>
+    }
+  }
 
   @if (loadError()) {
     <div class="alert alert-danger d-flex align-items-center gap-2 mb-0" role="alert">
       <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
 
-      <span>{{ loadError() }}</span>
+      <span>
+        {{ loadError() }}
+      </span>
     </div>
   }
 
@@ -239,7 +291,7 @@
         <div>
           <h2 class="card-title">Presupuestos del Mes</h2>
 
-          <p class="card-subtitle mb-0">Límites y consumo actual</p>
+          <p class="card-subtitle mb-0">Límites y consumo de {{ currentMonthLabel }}</p>
         </div>
 
         <button
@@ -252,17 +304,94 @@
         </button>
       </header>
 
-      <div class="empty-state">
-        <div class="empty-state-icon">
-          <i class="bi bi-wallet2" aria-hidden="true"></i>
+      @if (isLoadingBudgets()) {
+        <div class="transactions-loading">
+          <span class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </span>
+
+          <span> Cargando presupuestos... </span>
         </div>
+      } @else if (budgetLoadError()) {
+        <div class="alert alert-danger mt-3 mb-0" role="alert">
+          {{ budgetLoadError() }}
+        </div>
+      } @else if (budgetProgress().length === 0) {
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <i class="bi bi-wallet2" aria-hidden="true"></i>
+          </div>
 
-        <p class="empty-state-title mb-1">Sin presupuestos disponibles</p>
+          <p class="empty-state-title mb-1">Sin presupuestos disponibles</p>
 
-        <p class="empty-state-text mb-0">
-          Aquí podrás consultar el progreso de tus presupuestos mensuales.
-        </p>
-      </div>
+          <p class="empty-state-text mb-0">
+            Aquí podrás consultar el progreso de tus presupuestos mensuales.
+          </p>
+        </div>
+      } @else {
+        <div class="budget-list">
+          @for (budget of budgetProgress(); track budget.budgetId) {
+            <div class="budget-item">
+              <div class="budget-item-header">
+                <div class="budget-information">
+                  <div class="budget-category-row">
+                    <span
+                      class="budget-category-color"
+                      [style.background-color]="budget.categoryColor"
+                    ></span>
+
+                    <p class="budget-category mb-0">
+                      {{ budget.categoryName }}
+                    </p>
+                  </div>
+
+                  <p class="budget-values mb-0">
+                    {{ formatCurrency(budget.spent) }}
+                    de
+                    {{ formatCurrency(budget.limit) }}
+                  </p>
+                </div>
+
+                <span
+                  class="budget-percentage"
+                  [class.text-success]="budget.status === 'safe'"
+                  [class.text-warning]="budget.status === 'warning'"
+                  [class.text-danger]="budget.status === 'exceeded'"
+                >
+                  {{ budget.percentage.toFixed(0) }}%
+                </span>
+              </div>
+
+              <div
+                class="progress budget-progress"
+                role="progressbar"
+                [attr.aria-label]="'Presupuesto de ' + budget.categoryName"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [attr.aria-valuenow]="budget.percentage > 100 ? 100 : budget.percentage"
+              >
+                <div
+                  class="progress-bar"
+                  [class.bg-success]="budget.status === 'safe'"
+                  [class.bg-warning]="budget.status === 'warning'"
+                  [class.bg-danger]="budget.status === 'exceeded'"
+                  [style.width.%]="budget.percentage > 100 ? 100 : budget.percentage"
+                ></div>
+              </div>
+
+              <p class="budget-remaining mb-0" [class.text-danger]="budget.status === 'exceeded'">
+                @if (budget.remaining >= 0) {
+                  Quedan
+                  {{ formatCurrency(budget.remaining) }}
+                } @else {
+                  Excedido en
+                  {{ formatCurrency(-budget.remaining) }}
+                }
+              </p>
+            </div>
+          }
+        </div>
+      }
     </article>
 
     <article class="overview-card">

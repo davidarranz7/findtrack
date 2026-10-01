@@ -301,6 +301,18 @@
       "tagIds": [],
       "notes": "",
       "id": "KOlOk10NaNs"
+    },
+    {
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 6000,
+      "description": "alquiler",
+      "categoryId": "category-housing",
+      "date": "2026-10-01",
+      "paymentMethod": "bankTransfer",
+      "tagIds": [],
+      "notes": "",
+      "id": "Flb9dBfcyn0"
     }
   ],
   "budgets": [
