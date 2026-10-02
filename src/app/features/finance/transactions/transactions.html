@@ -566,115 +566,54 @@
 }
 
 @if (transactionToDelete(); as transaction) {
-  <div
-    class="transaction-modal-backdrop"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="delete-transaction-title"
-    aria-describedby="delete-transaction-description"
+  <app-confirm-dialog
+    title="Eliminar transacción"
+    message="Esta acción eliminará el movimiento de tus registros."
+    confirmText="Eliminar transacción"
+    processingText="Eliminando..."
+    [isProcessing]="deletingTransactionId() !== null"
+    [errorMessage]="deleteError()"
+    (confirmed)="confirmDeleteTransaction()"
+    (cancelled)="cancelDeleteTransaction()"
   >
-    <div class="delete-confirmation-modal">
-      <header class="delete-confirmation-header">
-        <div class="delete-confirmation-icon">
-          <i class="bi bi-trash3" aria-hidden="true"></i>
-        </div>
+    <div class="delete-transaction-preview">
+      <div
+        class="delete-transaction-preview-icon"
+        [class.delete-transaction-preview-income]="transaction.type === 'income'"
+        [class.delete-transaction-preview-expense]="transaction.type === 'expense'"
+      >
+        @if (transaction.type === 'income') {
+          <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+        } @else {
+          <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+        }
+      </div>
 
-        <div class="flex-grow-1">
-          <h2 id="delete-transaction-title" class="delete-confirmation-title">
-            Eliminar transacción
-          </h2>
+      <div class="delete-transaction-preview-content">
+        <span class="delete-transaction-description">
+          {{ transaction.description }}
+        </span>
 
-          <p id="delete-transaction-description" class="delete-confirmation-subtitle mb-0">
-            Esta acción eliminará el movimiento de tus registros.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          class="delete-close-button"
-          aria-label="Cerrar"
-          [disabled]="deletingTransactionId() !== null"
-          (click)="cancelDeleteTransaction()"
-        >
-          <i class="bi bi-x-lg" aria-hidden="true"></i>
-        </button>
-      </header>
-
-      <div class="delete-transaction-preview">
-        <div
-          class="delete-transaction-preview-icon"
-          [class.delete-transaction-preview-income]="transaction.type === 'income'"
-          [class.delete-transaction-preview-expense]="transaction.type === 'expense'"
-        >
-          @if (transaction.type === 'income') {
-            <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
-          } @else {
-            <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
-          }
-        </div>
-
-        <div class="delete-transaction-preview-content">
-          <span class="delete-transaction-description">
-            {{ transaction.description }}
-          </span>
-
-          <span class="delete-transaction-details">
-            {{ formatTransactionDate(transaction.date) }}
-            ·
-            {{ getCategoryName(transaction.categoryId) }}
-          </span>
-        </div>
-
-        <span
-          class="delete-transaction-amount"
-          [class.text-success]="transaction.type === 'income'"
-          [class.text-danger]="transaction.type === 'expense'"
-        >
-          {{ formatTransactionAmount(transaction) }}
+        <span class="delete-transaction-details">
+          {{ formatTransactionDate(transaction.date) }}
+          ·
+          {{ getCategoryName(transaction.categoryId) }}
         </span>
       </div>
 
-      <div class="delete-confirmation-warning">
-        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
-
-        <p class="mb-0">¿Seguro que quieres eliminar esta transacción?</p>
-      </div>
-
-      @if (deleteError()) {
-        <div class="alert alert-danger py-2 small mb-0" role="alert" aria-live="assertive">
-          <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
-
-          {{ deleteError() }}
-        </div>
-      }
-
-      <footer class="delete-confirmation-footer">
-        <button
-          type="button"
-          class="btn btn-light"
-          [disabled]="deletingTransactionId() !== null"
-          (click)="cancelDeleteTransaction()"
-        >
-          Cancelar
-        </button>
-
-        <button
-          type="button"
-          class="btn btn-danger delete-confirm-button"
-          [disabled]="deletingTransactionId() !== null"
-          (click)="confirmDeleteTransaction()"
-        >
-          @if (deletingTransactionId() !== null) {
-            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-
-            Eliminando...
-          } @else {
-            <i class="bi bi-trash3" aria-hidden="true"></i>
-
-            Eliminar transacción
-          }
-        </button>
-      </footer>
+      <span
+        class="delete-transaction-amount"
+        [class.text-success]="transaction.type === 'income'"
+        [class.text-danger]="transaction.type === 'expense'"
+      >
+        {{ formatTransactionAmount(transaction) }}
+      </span>
     </div>
-  </div>
+
+    <div class="delete-confirmation-warning">
+      <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+
+      <p class="mb-0">¿Seguro que quieres eliminar esta transacción?</p>
+    </div>
+  </app-confirm-dialog>
 }

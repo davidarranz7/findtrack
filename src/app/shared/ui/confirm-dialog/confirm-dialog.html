@@ -1,0 +1,71 @@
+<div class="confirm-dialog-backdrop" role="dialog" aria-modal="true" [attr.aria-label]="title()">
+  <div class="confirm-dialog">
+    <header class="confirm-dialog-header">
+      <div class="confirm-dialog-icon">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+      </div>
+
+      <div class="confirm-dialog-heading">
+        <h2 class="confirm-dialog-title">
+          {{ title() }}
+        </h2>
+
+        <p class="confirm-dialog-message mb-0">
+          {{ message() }}
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="confirm-dialog-close"
+        aria-label="Cerrar"
+        [disabled]="isProcessing()"
+        (click)="cancel()"
+      >
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="confirm-dialog-content">
+      <ng-content />
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger confirm-dialog-error mb-0" role="alert" aria-live="assertive">
+        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+        <span>
+          {{ errorMessage() }}
+        </span>
+      </div>
+    }
+
+    <footer class="confirm-dialog-footer">
+      <button
+        type="button"
+        class="btn btn-light confirm-dialog-cancel"
+        [disabled]="isProcessing()"
+        (click)="cancel()"
+      >
+        {{ cancelText() }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-danger confirm-dialog-confirm"
+        [disabled]="isProcessing()"
+        (click)="confirm()"
+      >
+        @if (isProcessing()) {
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+          {{ processingText() }}
+        } @else {
+          <i class="bi bi-trash3" aria-hidden="true"></i>
+
+          {{ confirmText() }}
+        }
+      </button>
+    </footer>
+  </div>
+</div>

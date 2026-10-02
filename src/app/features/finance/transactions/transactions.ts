@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../auth/services/auth.service';
+import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog';
 import { Category, PaymentMethod, Tag, Transaction, TransactionType } from '../models';
 import { CategoryService } from '../services/category.service';
 import { TagService } from '../services/tag.service';
@@ -21,7 +22,7 @@ type PaymentMethodFilter = 'all' | PaymentMethod;
 
 @Component({
   selector: 'app-transactions',
-  imports: [TransactionForm],
+  imports: [TransactionForm, ConfirmDialog],
   templateUrl: './transactions.html',
   styleUrl: './transactions.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,8 +68,11 @@ export class Transactions {
   protected readonly deleteError = signal<string | null>(null);
 
   protected readonly searchTerm = signal('');
+
   protected readonly selectedType = signal<TransactionTypeFilter>('all');
+
   protected readonly selectedCategoryId = signal('all');
+
   protected readonly selectedPaymentMethod = signal<PaymentMethodFilter>('all');
 
   protected readonly selectedMonth = signal(this.getMonthKey(this.currentDate));

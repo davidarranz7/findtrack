@@ -842,84 +842,11 @@
   margin: auto;
 }
 
-.delete-confirmation-modal {
-  width: 100%;
-  max-width: 460px;
-  padding: 1.5rem;
-  margin: auto;
-  border: 1px solid var(--bs-border-color-translucent);
-  border-radius: 1rem;
-  background: var(--bs-white);
-  box-shadow: 0 1.25rem 3rem rgba(15, 23, 42, 0.18);
-}
-
-.delete-confirmation-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-}
-
-.delete-confirmation-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: 0.65rem;
-  background: var(--bs-danger-bg-subtle);
-  color: var(--bs-danger);
-  font-size: 1rem;
-}
-
-.delete-confirmation-title {
-  margin: 0 0 0.2rem;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--bs-dark);
-}
-
-.delete-confirmation-subtitle {
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--bs-secondary);
-}
-
-.delete-close-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0.5rem;
-  background: transparent;
-  color: var(--bs-secondary);
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease,
-    opacity 0.15s ease;
-}
-
-.delete-close-button:hover:not(:disabled) {
-  background: var(--bs-light);
-  color: var(--bs-dark);
-}
-
-.delete-close-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-
 .delete-transaction-preview {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  margin-bottom: 1rem;
   border: 1px solid var(--bs-border-color-translucent);
   border-radius: 0.75rem;
   background: var(--bs-light);
@@ -984,7 +911,6 @@
   align-items: flex-start;
   gap: 0.6rem;
   padding: 0.75rem 0.85rem;
-  margin-bottom: 1rem;
   border: 1px solid var(--bs-warning-border-subtle);
   border-radius: 0.65rem;
   background: var(--bs-warning-bg-subtle);
@@ -997,35 +923,6 @@
   flex-shrink: 0;
   margin-top: 0.05rem;
   font-size: 0.85rem;
-}
-
-.delete-confirmation-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  padding-top: 1rem;
-  margin-top: 1rem;
-  border-top: 1px solid var(--bs-border-color-translucent);
-}
-
-.delete-confirmation-footer .btn {
-  min-height: 40px;
-  padding-inline: 1rem;
-  border-radius: 0.65rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.delete-confirm-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-}
-
-.delete-confirm-button .spinner-border {
-  width: 0.85rem;
-  height: 0.85rem;
 }
 
 @media (max-width: 1199.98px) {
@@ -1240,11 +1137,6 @@
     padding: 1rem;
   }
 
-  .delete-confirmation-modal {
-    padding: 1.25rem;
-    border-radius: 0.875rem;
-  }
-
   .delete-transaction-preview {
     align-items: flex-start;
     flex-wrap: wrap;
@@ -1256,13 +1148,5 @@
 
   .delete-transaction-amount {
     margin-left: 50px;
-  }
-
-  .delete-confirmation-footer {
-    flex-direction: column-reverse;
-  }
-
-  .delete-confirmation-footer .btn {
-    width: 100%;
   }
 }
