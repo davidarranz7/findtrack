@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+
 import { AppBrand } from '../../shared/app-brand/app-brand';
 
 interface NavigationItem {
@@ -20,7 +21,7 @@ export class Sidebar {
     {
       label: 'Resumen',
       icon: 'bi-grid',
-      route: '/dashboard',
+      route: '/overview',
     },
     {
       label: 'Transacciones',

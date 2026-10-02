@@ -1,0 +1,680 @@
+<section class="transactions">
+  <header class="transactions-header">
+    <div>
+      <div class="transactions-heading">
+        <div>
+          <h1 class="transactions-title">Transacciones</h1>
+
+          <div class="transactions-subtitle-row">
+            <p class="transactions-subtitle mb-0">Gestiona todos tus ingresos y gastos</p>
+
+            @if (!isLoading() && !loadError()) {
+              <span class="transactions-count">
+                Total: {{ totalTransactions() }}
+                movimientos registrados
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transactions-actions">
+      <button type="button" class="btn btn-outline-secondary export-button" disabled>
+        <i class="bi bi-download" aria-hidden="true"></i>
+
+        Exportar CSV
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary new-transaction-button"
+        (click)="openTransactionForm()"
+      >
+        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+
+        Nueva transacción
+      </button>
+    </div>
+  </header>
+
+  @if (loadError()) {
+    <div class="alert alert-danger d-flex align-items-center gap-2 mb-0" role="alert">
+      <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+      <span>
+        {{ loadError() }}
+      </span>
+    </div>
+  }
+
+  <section class="transactions-summary" aria-label="Resumen de transacciones">
+    <article class="transaction-summary-card">
+      <div>
+        <span class="transaction-summary-label"> Ingresos del mes </span>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-success mt-2" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <p class="transaction-summary-value text-success mb-0">
+            {{ formattedMonthlyIncome() }}
+          </p>
+        }
+
+        <span class="transaction-summary-period">
+          {{ currentMonthLabel() }}
+        </span>
+      </div>
+
+      <div class="transaction-summary-icon transaction-summary-icon-income">
+        <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+      </div>
+    </article>
+
+    <article class="transaction-summary-card">
+      <div>
+        <span class="transaction-summary-label"> Gastos del mes </span>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-danger mt-2" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <p class="transaction-summary-value text-danger mb-0">
+            {{ formattedMonthlyExpenses() }}
+          </p>
+        }
+
+        <span class="transaction-summary-period">
+          {{ currentMonthLabel() }}
+        </span>
+      </div>
+
+      <div class="transaction-summary-icon transaction-summary-icon-expense">
+        <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+      </div>
+    </article>
+
+    <article class="transaction-summary-card">
+      <div>
+        <span class="transaction-summary-label"> Balance operativo </span>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-primary mt-2" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <p
+            class="transaction-summary-value mb-0"
+            [class.text-success]="operatingBalance() > 0"
+            [class.text-danger]="operatingBalance() < 0"
+          >
+            {{ formattedOperatingBalance() }}
+          </p>
+        }
+
+        <span class="transaction-summary-period"> Ingresos menos gastos </span>
+      </div>
+
+      <div class="transaction-summary-icon transaction-summary-icon-balance">
+        <i class="bi bi-bank" aria-hidden="true"></i>
+      </div>
+    </article>
+  </section>
+
+  <section class="transactions-filters" aria-label="Filtros de transacciones">
+    <div class="filters-primary-row">
+      <div class="transaction-search">
+        <i class="bi bi-search transaction-search-icon" aria-hidden="true"></i>
+
+        <input
+          #searchInput
+          type="search"
+          class="transaction-search-input"
+          placeholder="Buscar por concepto, notas o categoría..."
+          [value]="searchTerm()"
+          (input)="updateSearchTerm(searchInput.value)"
+        />
+      </div>
+
+      <div class="month-filter">
+        <i class="bi bi-calendar3" aria-hidden="true"></i>
+
+        <input
+          #monthInput
+          type="month"
+          class="month-filter-input"
+          [value]="selectedMonth()"
+          (change)="selectMonth(monthInput.value)"
+        />
+      </div>
+
+      <div class="transaction-type-filter" role="group" aria-label="Filtrar por tipo">
+        <button
+          type="button"
+          class="transaction-type-filter-button"
+          [class.active]="selectedType() === 'all'"
+          (click)="selectType('all')"
+        >
+          Todos
+
+          <span class="filter-count">
+            {{ totalTransactionsInSelectedMonth() }}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="transaction-type-filter-button"
+          [class.active]="selectedType() === 'income'"
+          (click)="selectType('income')"
+        >
+          Ingresos
+
+          <span class="filter-count">
+            {{ incomeCount() }}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="transaction-type-filter-button"
+          [class.active]="selectedType() === 'expense'"
+          (click)="selectType('expense')"
+        >
+          Gastos
+
+          <span class="filter-count">
+            {{ expenseCount() }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="filters-secondary-row">
+      <div class="filter-select-wrapper">
+        <i class="bi bi-tag" aria-hidden="true"></i>
+
+        <select
+          #categorySelect
+          class="filter-select"
+          [value]="selectedCategoryId()"
+          [disabled]="isLoadingCategories()"
+          (change)="selectCategory(categorySelect.value)"
+        >
+          <option value="all">Todas las categorías</option>
+
+          @for (category of categories(); track category.id) {
+            <option [value]="category.id">
+              {{ category.name }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-select-wrapper">
+        <i class="bi bi-credit-card" aria-hidden="true"></i>
+
+        <select
+          #paymentSelect
+          class="filter-select"
+          [value]="selectedPaymentMethod()"
+          (change)="selectPaymentMethod(paymentSelect.value)"
+        >
+          <option value="all">Todos los métodos</option>
+
+          <option value="cash">Efectivo</option>
+
+          <option value="card">Tarjeta</option>
+
+          <option value="bankTransfer">Transferencia</option>
+        </select>
+      </div>
+
+      <div class="filters-result">
+        <span>
+          {{ filteredTransactions().length }}
+
+          @if (filteredTransactions().length === 1) {
+            resultado
+          } @else {
+            resultados
+          }
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        [disabled]="!hasActiveFilters()"
+        (click)="clearFilters()"
+      >
+        <i class="bi bi-x-circle" aria-hidden="true"></i>
+
+        Limpiar filtros
+      </button>
+    </div>
+
+    @if (categoryLoadError()) {
+      <div class="filters-error" role="alert">
+        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+        {{ categoryLoadError() }}
+      </div>
+    }
+  </section>
+
+  <section class="transactions-content" aria-labelledby="transactions-table-title">
+    <header class="transactions-table-header">
+      <div>
+        <h2 id="transactions-table-title" class="transactions-table-title">Movimientos</h2>
+
+        <p class="transactions-table-subtitle mb-0">
+          Consulta y gestiona las transacciones de
+          {{ currentMonthLabel() }}
+        </p>
+      </div>
+
+      @if (!isLoading() && !loadError()) {
+        <span class="transactions-table-count">
+          {{ filteredTransactions().length }}
+
+          @if (filteredTransactions().length === 1) {
+            movimiento
+          } @else {
+            movimientos
+          }
+        </span>
+      }
+    </header>
+
+    @if (isLoading()) {
+      <div class="transactions-placeholder">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden"> Cargando transacciones... </span>
+        </div>
+
+        <p class="transactions-placeholder-text mt-3 mb-0">Cargando tus movimientos...</p>
+      </div>
+    } @else if (!loadError() && filteredTransactions().length === 0) {
+      <div class="transactions-placeholder">
+        <div class="transactions-placeholder-icon">
+          <i class="bi bi-receipt" aria-hidden="true"></i>
+        </div>
+
+        <h3 class="transactions-placeholder-title">No se han encontrado transacciones</h3>
+
+        <p class="transactions-placeholder-text mb-0">
+          No hay movimientos que coincidan con los filtros seleccionados.
+        </p>
+
+        @if (hasActiveFilters()) {
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-sm mt-3"
+            (click)="clearFilters()"
+          >
+            Limpiar filtros
+          </button>
+        }
+      </div>
+    } @else if (!loadError()) {
+      <div class="transactions-table-wrapper">
+        <table class="transactions-table">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+
+              <th scope="col">Descripción</th>
+
+              <th scope="col">Tipo</th>
+
+              <th scope="col">Categoría</th>
+
+              <th scope="col">Método de pago</th>
+
+              <th scope="col">Etiquetas</th>
+
+              <th scope="col" class="text-end">Importe</th>
+
+              <th scope="col" class="text-end">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (transaction of paginatedTransactions(); track transaction.id) {
+              <tr>
+                <td>
+                  <span class="transaction-date">
+                    {{ formatTransactionDate(transaction.date) }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="transaction-description">
+                    <div
+                      class="transaction-description-icon"
+                      [class.transaction-description-icon-income]="transaction.type === 'income'"
+                      [class.transaction-description-icon-expense]="transaction.type === 'expense'"
+                    >
+                      @if (transaction.type === 'income') {
+                        <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+                      } @else {
+                        <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                      }
+                    </div>
+
+                    <div class="transaction-description-content">
+                      <span class="transaction-description-title">
+                        {{ transaction.description }}
+                      </span>
+
+                      @if (transaction.notes) {
+                        <span class="transaction-description-notes">
+                          {{ transaction.notes }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span
+                    class="transaction-type-badge"
+                    [class.transaction-type-income]="transaction.type === 'income'"
+                    [class.transaction-type-expense]="transaction.type === 'expense'"
+                  >
+                    @if (transaction.type === 'income') {
+                      Ingreso
+                    } @else {
+                      Gasto
+                    }
+                  </span>
+                </td>
+
+                <td>
+                  <span class="transaction-category">
+                    {{ getCategoryName(transaction.categoryId) }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="transaction-payment-method">
+                    <i
+                      class="bi {{ getPaymentMethodIcon(transaction.paymentMethod) }}"
+                      aria-hidden="true"
+                    ></i>
+
+                    <span>
+                      {{ getPaymentMethodLabel(transaction.paymentMethod) }}
+                    </span>
+                  </div>
+                </td>
+
+                <td>
+                  @if (isLoadingTags()) {
+                    <span class="transaction-tags-status">
+                      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    </span>
+                  } @else if (tagLoadError()) {
+                    <span class="transaction-tags-empty"> No disponibles </span>
+                  } @else if (transaction.tagIds.length === 0) {
+                    <span class="transaction-tags-empty"> Sin etiquetas </span>
+                  } @else {
+                    <div class="transaction-tags">
+                      @for (tagId of transaction.tagIds; track tagId) {
+                        <span class="transaction-tag">
+                          {{ getTagName(tagId) }}
+                        </span>
+                      }
+                    </div>
+                  }
+                </td>
+
+                <td class="text-end">
+                  <span
+                    class="transaction-amount"
+                    [class.transaction-amount-income]="transaction.type === 'income'"
+                    [class.transaction-amount-expense]="transaction.type === 'expense'"
+                  >
+                    {{ formatTransactionAmount(transaction) }}
+                  </span>
+                </td>
+
+                <td class="text-end">
+                  <div class="transaction-actions">
+                    <button
+                      type="button"
+                      class="transaction-action-button"
+                      aria-label="Editar transacción"
+                      title="Editar transacción"
+                      disabled
+                    >
+                      <i class="bi bi-pencil" aria-hidden="true"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="transaction-action-button transaction-delete-button"
+                      aria-label="Eliminar transacción"
+                      title="Eliminar transacción"
+                      [disabled]="deletingTransactionId() === transaction.id"
+                      (click)="requestDeleteTransaction(transaction)"
+                    >
+                      @if (deletingTransactionId() === transaction.id) {
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                      } @else {
+                        <i class="bi bi-trash3" aria-hidden="true"></i>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="transactions-pagination" aria-label="Paginación de transacciones">
+        <div class="pagination-summary">
+          Mostrando
+          <strong> {{ firstVisibleTransaction() }}-{{ lastVisibleTransaction() }} </strong>
+          de
+          <strong>
+            {{ filteredTransactions().length }}
+          </strong>
+          movimientos
+        </div>
+
+        <div class="pagination-controls">
+          <label for="pageSize" class="page-size-label"> Filas por página </label>
+
+          <select
+            #pageSizeSelect
+            id="pageSize"
+            class="page-size-select"
+            [value]="pageSize()"
+            (change)="changePageSize(pageSizeSelect.value)"
+          >
+            @for (option of pageSizeOptions; track option) {
+              <option [value]="option">
+                {{ option }}
+              </option>
+            }
+          </select>
+
+          <div class="pagination-navigation" role="group" aria-label="Cambiar página">
+            <button
+              type="button"
+              class="pagination-button pagination-direction-button"
+              aria-label="Página anterior"
+              [disabled]="!hasPreviousPage()"
+              (click)="previousPage()"
+            >
+              <i class="bi bi-chevron-left" aria-hidden="true"></i>
+
+              <span class="pagination-direction-text"> Anterior </span>
+            </button>
+
+            <div class="pagination-pages">
+              @for (page of visiblePages(); track page) {
+                <button
+                  type="button"
+                  class="pagination-button pagination-page-button"
+                  [class.active]="currentPage() === page"
+                  [attr.aria-current]="currentPage() === page ? 'page' : null"
+                  [attr.aria-label]="'Ir a la página ' + page"
+                  (click)="goToPage(page)"
+                >
+                  {{ page }}
+                </button>
+              }
+            </div>
+
+            <button
+              type="button"
+              class="pagination-button pagination-direction-button"
+              aria-label="Página siguiente"
+              [disabled]="!hasNextPage()"
+              (click)="nextPage()"
+            >
+              <span class="pagination-direction-text"> Siguiente </span>
+
+              <i class="bi bi-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </footer>
+    }
+  </section>
+</section>
+
+@if (isTransactionFormOpen()) {
+  <div
+    class="transaction-modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Nueva transacción"
+  >
+    <app-transaction-form
+      (closed)="closeTransactionForm()"
+      (created)="handleTransactionCreated($event)"
+    />
+  </div>
+}
+
+@if (transactionToDelete(); as transaction) {
+  <div
+    class="transaction-modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="delete-transaction-title"
+    aria-describedby="delete-transaction-description"
+  >
+    <div class="delete-confirmation-modal">
+      <header class="delete-confirmation-header">
+        <div class="delete-confirmation-icon">
+          <i class="bi bi-trash3" aria-hidden="true"></i>
+        </div>
+
+        <div class="flex-grow-1">
+          <h2 id="delete-transaction-title" class="delete-confirmation-title">
+            Eliminar transacción
+          </h2>
+
+          <p id="delete-transaction-description" class="delete-confirmation-subtitle mb-0">
+            Esta acción eliminará el movimiento de tus registros.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="delete-close-button"
+          aria-label="Cerrar"
+          [disabled]="deletingTransactionId() !== null"
+          (click)="cancelDeleteTransaction()"
+        >
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="delete-transaction-preview">
+        <div
+          class="delete-transaction-preview-icon"
+          [class.delete-transaction-preview-income]="transaction.type === 'income'"
+          [class.delete-transaction-preview-expense]="transaction.type === 'expense'"
+        >
+          @if (transaction.type === 'income') {
+            <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+          } @else {
+            <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+          }
+        </div>
+
+        <div class="delete-transaction-preview-content">
+          <span class="delete-transaction-description">
+            {{ transaction.description }}
+          </span>
+
+          <span class="delete-transaction-details">
+            {{ formatTransactionDate(transaction.date) }}
+            ·
+            {{ getCategoryName(transaction.categoryId) }}
+          </span>
+        </div>
+
+        <span
+          class="delete-transaction-amount"
+          [class.text-success]="transaction.type === 'income'"
+          [class.text-danger]="transaction.type === 'expense'"
+        >
+          {{ formatTransactionAmount(transaction) }}
+        </span>
+      </div>
+
+      <div class="delete-confirmation-warning">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+
+        <p class="mb-0">¿Seguro que quieres eliminar esta transacción?</p>
+      </div>
+
+      @if (deleteError()) {
+        <div class="alert alert-danger py-2 small mb-0" role="alert" aria-live="assertive">
+          <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
+
+          {{ deleteError() }}
+        </div>
+      }
+
+      <footer class="delete-confirmation-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          [disabled]="deletingTransactionId() !== null"
+          (click)="cancelDeleteTransaction()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger delete-confirm-button"
+          [disabled]="deletingTransactionId() !== null"
+          (click)="confirmDeleteTransaction()"
+        >
+          @if (deletingTransactionId() !== null) {
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+            Eliminando...
+          } @else {
+            <i class="bi bi-trash3" aria-hidden="true"></i>
+
+            Eliminar transacción
+          }
+        </button>
+      </footer>
+    </div>
+  </div>
+}

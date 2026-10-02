@@ -304,15 +304,15 @@
     },
     {
       "userId": "user-1",
-      "type": "expense",
-      "amount": 6000,
-      "description": "alquiler",
-      "categoryId": "category-housing",
+      "type": "income",
+      "amount": 20,
+      "description": "regalo abuela",
+      "categoryId": "category-other",
       "date": "2026-10-01",
-      "paymentMethod": "bankTransfer",
+      "paymentMethod": "cash",
       "tagIds": [],
       "notes": "",
-      "id": "Flb9dBfcyn0"
+      "id": "1ceXk7Rvnhc"
     }
   ],
   "budgets": [

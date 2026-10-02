@@ -15,11 +15,17 @@ export class TransactionService {
 
   getTransactions(userId: string): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(this.apiUrl, {
-      params: { userId },
+      params: {
+        userId,
+      },
     });
   }
 
   createTransaction(transaction: CreateTransaction): Observable<Transaction> {
     return this.http.post<Transaction>(this.apiUrl, transaction);
+  }
+
+  deleteTransaction(transactionId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${transactionId}`);
   }
 }
