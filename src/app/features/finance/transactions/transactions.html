@@ -450,7 +450,7 @@
                       class="transaction-action-button"
                       aria-label="Editar transacción"
                       title="Editar transacción"
-                      disabled
+                      (click)="openEditTransaction(transaction)"
                     >
                       <i class="bi bi-pencil" aria-hidden="true"></i>
                     </button>
@@ -480,11 +480,15 @@
       <footer class="transactions-pagination" aria-label="Paginación de transacciones">
         <div class="pagination-summary">
           Mostrando
+
           <strong> {{ firstVisibleTransaction() }}-{{ lastVisibleTransaction() }} </strong>
+
           de
+
           <strong>
             {{ filteredTransactions().length }}
           </strong>
+
           movimientos
         </div>
 
@@ -556,11 +560,13 @@
     class="transaction-modal-backdrop"
     role="dialog"
     aria-modal="true"
-    aria-label="Nueva transacción"
+    [attr.aria-label]="transactionToEdit() ? 'Editar transacción' : 'Nueva transacción'"
   >
     <app-transaction-form
+      [transaction]="transactionToEdit()"
       (closed)="closeTransactionForm()"
       (created)="handleTransactionCreated($event)"
+      (updated)="handleTransactionUpdated($event)"
     />
   </div>
 }

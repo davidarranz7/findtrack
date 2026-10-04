@@ -1,14 +1,28 @@
 <div class="transaction-modal">
   <header class="transaction-header">
     <div class="transaction-header-icon">
-      <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+      @if (isEditMode()) {
+        <i class="bi bi-pencil" aria-hidden="true"></i>
+      } @else {
+        <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+      }
     </div>
 
     <div class="flex-grow-1">
-      <h2 class="transaction-title mb-1">Nueva transacción</h2>
+      <h2 class="transaction-title mb-1">
+        @if (isEditMode()) {
+          Editar transacción
+        } @else {
+          Nueva transacción
+        }
+      </h2>
 
       <p class="transaction-subtitle mb-0">
-        Registra un nuevo movimiento de ingreso o gasto personal
+        @if (isEditMode()) {
+          Modifica los datos del movimiento seleccionado
+        } @else {
+          Registra un nuevo movimiento de ingreso o gasto personal
+        }
       </p>
     </div>
 
@@ -227,6 +241,7 @@
     <div class="form-field">
       <span class="transaction-label">
         Etiquetas
+
         <span class="optional-label"> (opcional) </span>
       </span>
 
@@ -265,6 +280,7 @@
       <div class="notes-heading">
         <label for="notes" class="transaction-label">
           Notas adicionales
+
           <span class="optional-label"> (opcional) </span>
         </label>
 
@@ -309,11 +325,21 @@
         @if (isSubmitting()) {
           <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
 
-          Guardando...
+          @if (isEditMode()) {
+            Guardando cambios...
+          } @else {
+            Guardando...
+          }
         } @else {
-          <i class="bi bi-check-lg" aria-hidden="true"></i>
+          @if (isEditMode()) {
+            <i class="bi bi-check-lg" aria-hidden="true"></i>
 
-          Guardar transacción
+            Guardar cambios
+          } @else {
+            <i class="bi bi-check-lg" aria-hidden="true"></i>
+
+            Guardar transacción
+          }
         }
       </button>
     </footer>

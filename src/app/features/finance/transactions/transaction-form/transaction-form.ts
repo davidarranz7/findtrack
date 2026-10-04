@@ -3,7 +3,9 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
   inject,
+  input,
   output,
   signal,
 } from '@angular/core';
@@ -32,8 +34,13 @@ export class TransactionForm {
   private readonly transactionService = inject(TransactionService);
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly transaction = input<Transaction | null>(null);
+
   readonly closed = output<void>();
   readonly created = output<Transaction>();
+  readonly updated = output<Transaction>();
+
+  protected readonly isEditMode = computed(() => this.transaction() !== null);
 
   protected readonly isSubmitting = signal(false);
   protected readonly submitError = signal<string | null>(null);
@@ -60,7 +67,6 @@ export class TransactionForm {
   protected readonly isLoadingTags = signal(true);
 
   protected readonly categoryLoadError = signal<string | null>(null);
-
   protected readonly tagLoadError = signal<string | null>(null);
 
   protected readonly filteredCategories = computed(() => {
@@ -74,6 +80,25 @@ export class TransactionForm {
   constructor() {
     this.loadCategories();
     this.loadTags();
+
+    effect(() => {
+      const transaction = this.transaction();
+
+      if (!transaction) {
+        return;
+      }
+
+      this.transactionForm.reset({
+        type: transaction.type,
+        amount: transaction.amount,
+        description: transaction.description,
+        categoryId: transaction.categoryId,
+        date: transaction.date,
+        paymentMethod: transaction.paymentMethod,
+        tagIds: [...transaction.tagIds],
+        notes: transaction.notes,
+      });
+    });
   }
 
   protected close(): void {
@@ -131,28 +156,51 @@ export class TransactionForm {
     const { type, amount, description, categoryId, date, paymentMethod, tagIds, notes } =
       this.transactionForm.getRawValue();
 
+    const payload = {
+      userId: currentUser.id,
+      type,
+      amount,
+      description: description.trim(),
+      categoryId,
+      date,
+      paymentMethod,
+      tagIds,
+      notes: notes.trim(),
+    };
+
     this.isSubmitting.set(true);
     this.submitError.set(null);
 
+    const transaction = this.transaction();
+
+    if (transaction) {
+      this.transactionService
+        .updateTransaction(transaction.id, payload)
+        .pipe(
+          takeUntilDestroyed(this.destroyRef),
+          finalize(() => this.isSubmitting.set(false)),
+        )
+        .subscribe({
+          next: (updatedTransaction) => {
+            this.updated.emit(updatedTransaction);
+          },
+          error: () => {
+            this.submitError.set('No se ha podido actualizar la transacción. Inténtalo de nuevo.');
+          },
+        });
+
+      return;
+    }
+
     this.transactionService
-      .createTransaction({
-        userId: currentUser.id,
-        type,
-        amount,
-        description: description.trim(),
-        categoryId,
-        date,
-        paymentMethod,
-        tagIds,
-        notes: notes.trim(),
-      })
+      .createTransaction(payload)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.isSubmitting.set(false)),
       )
       .subscribe({
-        next: (transaction) => {
-          this.created.emit(transaction);
+        next: (createdTransaction) => {
+          this.created.emit(createdTransaction);
         },
         error: () => {
           this.submitError.set('No se ha podido guardar la transacción. Inténtalo de nuevo.');
@@ -165,7 +213,9 @@ export class TransactionForm {
 
     if (!userId) {
       this.isLoadingCategories.set(false);
+
       this.categoryLoadError.set('No se han podido cargar las categorías.');
+
       return;
     }
 
@@ -179,6 +229,7 @@ export class TransactionForm {
         },
         error: () => {
           this.isLoadingCategories.set(false);
+
           this.categoryLoadError.set('No se han podido cargar las categorías.');
         },
       });
@@ -189,7 +240,9 @@ export class TransactionForm {
 
     if (!userId) {
       this.isLoadingTags.set(false);
+
       this.tagLoadError.set('No se han podido cargar las etiquetas.');
+
       return;
     }
 
@@ -203,6 +256,7 @@ export class TransactionForm {
         },
         error: () => {
           this.isLoadingTags.set(false);
+
           this.tagLoadError.set('No se han podido cargar las etiquetas.');
         },
       });

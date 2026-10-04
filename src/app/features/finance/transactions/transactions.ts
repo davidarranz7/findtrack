@@ -61,6 +61,8 @@ export class Transactions {
 
   protected readonly isTransactionFormOpen = signal(false);
 
+  protected readonly transactionToEdit = signal<Transaction | null>(null);
+
   protected readonly transactionToDelete = signal<Transaction | null>(null);
 
   protected readonly deletingTransactionId = signal<string | null>(null);
@@ -142,6 +144,7 @@ export class Transactions {
 
   protected readonly filteredTransactions = computed(() => {
     const search = this.searchTerm().trim().toLowerCase();
+
     const type = this.selectedType();
     const categoryId = this.selectedCategoryId();
     const paymentMethod = this.selectedPaymentMethod();
@@ -244,17 +247,34 @@ export class Transactions {
   }
 
   protected openTransactionForm(): void {
+    this.transactionToEdit.set(null);
+    this.isTransactionFormOpen.set(true);
+  }
+
+  protected openEditTransaction(transaction: Transaction): void {
+    this.transactionToEdit.set(transaction);
     this.isTransactionFormOpen.set(true);
   }
 
   protected closeTransactionForm(): void {
     this.isTransactionFormOpen.set(false);
+    this.transactionToEdit.set(null);
   }
 
   protected handleTransactionCreated(transaction: Transaction): void {
     this.transactions.update((transactions) => [transaction, ...transactions]);
 
     this.currentPage.set(1);
+    this.closeTransactionForm();
+  }
+
+  protected handleTransactionUpdated(updatedTransaction: Transaction): void {
+    this.transactions.update((transactions) =>
+      transactions.map((transaction) =>
+        transaction.id === updatedTransaction.id ? updatedTransaction : transaction,
+      ),
+    );
+
     this.closeTransactionForm();
   }
 
@@ -319,6 +339,7 @@ export class Transactions {
 
   protected selectCategory(categoryId: string): void {
     this.selectedCategoryId.set(categoryId);
+
     this.currentPage.set(1);
   }
 

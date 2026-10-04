@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Transaction } from '../models';
 
-type CreateTransaction = Omit<Transaction, 'id'>;
+type TransactionPayload = Omit<Transaction, 'id'>;
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +21,15 @@ export class TransactionService {
     });
   }
 
-  createTransaction(transaction: CreateTransaction): Observable<Transaction> {
+  createTransaction(transaction: TransactionPayload): Observable<Transaction> {
     return this.http.post<Transaction>(this.apiUrl, transaction);
+  }
+
+  updateTransaction(
+    transactionId: string,
+    transaction: TransactionPayload,
+  ): Observable<Transaction> {
+    return this.http.patch<Transaction>(`${this.apiUrl}/${transactionId}`, transaction);
   }
 
   deleteTransaction(transactionId: string): Observable<void> {
