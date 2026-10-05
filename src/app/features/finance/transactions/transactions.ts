@@ -9,8 +9,9 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 
-import { AuthService } from '../../auth/services/auth.service';
 import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog';
+import { ToastService } from '../../../shared/ui/toast/toast.service';
+import { AuthService } from '../../auth/services/auth.service';
 import { Category, PaymentMethod, Tag, Transaction, TransactionType } from '../models';
 import { CategoryService } from '../services/category.service';
 import { TagService } from '../services/tag.service';
@@ -32,6 +33,7 @@ export class Transactions {
   private readonly transactionService = inject(TransactionService);
   private readonly categoryService = inject(CategoryService);
   private readonly tagService = inject(TagService);
+  private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly currentDate = new Date();
@@ -192,7 +194,6 @@ export class Transactions {
 
   protected readonly paginatedTransactions = computed(() => {
     const startIndex = (this.currentPage() - 1) * this.pageSize();
-
     const endIndex = startIndex + this.pageSize();
 
     return this.filteredTransactions().slice(startIndex, endIndex);
@@ -215,9 +216,7 @@ export class Transactions {
     const currentPage = this.currentPage();
 
     const startPage = Math.max(1, currentPage - 2);
-
     const endPage = Math.min(totalPages, startPage + 4);
-
     const adjustedStartPage = Math.max(1, endPage - 4);
 
     return Array.from(
@@ -300,7 +299,6 @@ export class Transactions {
     }
 
     this.deletingTransactionId.set(transaction.id);
-
     this.deleteError.set(null);
 
     this.transactionService
@@ -320,6 +318,8 @@ export class Transactions {
           }
 
           this.transactionToDelete.set(null);
+
+          this.toastService.success('Transacción eliminada correctamente.');
         },
         error: () => {
           this.deleteError.set('No se ha podido eliminar la transacción. Inténtalo de nuevo.');
@@ -339,7 +339,6 @@ export class Transactions {
 
   protected selectCategory(categoryId: string): void {
     this.selectedCategoryId.set(categoryId);
-
     this.currentPage.set(1);
   }
 

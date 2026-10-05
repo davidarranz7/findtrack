@@ -1,0 +1,45 @@
+<div class="app-toast-container" aria-live="polite" aria-atomic="false">
+  @for (toast of toasts(); track toast.id) {
+    <div
+      class="app-toast"
+      [class.toast-success]="toast.type === 'success'"
+      [class.toast-error]="toast.type === 'error'"
+      [class.toast-warning]="toast.type === 'warning'"
+      [class.toast-info]="toast.type === 'info'"
+      role="status"
+    >
+      <div class="toast-icon">
+        @switch (toast.type) {
+          @case ('success') {
+            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+          }
+
+          @case ('error') {
+            <i class="bi bi-x-circle-fill" aria-hidden="true"></i>
+          }
+
+          @case ('warning') {
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+          }
+
+          @case ('info') {
+            <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+          }
+        }
+      </div>
+
+      <p class="toast-message mb-0">
+        {{ toast.message }}
+      </p>
+
+      <button
+        type="button"
+        class="toast-close-button"
+        aria-label="Cerrar aviso"
+        (click)="removeToast(toast.id)"
+      >
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+  }
+</div>

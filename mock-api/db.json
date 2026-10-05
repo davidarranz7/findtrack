@@ -301,18 +301,6 @@
       "tagIds": [],
       "notes": "",
       "id": "KOlOk10NaNs"
-    },
-    {
-      "userId": "user-1",
-      "type": "income",
-      "amount": 40,
-      "description": "regalo abuela",
-      "categoryId": "category-other",
-      "date": "2026-10-01",
-      "paymentMethod": "cash",
-      "tagIds": [],
-      "notes": "",
-      "id": "1ceXk7Rvnhc"
     }
   ],
   "budgets": [

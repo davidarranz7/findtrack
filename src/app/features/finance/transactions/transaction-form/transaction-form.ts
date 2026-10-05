@@ -13,6 +13,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Category, PaymentMethod, Tag, Transaction, TransactionType } from '../../models';
 import { CategoryService } from '../../services/category.service';
@@ -32,6 +33,7 @@ export class TransactionForm {
   private readonly categoryService = inject(CategoryService);
   private readonly tagService = inject(TagService);
   private readonly transactionService = inject(TransactionService);
+  private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly transaction = input<Transaction | null>(null);
@@ -182,6 +184,8 @@ export class TransactionForm {
         )
         .subscribe({
           next: (updatedTransaction) => {
+            this.toastService.success('Transacción actualizada correctamente.');
+
             this.updated.emit(updatedTransaction);
           },
           error: () => {
@@ -200,6 +204,8 @@ export class TransactionForm {
       )
       .subscribe({
         next: (createdTransaction) => {
+          this.toastService.success('Transacción creada correctamente.');
+
           this.created.emit(createdTransaction);
         },
         error: () => {
