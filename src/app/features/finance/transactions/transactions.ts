@@ -12,9 +12,8 @@ import { finalize } from 'rxjs';
 import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog';
 import { ToastService } from '../../../shared/ui/toast/toast.service';
 import { AuthService } from '../../auth/services/auth.service';
-import { Category, PaymentMethod, Tag, Transaction, TransactionType } from '../models';
+import { Category, PaymentMethod, Transaction, TransactionType } from '../models';
 import { CategoryService } from '../services/category.service';
-import { TagService } from '../services/tag.service';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionForm } from './transaction-form/transaction-form';
 
@@ -32,7 +31,6 @@ export class Transactions {
   private readonly authService = inject(AuthService);
   private readonly transactionService = inject(TransactionService);
   private readonly categoryService = inject(CategoryService);
-  private readonly tagService = inject(TagService);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -51,39 +49,28 @@ export class Transactions {
 
   protected readonly transactions = signal<Transaction[]>([]);
   protected readonly categories = signal<Category[]>([]);
-  protected readonly tags = signal<Tag[]>([]);
 
   protected readonly isLoading = signal(true);
   protected readonly isLoadingCategories = signal(true);
-  protected readonly isLoadingTags = signal(true);
 
   protected readonly loadError = signal<string | null>(null);
   protected readonly categoryLoadError = signal<string | null>(null);
-  protected readonly tagLoadError = signal<string | null>(null);
 
   protected readonly isTransactionFormOpen = signal(false);
-
   protected readonly transactionToEdit = signal<Transaction | null>(null);
 
   protected readonly transactionToDelete = signal<Transaction | null>(null);
-
   protected readonly deletingTransactionId = signal<string | null>(null);
-
   protected readonly deleteError = signal<string | null>(null);
 
   protected readonly searchTerm = signal('');
-
   protected readonly selectedType = signal<TransactionTypeFilter>('all');
-
   protected readonly selectedCategoryId = signal('all');
-
   protected readonly selectedPaymentMethod = signal<PaymentMethodFilter>('all');
-
   protected readonly selectedMonth = signal(this.getMonthKey(this.currentDate));
 
   protected readonly currentPage = signal(1);
   protected readonly pageSize = signal(10);
-
   protected readonly pageSizeOptions = [5, 10, 20];
 
   protected readonly currentMonthLabel = computed(() => this.getMonthLabel(this.selectedMonth()));
@@ -146,7 +133,6 @@ export class Transactions {
 
   protected readonly filteredTransactions = computed(() => {
     const search = this.searchTerm().trim().toLowerCase();
-
     const type = this.selectedType();
     const categoryId = this.selectedCategoryId();
     const paymentMethod = this.selectedPaymentMethod();
@@ -171,16 +157,10 @@ export class Transactions {
 
         const categoryName = this.getCategoryName(transaction.categoryId).toLowerCase();
 
-        const tagNames = transaction.tagIds
-          .map((tagId) => this.getTagName(tagId))
-          .join(' ')
-          .toLowerCase();
-
         return (
           transaction.description.toLowerCase().includes(search) ||
           transaction.notes.toLowerCase().includes(search) ||
-          categoryName.includes(search) ||
-          tagNames.includes(search)
+          categoryName.includes(search)
         );
       })
       .sort((firstTransaction, secondTransaction) =>
@@ -194,6 +174,7 @@ export class Transactions {
 
   protected readonly paginatedTransactions = computed(() => {
     const startIndex = (this.currentPage() - 1) * this.pageSize();
+
     const endIndex = startIndex + this.pageSize();
 
     return this.filteredTransactions().slice(startIndex, endIndex);
@@ -216,7 +197,9 @@ export class Transactions {
     const currentPage = this.currentPage();
 
     const startPage = Math.max(1, currentPage - 2);
+
     const endPage = Math.min(totalPages, startPage + 4);
+
     const adjustedStartPage = Math.max(1, endPage - 4);
 
     return Array.from(
@@ -242,7 +225,6 @@ export class Transactions {
   constructor() {
     this.loadTransactions();
     this.loadCategories();
-    this.loadTags();
   }
 
   protected openTransactionForm(): void {
@@ -299,6 +281,7 @@ export class Transactions {
     }
 
     this.deletingTransactionId.set(transaction.id);
+
     this.deleteError.set(null);
 
     this.transactionService
@@ -339,6 +322,7 @@ export class Transactions {
 
   protected selectCategory(categoryId: string): void {
     this.selectedCategoryId.set(categoryId);
+
     this.currentPage.set(1);
   }
 
@@ -394,14 +378,14 @@ export class Transactions {
     this.currentPage.update((page) => page + 1);
   }
 
-  protected getCategoryName(categoryId: string): string {
+  protected getCategoryName(categoryId: string | null): string {
+    if (!categoryId) {
+      return 'Sin categoría';
+    }
+
     return (
       this.categories().find((category) => category.id === categoryId)?.name ?? 'Sin categoría'
     );
-  }
-
-  protected getTagName(tagId: string): string {
-    return this.tags().find((tag) => tag.id === tagId)?.name ?? 'Etiqueta';
   }
 
   protected getPaymentMethodLabel(paymentMethod: PaymentMethod): string {
@@ -486,33 +470,6 @@ export class Transactions {
         },
         error: () => {
           this.categoryLoadError.set('No se han podido cargar las categorías.');
-        },
-      });
-  }
-
-  private loadTags(): void {
-    const userId = this.authService.currentUser()?.id;
-
-    if (!userId) {
-      this.isLoadingTags.set(false);
-
-      this.tagLoadError.set('No se han podido cargar las etiquetas.');
-
-      return;
-    }
-
-    this.tagService
-      .getTags(userId)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.isLoadingTags.set(false)),
-      )
-      .subscribe({
-        next: (tags) => {
-          this.tags.set(tags);
-        },
-        error: () => {
-          this.tagLoadError.set('No se han podido cargar las etiquetas.');
         },
       });
   }

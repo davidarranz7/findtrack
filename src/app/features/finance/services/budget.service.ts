@@ -19,4 +19,12 @@ export class BudgetService {
       },
     });
   }
+
+  getBudgetsByUser(userId: string): Observable<Budget[]> {
+    return this.http.get<Budget[]>(this.apiUrl, {
+      params: {
+        userId,
+      },
+    });
+  }
 }

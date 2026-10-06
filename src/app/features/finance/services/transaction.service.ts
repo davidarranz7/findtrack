@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 
 import { Transaction } from '../models';
 
-type TransactionPayload = Omit<Transaction, 'id'>;
+type CreateTransactionPayload = Omit<Transaction, 'id'>;
+
+type UpdateTransactionPayload = Partial<CreateTransactionPayload>;
 
 @Injectable({
   providedIn: 'root',
@@ -21,13 +23,13 @@ export class TransactionService {
     });
   }
 
-  createTransaction(transaction: TransactionPayload): Observable<Transaction> {
+  createTransaction(transaction: CreateTransactionPayload): Observable<Transaction> {
     return this.http.post<Transaction>(this.apiUrl, transaction);
   }
 
   updateTransaction(
     transactionId: string,
-    transaction: TransactionPayload,
+    transaction: UpdateTransactionPayload,
   ): Observable<Transaction> {
     return this.http.patch<Transaction>(`${this.apiUrl}/${transactionId}`, transaction);
   }

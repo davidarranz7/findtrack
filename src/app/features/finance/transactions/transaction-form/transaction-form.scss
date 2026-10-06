@@ -299,52 +299,6 @@
   color: var(--bs-secondary);
 }
 
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.tag-button {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  min-height: 34px;
-  padding: 0.4rem 0.7rem;
-  border: 1px solid var(--bs-border-color);
-  border-radius: 999px;
-  background: var(--bs-white);
-  color: var(--bs-secondary);
-  font-size: 0.75rem;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.tag-button:hover {
-  border-color: var(--bs-primary-border-subtle);
-  color: var(--bs-primary);
-}
-
-.tag-button.active {
-  border-color: var(--bs-primary);
-  background: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
-}
-
-.tags-status,
-.empty-tags {
-  font-size: 0.75rem;
-  color: var(--bs-secondary);
-}
-
-.tags-status {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .notes-heading {
   display: flex;
   align-items: center;

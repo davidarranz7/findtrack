@@ -1,0 +1,340 @@
+<section class="categories-page">
+  <header class="categories-header">
+    <div>
+      <p class="categories-eyebrow mb-1">AJUSTES FINANCIEROS · ORGANIZACIÓN</p>
+
+      <h1 class="categories-title mb-1">Categorías</h1>
+
+      <p class="categories-description mb-0">
+        Organiza tus movimientos de la forma que mejor se adapte a ti.
+      </p>
+    </div>
+
+    <div class="categories-header-actions">
+      <button type="button" class="btn btn-primary" (click)="openCategoryForm()">
+        <i class="bi bi-plus-circle me-2" aria-hidden="true"></i>
+
+        Nueva categoría
+      </button>
+    </div>
+  </header>
+
+  @if (loadError()) {
+    <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+      <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+      <span>
+        {{ loadError() }}
+      </span>
+    </div>
+  }
+
+  <section class="categories-summary" aria-label="Resumen de categorías">
+    <article class="summary-card">
+      <div>
+        <p class="summary-label mb-1">Total categorías</p>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <strong class="summary-value">
+            {{ totalCategories() }}
+          </strong>
+        }
+
+        <p class="summary-detail mb-0">Categorías disponibles</p>
+      </div>
+
+      <div class="summary-icon summary-icon-primary">
+        <i class="bi bi-grid" aria-hidden="true"></i>
+      </div>
+    </article>
+
+    <article class="summary-card">
+      <div>
+        <p class="summary-label mb-1">Movimientos categorizados</p>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-success" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <strong class="summary-value">
+            {{ categorizedTransactions() }}
+          </strong>
+        }
+
+        <p class="summary-detail mb-0">Con categoría asignada</p>
+      </div>
+
+      <div class="summary-icon summary-icon-success">
+        <i class="bi bi-check-circle" aria-hidden="true"></i>
+      </div>
+    </article>
+
+    <article class="summary-card">
+      <div>
+        <p class="summary-label mb-1">Sin categoría</p>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-warning" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <strong class="summary-value">
+            {{ uncategorizedTransactions() }}
+          </strong>
+        }
+
+        <p class="summary-detail mb-0">Movimientos pendientes</p>
+      </div>
+
+      <div class="summary-icon summary-icon-warning">
+        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+      </div>
+    </article>
+  </section>
+
+  <section class="categories-management">
+    <div class="categories-management-header">
+      <div>
+        <h2 class="section-title mb-1">Categorías de movimiento</h2>
+
+        <p class="section-description mb-0">
+          Organiza tus movimientos utilizando tus propias categorías.
+        </p>
+      </div>
+
+      <span class="categories-count">
+        {{ totalCategories() }}
+
+        @if (totalCategories() === 1) {
+          categoría
+        } @else {
+          categorías
+        }
+      </span>
+    </div>
+
+    @if (isLoadingCategories()) {
+      <div class="categories-loading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden"> Cargando categorías... </span>
+        </div>
+      </div>
+    } @else if (categories().length === 0) {
+      <div class="categories-empty">
+        <div class="categories-empty-icon">
+          <i class="bi bi-grid" aria-hidden="true"></i>
+        </div>
+
+        <h3>No tienes categorías</h3>
+
+        <p>Crea tu primera categoría para organizar tus movimientos.</p>
+
+        <button type="button" class="btn btn-primary mt-3" (click)="openCategoryForm()">
+          Crear mi primera categoría
+        </button>
+      </div>
+    } @else {
+      <div class="categories-grid">
+        @for (category of categories(); track category.id) {
+          <article class="category-card">
+            <div class="category-card-header">
+              <div
+                class="category-icon"
+                [style.color]="category.color"
+                [style.backgroundColor]="category.color + '18'"
+              >
+                <i [class]="getCategoryIconClass(category)" aria-hidden="true"></i>
+              </div>
+
+              <div class="category-card-main">
+                <h3 class="category-name mb-1">
+                  {{ category.name }}
+                </h3>
+
+                <p class="category-usage mb-0">
+                  {{ getTransactionCount(category.id) }}
+
+                  @if (getTransactionCount(category.id) === 1) {
+                    transacción
+                  } @else {
+                    transacciones
+                  }
+                </p>
+              </div>
+            </div>
+
+            <div class="category-card-footer">
+              <span
+                class="category-color"
+                [style.backgroundColor]="category.color"
+                aria-hidden="true"
+              ></span>
+
+              <div class="category-actions">
+                <button
+                  type="button"
+                  class="category-action-button"
+                  [attr.aria-label]="'Editar categoría ' + category.name"
+                  (click)="openEditCategory(category)"
+                >
+                  <i class="bi bi-pencil" aria-hidden="true"></i>
+                </button>
+
+                <button
+                  type="button"
+                  class="category-action-button category-action-delete"
+                  [attr.aria-label]="'Eliminar categoría ' + category.name"
+                  [disabled]="isLoadingBudgets() || deletingCategoryId() !== null"
+                  (click)="requestDeleteCategory(category)"
+                >
+                  <i class="bi bi-trash" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</section>
+
+@if (isCategoryFormOpen()) {
+  <div
+    class="category-modal-backdrop"
+    role="presentation"
+    (click)="$event.target === $event.currentTarget && closeCategoryForm()"
+  >
+    <section
+      class="category-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="category-modal-title"
+    >
+      <header class="category-modal-header">
+        <div class="category-modal-heading">
+          <div class="category-modal-icon">
+            @if (isEditingCategory()) {
+              <i class="bi bi-pencil" aria-hidden="true"></i>
+            } @else {
+              <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            }
+          </div>
+
+          <div>
+            <h2 id="category-modal-title" class="category-modal-title mb-1">
+              @if (isEditingCategory()) {
+                Editar categoría
+              } @else {
+                Nueva categoría
+              }
+            </h2>
+
+            <p class="category-modal-description mb-0">
+              @if (isEditingCategory()) {
+                Modifica el nombre, icono o color de la categoría.
+              } @else {
+                Crea una categoría para organizar tus movimientos.
+              }
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="category-modal-close"
+          aria-label="Cerrar"
+          [disabled]="isSavingCategory()"
+          (click)="closeCategoryForm()"
+        >
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="category-modal-body">
+        <app-category-form
+          [category]="categoryToEdit()"
+          [isSaving]="isSavingCategory()"
+          [errorMessage]="categoryFormError()"
+          (submitted)="saveCategory($event)"
+          (cancelled)="closeCategoryForm()"
+        />
+      </div>
+    </section>
+  </div>
+}
+
+@if (categoryToDelete(); as category) {
+  <app-confirm-dialog
+    title="Eliminar categoría"
+    message="Esta acción eliminará la categoría de tu organización financiera."
+    confirmText="Eliminar categoría"
+    cancelText="Cancelar"
+    processingText="Eliminando..."
+    variant="danger"
+    [isProcessing]="deletingCategoryId() !== null"
+    (confirmed)="confirmDeleteCategory()"
+    (cancelled)="cancelDeleteCategory()"
+  >
+    <div class="border rounded-3 p-3 mb-3">
+      <div class="d-flex align-items-center gap-3">
+        <div
+          class="d-flex align-items-center justify-content-center rounded-3"
+          style="width: 44px; height: 44px"
+          [style.color]="category.color"
+          [style.backgroundColor]="category.color + '18'"
+        >
+          <i [class]="getCategoryIconClass(category)" aria-hidden="true"></i>
+        </div>
+
+        <div>
+          <strong>
+            {{ category.name }}
+          </strong>
+
+          <p class="text-body-secondary small mb-0">
+            {{ affectedTransactions().length }}
+
+            @if (affectedTransactions().length === 1) {
+              transacción asociada
+            } @else {
+              transacciones asociadas
+            }
+          </p>
+        </div>
+      </div>
+    </div>
+
+    @if (affectedTransactions().length > 0) {
+      <div class="alert alert-warning small mb-3" role="alert">
+        <i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>
+
+        @if (affectedTransactions().length === 1) {
+          Esta transacción no se eliminará. Pasará a
+          <strong>Sin categoría</strong>.
+        } @else {
+          Las
+          {{ affectedTransactions().length }}
+          transacciones asociadas no se eliminarán. Pasarán a
+          <strong>Sin categoría</strong>.
+        }
+      </div>
+    } @else {
+      <div class="alert alert-light border small mb-3" role="status">
+        Esta categoría no tiene transacciones asociadas.
+      </div>
+    }
+
+    @if (deleteError()) {
+      <div class="alert alert-danger small mb-0" role="alert" aria-live="assertive">
+        <i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>
+
+        {{ deleteError() }}
+      </div>
+    }
+  </app-confirm-dialog>
+}

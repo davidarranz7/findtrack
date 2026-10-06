@@ -10,4 +10,9 @@ export const FINANCE_ROUTES: Routes = [
     loadComponent: () =>
       import('./transactions/transactions').then((component) => component.Transactions),
   },
+  {
+    path: 'categories',
+    loadComponent: () =>
+      import('./categories/categories').then((component) => component.Categories),
+  },
 ];

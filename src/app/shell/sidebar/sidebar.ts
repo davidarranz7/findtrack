@@ -34,7 +34,7 @@ export class Sidebar {
       route: '/budgets',
     },
     {
-      label: 'Categorías y Etiquetas',
+      label: 'Categorías',
       icon: 'bi-tag',
       route: '/categories',
     },

@@ -9,15 +9,14 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 
 import { ToastService } from '../../../../shared/ui/toast/toast.service';
 import { AuthService } from '../../../auth/services/auth.service';
-import { Category, PaymentMethod, Tag, Transaction, TransactionType } from '../../models';
+import { Category, PaymentMethod, Transaction, TransactionType } from '../../models';
 import { CategoryService } from '../../services/category.service';
-import { TagService } from '../../services/tag.service';
 import { TransactionService } from '../../services/transaction.service';
 
 @Component({
@@ -31,7 +30,6 @@ export class TransactionForm {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly categoryService = inject(CategoryService);
-  private readonly tagService = inject(TagService);
   private readonly transactionService = inject(TransactionService);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
@@ -54,34 +52,17 @@ export class TransactionForm {
     categoryId: ['', Validators.required],
     date: [this.getTodayDate(), Validators.required],
     paymentMethod: ['card' as PaymentMethod, Validators.required],
-    tagIds: this.formBuilder.nonNullable.control<string[]>([]),
     notes: ['', Validators.maxLength(500)],
   });
 
-  private readonly selectedType = toSignal(this.transactionForm.controls.type.valueChanges, {
-    initialValue: this.transactionForm.controls.type.value,
-  });
-
   protected readonly categories = signal<Category[]>([]);
-  protected readonly tags = signal<Tag[]>([]);
 
   protected readonly isLoadingCategories = signal(true);
-  protected readonly isLoadingTags = signal(true);
 
   protected readonly categoryLoadError = signal<string | null>(null);
-  protected readonly tagLoadError = signal<string | null>(null);
-
-  protected readonly filteredCategories = computed(() => {
-    const selectedType = this.selectedType();
-
-    return this.categories().filter(
-      (category) => category.type === selectedType || category.type === 'both',
-    );
-  });
 
   constructor() {
     this.loadCategories();
-    this.loadTags();
 
     effect(() => {
       const transaction = this.transaction();
@@ -94,10 +75,9 @@ export class TransactionForm {
         type: transaction.type,
         amount: transaction.amount,
         description: transaction.description,
-        categoryId: transaction.categoryId,
+        categoryId: transaction.categoryId ?? '',
         date: transaction.date,
         paymentMethod: transaction.paymentMethod,
-        tagIds: [...transaction.tagIds],
         notes: transaction.notes,
       });
     });
@@ -117,29 +97,10 @@ export class TransactionForm {
     }
 
     this.transactionForm.controls.type.setValue(type);
-    this.transactionForm.controls.categoryId.reset('');
   }
 
   protected selectPaymentMethod(paymentMethod: PaymentMethod): void {
     this.transactionForm.controls.paymentMethod.setValue(paymentMethod);
-  }
-
-  protected toggleTag(tagId: string): void {
-    const selectedTags = this.transactionForm.controls.tagIds.value;
-
-    if (selectedTags.includes(tagId)) {
-      this.transactionForm.controls.tagIds.setValue(
-        selectedTags.filter((selectedTagId) => selectedTagId !== tagId),
-      );
-
-      return;
-    }
-
-    this.transactionForm.controls.tagIds.setValue([...selectedTags, tagId]);
-  }
-
-  protected isTagSelected(tagId: string): boolean {
-    return this.transactionForm.controls.tagIds.value.includes(tagId);
   }
 
   protected onSubmit(): void {
@@ -152,10 +113,11 @@ export class TransactionForm {
 
     if (!currentUser) {
       this.submitError.set('No se ha podido identificar al usuario actual.');
+
       return;
     }
 
-    const { type, amount, description, categoryId, date, paymentMethod, tagIds, notes } =
+    const { type, amount, description, categoryId, date, paymentMethod, notes } =
       this.transactionForm.getRawValue();
 
     const payload = {
@@ -166,7 +128,6 @@ export class TransactionForm {
       categoryId,
       date,
       paymentMethod,
-      tagIds,
       notes: notes.trim(),
     };
 
@@ -237,33 +198,6 @@ export class TransactionForm {
           this.isLoadingCategories.set(false);
 
           this.categoryLoadError.set('No se han podido cargar las categorías.');
-        },
-      });
-  }
-
-  private loadTags(): void {
-    const userId = this.authService.currentUser()?.id;
-
-    if (!userId) {
-      this.isLoadingTags.set(false);
-
-      this.tagLoadError.set('No se han podido cargar las etiquetas.');
-
-      return;
-    }
-
-    this.tagService
-      .getTags(userId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (tags) => {
-          this.tags.set(tags);
-          this.isLoadingTags.set(false);
-        },
-        error: () => {
-          this.isLoadingTags.set(false);
-
-          this.tagLoadError.set('No se han podido cargar las etiquetas.');
         },
       });
   }

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+
 import { Sidebar } from './sidebar';
 
 describe('Sidebar', () => {
@@ -29,7 +30,7 @@ describe('Sidebar', () => {
     expect(compiled.textContent).toContain('Resumen');
     expect(compiled.textContent).toContain('Transacciones');
     expect(compiled.textContent).toContain('Presupuestos');
-    expect(compiled.textContent).toContain('Categorías y Etiquetas');
+    expect(compiled.textContent).toContain('Categorías');
     expect(compiled.textContent).toContain('Informes y Estadísticas');
     expect(compiled.textContent).toContain('Configuración');
   });

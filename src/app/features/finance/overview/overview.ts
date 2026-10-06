@@ -103,10 +103,6 @@ export class Overview {
 
   protected readonly userName = computed(() => this.currentUser()?.username ?? 'Usuario');
 
-  protected readonly canGoToNextMonth = computed(
-    () => this.selectedMonthKey() < this.getMonthKey(this.currentDate),
-  );
-
   protected get currentMonthLabel(): string {
     return this.getMonthLabel(this.selectedMonth());
   }
@@ -132,11 +128,11 @@ export class Overview {
   );
 
   protected readonly availableBalance = computed(() =>
-    this.transactionsUpToSelectedMonth().reduce((balance, transaction) => {
-      return transaction.type === 'income'
-        ? balance + transaction.amount
-        : balance - transaction.amount;
-    }, 0),
+    this.transactionsUpToSelectedMonth().reduce(
+      (balance, transaction) =>
+        transaction.type === 'income' ? balance + transaction.amount : balance - transaction.amount,
+      0,
+    ),
   );
 
   protected readonly monthlyIncome = computed(() =>
@@ -211,7 +207,7 @@ export class Overview {
       return [];
     }
 
-    const amountsByCategory = new Map<string, number>();
+    const amountsByCategory = new Map<string | null, number>();
 
     for (const transaction of expenses) {
       const currentAmount = amountsByCategory.get(transaction.categoryId) ?? 0;
@@ -220,12 +216,13 @@ export class Overview {
     }
 
     return Array.from(amountsByCategory.entries(), ([categoryId, amount]) => {
-      const category = this.categories().find(
-        (currentCategory) => currentCategory.id === categoryId,
-      );
+      const category =
+        categoryId === null
+          ? undefined
+          : this.categories().find((currentCategory) => currentCategory.id === categoryId);
 
       return {
-        categoryId,
+        categoryId: categoryId ?? 'uncategorized',
         categoryName: category?.name ?? 'Sin categoría',
         amount,
         percentage: (amount / totalExpenses) * 100,
@@ -334,6 +331,16 @@ export class Overview {
     this.changeMonth(-1);
   }
 
+  protected canGoToNextMonth(): boolean {
+    const selectedMonth = this.selectedMonth();
+
+    return (
+      selectedMonth.getFullYear() < this.currentDate.getFullYear() ||
+      (selectedMonth.getFullYear() === this.currentDate.getFullYear() &&
+        selectedMonth.getMonth() < this.currentDate.getMonth())
+    );
+  }
+
   protected nextMonth(): void {
     if (!this.canGoToNextMonth()) {
       return;
@@ -356,7 +363,11 @@ export class Overview {
     this.closeTransactionForm();
   }
 
-  protected getCategoryName(categoryId: string): string {
+  protected getCategoryName(categoryId: string | null): string {
+    if (!categoryId) {
+      return 'Sin categoría';
+    }
+
     return (
       this.categories().find((category) => category.id === categoryId)?.name ?? 'Sin categoría'
     );

@@ -1,0 +1,115 @@
+<form class="category-form" [formGroup]="categoryForm" (ngSubmit)="submit()">
+  @if (errorMessage()) {
+    <div class="alert alert-danger py-2 px-3" role="alert">
+      <i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>
+
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <div class="mb-3">
+    <label for="category-name" class="form-label"> Nombre </label>
+
+    <input
+      id="category-name"
+      type="text"
+      class="form-control"
+      placeholder="Ej. Videojuegos"
+      maxlength="40"
+      formControlName="name"
+    />
+
+    @if (categoryForm.controls.name.touched && categoryForm.controls.name.hasError('required')) {
+      <small class="text-danger"> El nombre de la categoría es obligatorio. </small>
+    }
+
+    @if (categoryForm.controls.name.touched && categoryForm.controls.name.hasError('maxlength')) {
+      <small class="text-danger"> El nombre no puede superar los 40 caracteres. </small>
+    }
+  </div>
+
+  <div class="mb-3">
+    <span class="form-label d-block"> Icono </span>
+
+    <div class="category-icon-selector" role="group" aria-label="Seleccionar icono">
+      @for (icon of iconOptions; track icon) {
+        <button
+          type="button"
+          class="category-icon-option"
+          [class.active]="categoryForm.controls.icon.value === icon"
+          [attr.aria-pressed]="categoryForm.controls.icon.value === icon"
+          [attr.aria-label]="'Seleccionar icono ' + icon"
+          (click)="selectIcon(icon)"
+        >
+          <i [class]="'bi ' + icon" aria-hidden="true"></i>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <span class="form-label d-block"> Color </span>
+
+    <div class="category-color-selector" role="group" aria-label="Seleccionar color">
+      @for (color of colorOptions; track color) {
+        <button
+          type="button"
+          class="category-color-option"
+          [class.active]="categoryForm.controls.color.value === color"
+          [style.--category-color]="color"
+          [attr.aria-pressed]="categoryForm.controls.color.value === color"
+          [attr.aria-label]="'Seleccionar color ' + color"
+          (click)="selectColor(color)"
+        ></button>
+      }
+    </div>
+  </div>
+
+  <div class="category-preview">
+    <span class="category-preview-label"> Vista previa </span>
+
+    <div class="category-preview-content">
+      <div
+        class="category-preview-icon"
+        [style.color]="categoryForm.controls.color.value"
+        [style.backgroundColor]="categoryForm.controls.color.value + '18'"
+      >
+        <i [class]="'bi ' + categoryForm.controls.icon.value" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <strong>
+          {{ categoryForm.controls.name.value || 'Nueva categoría' }}
+        </strong>
+
+        <span> Categoría personal </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="category-form-actions">
+    <button type="button" class="btn btn-light" [disabled]="isSaving()" (click)="cancel()">
+      Cancelar
+    </button>
+
+    <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+      @if (isSaving()) {
+        <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+        @if (isEditMode()) {
+          Guardando...
+        } @else {
+          Creando...
+        }
+      } @else {
+        <i class="bi bi-check-lg me-2" aria-hidden="true"></i>
+
+        @if (isEditMode()) {
+          Guardar cambios
+        } @else {
+          Crear categoría
+        }
+      }
+    </button>
+  </div>
+</form>

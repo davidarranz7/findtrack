@@ -8,9 +8,8 @@ export interface Transaction {
   type: TransactionType;
   amount: number;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   date: string;
   paymentMethod: PaymentMethod;
-  tagIds: string[];
   notes: string;
 }

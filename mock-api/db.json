@@ -32,10 +32,9 @@
       "type": "income",
       "amount": 2200,
       "description": "Nómina septiembre",
-      "categoryId": "category-salary",
+      "categoryId": null,
       "date": "2026-09-01",
       "paymentMethod": "bankTransfer",
-      "tagIds": ["tag-recurring"],
       "notes": ""
     },
     {
@@ -44,10 +43,9 @@
       "type": "income",
       "amount": 350,
       "description": "Proyecto freelance",
-      "categoryId": "category-freelance",
+      "categoryId": null,
       "date": "2026-09-05",
       "paymentMethod": "bankTransfer",
-      "tagIds": [],
       "notes": ""
     },
     {
@@ -56,10 +54,9 @@
       "type": "expense",
       "amount": 750,
       "description": "Alquiler",
-      "categoryId": "category-housing",
+      "categoryId": null,
       "date": "2026-09-02",
       "paymentMethod": "bankTransfer",
-      "tagIds": ["tag-essential", "tag-recurring"],
       "notes": ""
     },
     {
@@ -71,7 +68,6 @@
       "categoryId": "category-food",
       "date": "2026-09-08",
       "paymentMethod": "card",
-      "tagIds": ["tag-essential"],
       "notes": ""
     },
     {
@@ -83,7 +79,6 @@
       "categoryId": "category-transport",
       "date": "2026-09-12",
       "paymentMethod": "card",
-      "tagIds": ["tag-essential"],
       "notes": ""
     },
     {
@@ -95,7 +90,6 @@
       "categoryId": "category-leisure",
       "date": "2026-09-18",
       "paymentMethod": "card",
-      "tagIds": ["tag-personal"],
       "notes": ""
     },
     {
@@ -103,10 +97,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "hqjutSi5Cho"
     },
@@ -115,10 +108,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "gpILTzm2J28"
     },
@@ -127,10 +119,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "KvBocXOggo8"
     },
@@ -139,10 +130,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "CvZg-xcwdTM"
     },
@@ -151,10 +141,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "ckhWuUqodBk"
     },
@@ -163,10 +152,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "V14m-QQVkdY"
     },
@@ -175,10 +163,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "lS5iISkk6cE"
     },
@@ -187,10 +174,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "I5WUDbaPhr4"
     },
@@ -199,10 +185,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "y-1rRnkjMfQ"
     },
@@ -211,10 +196,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "tYwjMQpjfkc"
     },
@@ -223,10 +207,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "-y_ZdlKVQAE"
     },
@@ -235,10 +218,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "K5teOiA74s4"
     },
@@ -247,10 +229,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "8blTAMjXosE"
     },
@@ -259,10 +240,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "6B_bWa179i4"
     },
@@ -271,10 +251,9 @@
       "type": "expense",
       "amount": 20,
       "description": "compra",
-      "categoryId": "category-food",
+      "categoryId": "rXirHvenoQU-food",
       "date": "2026-09-22",
       "paymentMethod": "cash",
-      "tagIds": [],
       "notes": "",
       "id": "cBphDpA5zeU"
     },
@@ -283,10 +262,9 @@
       "type": "expense",
       "amount": 20,
       "description": "juego",
-      "categoryId": "category-leisure",
+      "categoryId": "rXirHvenoQU-leisure",
       "date": "2026-09-29",
       "paymentMethod": "card",
-      "tagIds": [],
       "notes": "",
       "id": "zS9njw6AryE"
     },
@@ -295,12 +273,33 @@
       "type": "income",
       "amount": 500,
       "description": "nomina",
-      "categoryId": "category-salary",
+      "categoryId": "rXirHvenoQU-salary",
       "date": "2026-09-29",
       "paymentMethod": "bankTransfer",
-      "tagIds": [],
       "notes": "",
       "id": "KOlOk10NaNs"
+    },
+    {
+      "userId": "user-1",
+      "type": "income",
+      "amount": 8000,
+      "description": "nomina",
+      "categoryId": null,
+      "date": "2026-10-05",
+      "paymentMethod": "bankTransfer",
+      "notes": "",
+      "id": "yGAy90MTpvo"
+    },
+    {
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 100,
+      "description": "viaje a Madrid",
+      "categoryId": null,
+      "date": "2026-10-06",
+      "paymentMethod": "card",
+      "notes": "Viaje en madrid con mis amigos",
+      "id": "dxbuPwnI_9s"
     }
   ],
   "budgets": [
@@ -335,70 +334,201 @@
   ],
   "categories": [
     {
-      "id": "category-salary",
-      "userId": null,
-      "name": "Salario",
-      "type": "income",
-      "icon": "bi-wallet2",
-      "color": "#198754"
-    },
-    {
-      "id": "category-freelance",
-      "userId": null,
-      "name": "Freelance",
-      "type": "income",
-      "icon": "bi-laptop",
-      "color": "#0d6efd"
-    },
-    {
-      "id": "category-housing",
-      "userId": null,
-      "name": "Vivienda",
-      "type": "expense",
-      "icon": "bi-house",
-      "color": "#dc3545"
-    },
-    {
       "id": "category-food",
-      "userId": null,
+      "userId": "user-1",
       "name": "Alimentación",
-      "type": "expense",
       "icon": "bi-basket",
       "color": "#fd7e14"
     },
     {
       "id": "category-transport",
-      "userId": null,
+      "userId": "user-1",
       "name": "Transporte",
-      "type": "expense",
       "icon": "bi-car-front",
       "color": "#6f42c1"
     },
     {
       "id": "category-leisure",
-      "userId": null,
+      "userId": "user-1",
       "name": "Ocio",
-      "type": "expense",
       "icon": "bi-controller",
       "color": "#d63384"
     },
     {
       "id": "category-health",
-      "userId": null,
+      "userId": "user-1",
       "name": "Salud",
-      "type": "expense",
       "icon": "bi-heart-pulse",
       "color": "#20c997"
     },
     {
-      "id": "category-other",
-      "userId": null,
+      "id": "VvJQII-Tx9I-salary",
+      "userId": "VvJQII-Tx9I",
+      "name": "Salario",
+      "icon": "bi-wallet2",
+      "color": "#198754"
+    },
+    {
+      "id": "VvJQII-Tx9I-freelance",
+      "userId": "VvJQII-Tx9I",
+      "name": "Freelance",
+      "icon": "bi-laptop",
+      "color": "#0d6efd"
+    },
+    {
+      "id": "VvJQII-Tx9I-housing",
+      "userId": "VvJQII-Tx9I",
+      "name": "Vivienda",
+      "icon": "bi-house",
+      "color": "#dc3545"
+    },
+    {
+      "id": "VvJQII-Tx9I-food",
+      "userId": "VvJQII-Tx9I",
+      "name": "Alimentación",
+      "icon": "bi-basket",
+      "color": "#fd7e14"
+    },
+    {
+      "id": "VvJQII-Tx9I-transport",
+      "userId": "VvJQII-Tx9I",
+      "name": "Transporte",
+      "icon": "bi-car-front",
+      "color": "#6f42c1"
+    },
+    {
+      "id": "VvJQII-Tx9I-leisure",
+      "userId": "VvJQII-Tx9I",
+      "name": "Ocio",
+      "icon": "bi-controller",
+      "color": "#d63384"
+    },
+    {
+      "id": "VvJQII-Tx9I-health",
+      "userId": "VvJQII-Tx9I",
+      "name": "Salud",
+      "icon": "bi-heart-pulse",
+      "color": "#20c997"
+    },
+    {
+      "id": "VvJQII-Tx9I-other",
+      "userId": "VvJQII-Tx9I",
       "name": "Otros",
-      "type": "both",
+      "icon": "bi-three-dots",
+      "color": "#6c757d"
+    },
+    {
+      "id": "rXirHvenoQU-salary",
+      "userId": "rXirHvenoQU",
+      "name": "Salario",
+      "icon": "bi-wallet2",
+      "color": "#198754"
+    },
+    {
+      "id": "rXirHvenoQU-freelance",
+      "userId": "rXirHvenoQU",
+      "name": "Freelance",
+      "icon": "bi-laptop",
+      "color": "#0d6efd"
+    },
+    {
+      "id": "rXirHvenoQU-housing",
+      "userId": "rXirHvenoQU",
+      "name": "Vivienda",
+      "icon": "bi-house",
+      "color": "#dc3545"
+    },
+    {
+      "id": "rXirHvenoQU-food",
+      "userId": "rXirHvenoQU",
+      "name": "Alimentación",
+      "icon": "bi-basket",
+      "color": "#fd7e14"
+    },
+    {
+      "id": "rXirHvenoQU-transport",
+      "userId": "rXirHvenoQU",
+      "name": "Transporte",
+      "icon": "bi-car-front",
+      "color": "#6f42c1"
+    },
+    {
+      "id": "rXirHvenoQU-leisure",
+      "userId": "rXirHvenoQU",
+      "name": "Ocio",
+      "icon": "bi-controller",
+      "color": "#d63384"
+    },
+    {
+      "id": "rXirHvenoQU-health",
+      "userId": "rXirHvenoQU",
+      "name": "Salud",
+      "icon": "bi-heart-pulse",
+      "color": "#20c997"
+    },
+    {
+      "id": "rXirHvenoQU-other",
+      "userId": "rXirHvenoQU",
+      "name": "Otros",
+      "icon": "bi-three-dots",
+      "color": "#6c757d"
+    },
+    {
+      "id": "aqhXpvZtCOk-salary",
+      "userId": "aqhXpvZtCOk",
+      "name": "Salario",
+      "icon": "bi-wallet2",
+      "color": "#198754"
+    },
+    {
+      "id": "aqhXpvZtCOk-freelance",
+      "userId": "aqhXpvZtCOk",
+      "name": "Freelance",
+      "icon": "bi-laptop",
+      "color": "#0d6efd"
+    },
+    {
+      "id": "aqhXpvZtCOk-housing",
+      "userId": "aqhXpvZtCOk",
+      "name": "Vivienda",
+      "icon": "bi-house",
+      "color": "#dc3545"
+    },
+    {
+      "id": "aqhXpvZtCOk-food",
+      "userId": "aqhXpvZtCOk",
+      "name": "Alimentación",
+      "icon": "bi-basket",
+      "color": "#fd7e14"
+    },
+    {
+      "id": "aqhXpvZtCOk-transport",
+      "userId": "aqhXpvZtCOk",
+      "name": "Transporte",
+      "icon": "bi-car-front",
+      "color": "#6f42c1"
+    },
+    {
+      "id": "aqhXpvZtCOk-leisure",
+      "userId": "aqhXpvZtCOk",
+      "name": "Ocio",
+      "icon": "bi-controller",
+      "color": "#d63384"
+    },
+    {
+      "id": "aqhXpvZtCOk-health",
+      "userId": "aqhXpvZtCOk",
+      "name": "Salud",
+      "icon": "bi-heart-pulse",
+      "color": "#20c997"
+    },
+    {
+      "id": "aqhXpvZtCOk-other",
+      "userId": "aqhXpvZtCOk",
+      "name": "Otros",
       "icon": "bi-three-dots",
       "color": "#6c757d"
     }
   ],
-  "tags": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

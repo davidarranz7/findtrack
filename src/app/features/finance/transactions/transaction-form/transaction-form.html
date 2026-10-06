@@ -127,13 +127,7 @@
 
     <div class="transaction-row">
       <div class="form-field">
-        <label for="category" class="transaction-label">
-          @if (transactionForm.controls.type.value === 'expense') {
-            Categoría *
-          } @else {
-            Origen del ingreso *
-          }
-        </label>
+        <label for="category" class="transaction-label"> Categoría * </label>
 
         <div class="field-input-wrapper">
           <i class="bi bi-tag field-icon" aria-hidden="true"></i>
@@ -142,14 +136,12 @@
             <option value="" disabled>
               @if (isLoadingCategories()) {
                 Cargando categorías...
-              } @else if (transactionForm.controls.type.value === 'expense') {
-                Selecciona una categoría
               } @else {
-                Selecciona el origen
+                Selecciona una categoría
               }
             </option>
 
-            @for (category of filteredCategories(); track category.id) {
+            @for (category of categories(); track category.id) {
               <option [value]="category.id">
                 {{ category.name }}
               </option>
@@ -165,13 +157,7 @@
           transactionForm.controls.categoryId.touched &&
           transactionForm.controls.categoryId.hasError('required')
         ) {
-          <small class="field-error">
-            @if (transactionForm.controls.type.value === 'expense') {
-              Selecciona una categoría.
-            } @else {
-              Selecciona el origen del ingreso.
-            }
-          </small>
+          <small class="field-error"> Selecciona una categoría. </small>
         }
       </div>
 
@@ -236,44 +222,6 @@
           Transferencia
         </button>
       </div>
-    </div>
-
-    <div class="form-field">
-      <span class="transaction-label">
-        Etiquetas
-
-        <span class="optional-label"> (opcional) </span>
-      </span>
-
-      @if (isLoadingTags()) {
-        <div class="tags-status">
-          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-
-          Cargando etiquetas...
-        </div>
-      } @else if (tagLoadError()) {
-        <small class="field-error">
-          {{ tagLoadError() }}
-        </small>
-      } @else if (tags().length === 0) {
-        <p class="empty-tags mb-0">Todavía no tienes etiquetas creadas.</p>
-      } @else {
-        <div class="tag-list">
-          @for (tag of tags(); track tag.id) {
-            <button
-              type="button"
-              class="tag-button"
-              [class.active]="isTagSelected(tag.id)"
-              [attr.aria-pressed]="isTagSelected(tag.id)"
-              (click)="toggleTag(tag.id)"
-            >
-              <i class="bi bi-tag-fill" aria-hidden="true"></i>
-
-              {{ tag.name }}
-            </button>
-          }
-        </div>
-      }
     </div>
 
     <div class="form-field">

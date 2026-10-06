@@ -335,8 +335,6 @@
 
               <th scope="col">Método de pago</th>
 
-              <th scope="col">Etiquetas</th>
-
               <th scope="col" class="text-end">Importe</th>
 
               <th scope="col" class="text-end">Acciones</th>
@@ -411,26 +409,6 @@
                       {{ getPaymentMethodLabel(transaction.paymentMethod) }}
                     </span>
                   </div>
-                </td>
-
-                <td>
-                  @if (isLoadingTags()) {
-                    <span class="transaction-tags-status">
-                      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                    </span>
-                  } @else if (tagLoadError()) {
-                    <span class="transaction-tags-empty"> No disponibles </span>
-                  } @else if (transaction.tagIds.length === 0) {
-                    <span class="transaction-tags-empty"> Sin etiquetas </span>
-                  } @else {
-                    <div class="transaction-tags">
-                      @for (tagId of transaction.tagIds; track tagId) {
-                        <span class="transaction-tag">
-                          {{ getTagName(tagId) }}
-                        </span>
-                      }
-                    </div>
-                  }
                 </td>
 
                 <td class="text-end">
