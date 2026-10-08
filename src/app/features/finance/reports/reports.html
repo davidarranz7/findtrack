@@ -1,0 +1,673 @@
+<section class="reports-page">
+  <header class="reports-header">
+    <div class="reports-heading">
+      <span class="reports-eyebrow"> ANÁLISIS FINANCIERO </span>
+
+      <h1>Informes y Estadísticas</h1>
+
+      <p>Analiza la evolución de tus ingresos, gastos y hábitos financieros.</p>
+    </div>
+
+    <div class="reports-header-actions no-export">
+      <div class="report-filter">
+        <label for="report-period"> Periodo </label>
+
+        <select id="report-period" class="form-select" (change)="changePeriod($event)">
+          @for (option of periodOptions; track option.value) {
+            <option [value]="option.value" [selected]="option.value === selectedPeriod()">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="report-filter report-filter-year">
+        <label for="report-year"> Año </label>
+
+        <select id="report-year" class="form-select" (change)="changeYear($event)">
+          @for (year of availableYears(); track year) {
+            <option [value]="year" [selected]="year === selectedYear()">
+              {{ year }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="report-export-actions">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          [disabled]="!hasReportData()"
+          (click)="exportReportCsv()"
+        >
+          <i class="bi bi-filetype-csv" aria-hidden="true"></i>
+
+          CSV
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!hasReportData() || isExportingPdf()"
+          (click)="exportReportPdf()"
+        >
+          @if (isExportingPdf()) {
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+            Generando...
+          } @else {
+            <i class="bi bi-file-earmark-pdf" aria-hidden="true"></i>
+
+            Exportar PDF
+          }
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="report-export-context">
+    <div>
+      <strong>Finora</strong>
+      <span>Informe financiero</span>
+    </div>
+
+    <div class="report-export-meta">
+      <span>
+        <strong>Periodo:</strong>
+        {{ reportRangeLabel() }}
+      </span>
+
+      <span>
+        <strong>Categoría:</strong>
+        {{ selectedCategoryLabel() }}
+      </span>
+
+      <span>
+        <strong>Método de pago:</strong>
+        {{ selectedPaymentMethodLabel() }}
+      </span>
+
+      <span>
+        <strong>Generado:</strong>
+        {{ generatedAtLabel }}
+      </span>
+    </div>
+  </section>
+
+  @if (isLoading()) {
+    <div class="reports-state" aria-live="polite">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden"> Cargando informes... </span>
+      </div>
+
+      <div>
+        <strong> Cargando tus informes </strong>
+
+        <p class="mb-0">Estamos preparando tus datos financieros.</p>
+      </div>
+    </div>
+  } @else if (loadError()) {
+    <div class="alert alert-danger reports-error" role="alert">
+      <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+      <div>
+        <strong> No hemos podido cargar tus informes. </strong>
+
+        <p class="mb-0">
+          {{ loadError() }}
+        </p>
+      </div>
+    </div>
+  } @else {
+    <section class="reports-analysis-filters no-export">
+      <div class="report-filter">
+        <label for="report-category"> Categoría </label>
+
+        <select id="report-category" class="form-select" (change)="changeCategory($event)">
+          <option value="all" [selected]="selectedCategoryId() === 'all'">
+            Todas las categorías
+          </option>
+
+          <option value="uncategorized" [selected]="selectedCategoryId() === 'uncategorized'">
+            Sin categoría
+          </option>
+
+          @for (category of sortedCategories(); track category.id) {
+            <option [value]="category.id" [selected]="selectedCategoryId() === category.id">
+              {{ category.name }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="report-filter">
+        <label for="report-payment-method"> Método de pago </label>
+
+        <select
+          id="report-payment-method"
+          class="form-select"
+          (change)="changePaymentMethod($event)"
+        >
+          @for (option of paymentMethodOptions; track option.value) {
+            <option [value]="option.value" [selected]="option.value === selectedPaymentMethod()">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="report-comparison-control">
+        <span class="report-control-label"> Comparación </span>
+
+        <div class="form-check form-switch mb-0">
+          <input
+            id="report-comparison"
+            class="form-check-input"
+            type="checkbox"
+            [checked]="comparisonEnabled()"
+            (change)="toggleComparison($event)"
+          />
+
+          <label class="form-check-label" for="report-comparison"> Periodo anterior </label>
+        </div>
+      </div>
+
+      @if (activeFilterCount() > 0) {
+        <button
+          type="button"
+          class="btn btn-link btn-sm reports-clear-filters"
+          (click)="clearAnalysisFilters()"
+        >
+          <i class="bi bi-x-circle me-1" aria-hidden="true"></i>
+
+          Limpiar filtros
+        </button>
+      }
+    </section>
+
+    <div class="reports-context-row">
+      <div class="reports-period">
+        <i class="bi bi-calendar3" aria-hidden="true"></i>
+
+        <span>
+          Analizando:
+          <strong>
+            {{ reportRangeLabel() }}
+          </strong>
+        </span>
+      </div>
+
+      @if (activeFilterCount() > 0) {
+        <span class="reports-context-badge">
+          {{ activeFilterCount() }}
+
+          {{ activeFilterCount() === 1 ? 'filtro activo' : 'filtros activos' }}
+        </span>
+      }
+
+      @if (comparisonEnabled()) {
+        <span class="reports-context-badge">
+          Comparando con
+          {{ previousReportRangeLabel() }}
+        </span>
+      }
+    </div>
+
+    <section class="reports-kpis" aria-label="Resumen financiero">
+      <article class="report-kpi">
+        <div class="report-kpi-header">
+          <span> Ingresos totales </span>
+
+          <div class="report-kpi-icon report-kpi-icon-income">
+            <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <strong class="report-kpi-value report-kpi-value-income">
+          {{ formattedIncome() }}
+        </strong>
+
+        @if (comparisonEnabled()) {
+          <span
+            class="report-kpi-comparison"
+            [class.text-success]="incomeComparison().direction === 'increase'"
+            [class.text-danger]="incomeComparison().direction === 'decrease'"
+            [class.text-secondary]="incomeComparison().direction === 'same'"
+          >
+            @if (incomeComparison().direction === 'increase') {
+              <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+            } @else if (incomeComparison().direction === 'decrease') {
+              <i class="bi bi-arrow-down-right" aria-hidden="true"></i>
+            } @else {
+              <i class="bi bi-dash" aria-hidden="true"></i>
+            }
+
+            {{ formatMoneyComparison(incomeComparison()) }}
+          </span>
+        } @else {
+          <span class="report-kpi-caption"> Durante el periodo seleccionado </span>
+        }
+      </article>
+
+      <article class="report-kpi">
+        <div class="report-kpi-header">
+          <span> Gastos totales </span>
+
+          <div class="report-kpi-icon report-kpi-icon-expense">
+            <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <strong class="report-kpi-value report-kpi-value-expense">
+          {{ formattedExpenses() }}
+        </strong>
+
+        @if (comparisonEnabled()) {
+          <span
+            class="report-kpi-comparison"
+            [class.text-danger]="expenseComparison().direction === 'increase'"
+            [class.text-success]="expenseComparison().direction === 'decrease'"
+            [class.text-secondary]="expenseComparison().direction === 'same'"
+          >
+            @if (expenseComparison().direction === 'increase') {
+              <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+            } @else if (expenseComparison().direction === 'decrease') {
+              <i class="bi bi-arrow-down-right" aria-hidden="true"></i>
+            } @else {
+              <i class="bi bi-dash" aria-hidden="true"></i>
+            }
+
+            {{ formatMoneyComparison(expenseComparison()) }}
+          </span>
+        } @else {
+          <span class="report-kpi-caption"> Durante el periodo seleccionado </span>
+        }
+      </article>
+
+      <article class="report-kpi">
+        <div class="report-kpi-header">
+          <span> Balance neto </span>
+
+          <div class="report-kpi-icon report-kpi-icon-balance">
+            <i class="bi bi-wallet2" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <strong
+          class="report-kpi-value"
+          [class.report-kpi-value-income]="netBalance() >= 0"
+          [class.report-kpi-value-expense]="netBalance() < 0"
+        >
+          {{ formattedBalance() }}
+        </strong>
+
+        @if (comparisonEnabled()) {
+          <span
+            class="report-kpi-comparison"
+            [class.text-success]="balanceComparison().direction === 'increase'"
+            [class.text-danger]="balanceComparison().direction === 'decrease'"
+            [class.text-secondary]="balanceComparison().direction === 'same'"
+          >
+            @if (balanceComparison().direction === 'increase') {
+              <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+            } @else if (balanceComparison().direction === 'decrease') {
+              <i class="bi bi-arrow-down-right" aria-hidden="true"></i>
+            } @else {
+              <i class="bi bi-dash" aria-hidden="true"></i>
+            }
+
+            {{ formatMoneyComparison(balanceComparison()) }}
+          </span>
+        } @else {
+          <span class="report-kpi-caption"> Ingresos menos gastos </span>
+        }
+      </article>
+
+      <article class="report-kpi">
+        <div class="report-kpi-header">
+          <span> Tasa de ahorro </span>
+
+          <div class="report-kpi-icon report-kpi-icon-savings">
+            <i class="bi bi-piggy-bank" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <strong
+          class="report-kpi-value"
+          [class.report-kpi-value-income]="savingsRate() !== null && (savingsRate() ?? 0) >= 0"
+          [class.report-kpi-value-expense]="savingsRate() !== null && (savingsRate() ?? 0) < 0"
+        >
+          {{ formattedSavingsRate() }}
+        </strong>
+
+        @if (comparisonEnabled()) {
+          <span
+            class="report-kpi-comparison"
+            [class.text-success]="
+              savingsRate() !== null &&
+              savingsRateComparison().points !== null &&
+              savingsRateComparison().direction === 'increase'
+            "
+            [class.text-danger]="
+              savingsRate() !== null &&
+              savingsRateComparison().points !== null &&
+              savingsRateComparison().direction === 'decrease'
+            "
+            [class.text-secondary]="
+              savingsRate() === null ||
+              savingsRateComparison().points === null ||
+              savingsRateComparison().direction === 'same'
+            "
+          >
+            @if (savingsRate() === null || savingsRateComparison().points === null) {
+              <i class="bi bi-dash" aria-hidden="true"></i>
+            } @else if (savingsRateComparison().direction === 'increase') {
+              <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+            } @else if (savingsRateComparison().direction === 'decrease') {
+              <i class="bi bi-arrow-down-right" aria-hidden="true"></i>
+            } @else {
+              <i class="bi bi-dash" aria-hidden="true"></i>
+            }
+
+            {{ formatSavingsComparison(savingsRateComparison()) }}
+          </span>
+        } @else {
+          @if (savingsRate() === null) {
+            <span class="report-kpi-caption"> Sin ingresos en este periodo </span>
+          } @else {
+            <span class="report-kpi-caption"> Porcentaje de ingresos conservado </span>
+          }
+        }
+      </article>
+    </section>
+
+    @if (hasReportData()) {
+      <section class="reports-main-grid">
+        <article class="report-card">
+          <header class="report-card-header">
+            <div>
+              <span class="report-card-eyebrow"> EVOLUCIÓN </span>
+
+              <h2>Ingresos vs Gastos</h2>
+
+              <p>Compara cómo han evolucionado tus ingresos y gastos.</p>
+            </div>
+
+            <div class="report-chart-legend">
+              <span>
+                <i class="legend-dot legend-dot-income"></i>
+
+                Ingresos
+              </span>
+
+              <span>
+                <i class="legend-dot legend-dot-expense"></i>
+
+                Gastos
+              </span>
+            </div>
+          </header>
+
+          <div class="report-chart report-chart-large">
+            <app-income-expense-chart [items]="incomeExpenseHistory()" />
+          </div>
+        </article>
+
+        <article class="report-card">
+          <header class="report-card-header">
+            <div>
+              <span class="report-card-eyebrow"> DISTRIBUCIÓN </span>
+
+              <h2>Gastos por categoría</h2>
+
+              <p>Descubre dónde se concentra la mayor parte de tus gastos.</p>
+            </div>
+          </header>
+
+          @if (expenseDistribution().length > 0) {
+            <div class="report-chart report-chart-distribution">
+              <app-expense-distribution-chart
+                [items]="expenseDistribution()"
+                [total]="totalExpenses()"
+              />
+            </div>
+          } @else {
+            <div class="report-empty report-empty-small">
+              <i class="bi bi-pie-chart" aria-hidden="true"></i>
+
+              <strong> Sin gastos en este periodo </strong>
+
+              <span> Cuando registres gastos aparecerá aquí su distribución. </span>
+            </div>
+          }
+        </article>
+      </section>
+
+      <section class="report-card report-balance-section">
+        <header class="report-card-header">
+          <div>
+            <span class="report-card-eyebrow"> BALANCE </span>
+
+            <h2>Evolución del balance</h2>
+
+            <p>Observa cómo se acumula la diferencia entre ingresos y gastos.</p>
+          </div>
+
+          <div
+            class="report-balance-current"
+            [class.report-balance-current-negative]="netBalance() < 0"
+          >
+            <span> Balance del periodo </span>
+
+            <strong>
+              {{ formattedBalance() }}
+            </strong>
+          </div>
+        </header>
+
+        <div class="report-balance-chart">
+          <app-balance-evolution-chart [items]="balanceEvolution()" />
+        </div>
+      </section>
+
+      <section class="reports-bottom-grid">
+        <article class="report-card">
+          <header class="report-card-header">
+            <div>
+              <span class="report-card-eyebrow"> RANKING </span>
+
+              <h2>Principales categorías de gasto</h2>
+
+              <p>Las categorías que más peso tienen en tus gastos.</p>
+            </div>
+          </header>
+
+          @if (topExpenseCategories().length > 0) {
+            <div class="top-categories">
+              @for (
+                category of topExpenseCategories();
+                track category.categoryId;
+                let position = $index
+              ) {
+                <div class="top-category">
+                  <span class="top-category-position">
+                    {{ position + 1 }}
+                  </span>
+
+                  <span class="top-category-color" [style.backgroundColor]="category.color"></span>
+
+                  <div class="top-category-info">
+                    <div class="top-category-heading">
+                      <strong>
+                        {{ category.categoryName }}
+                      </strong>
+
+                      <span>
+                        {{ formatCurrency(category.amount) }}
+                      </span>
+                    </div>
+
+                    <div class="top-category-progress">
+                      <div
+                        class="top-category-progress-value"
+                        [style.width.%]="category.percentage"
+                        [style.backgroundColor]="category.color"
+                      ></div>
+                    </div>
+
+                    <div class="top-category-footer">
+                      <small>
+                        {{ category.percentage.toFixed(1) }}
+                        % de tus gastos
+                      </small>
+
+                      <button
+                        type="button"
+                        class="top-category-filter no-export"
+                        (click)="filterByCategory(category.categoryId)"
+                      >
+                        Filtrar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="report-empty report-empty-small">
+              <i class="bi bi-bar-chart" aria-hidden="true"></i>
+
+              <strong> No hay categorías que analizar </strong>
+            </div>
+          }
+        </article>
+
+        <article class="report-card">
+          <header class="report-card-header">
+            <div>
+              <span class="report-card-eyebrow"> RESUMEN </span>
+
+              <h2>Resumen del periodo</h2>
+
+              <p>Una visión rápida de tu actividad financiera.</p>
+            </div>
+          </header>
+
+          <div class="report-summary-list">
+            <div class="report-summary-item">
+              <div class="report-summary-icon">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+              </div>
+
+              <div>
+                <span> Movimientos analizados </span>
+
+                <strong>
+                  {{ filteredTransactions().length }}
+                </strong>
+              </div>
+            </div>
+
+            <div class="report-summary-item">
+              <div class="report-summary-icon">
+                <i class="bi bi-calculator" aria-hidden="true"></i>
+              </div>
+
+              <div>
+                <span> Gasto medio mensual </span>
+
+                <strong>
+                  {{ formattedAverageMonthlyExpenses() }}
+                </strong>
+              </div>
+            </div>
+
+            <div class="report-summary-item">
+              <div class="report-summary-icon">
+                <i class="bi bi-trophy" aria-hidden="true"></i>
+              </div>
+
+              <div>
+                <span> Mayor categoría de gasto </span>
+
+                <strong>
+                  {{ topExpenseCategory()?.categoryName ?? 'Sin datos' }}
+                </strong>
+              </div>
+            </div>
+
+            <div class="report-summary-item">
+              <div class="report-summary-icon">
+                <i class="bi bi-calendar-event" aria-hidden="true"></i>
+              </div>
+
+              <div>
+                <span> Mes con mayor gasto </span>
+
+                <strong>
+                  @if (highestExpenseMonth()) {
+                    {{ highestExpenseMonth()?.label }}
+                    ·
+                    {{ formatCurrency(highestExpenseMonth()?.expense ?? 0) }}
+                  } @else {
+                    Sin datos
+                  }
+                </strong>
+              </div>
+            </div>
+
+            <div class="report-summary-item">
+              <div class="report-summary-icon">
+                <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+              </div>
+
+              <div>
+                <span> Resultado del periodo </span>
+
+                <strong
+                  [class.balance-positive]="netBalance() >= 0"
+                  [class.balance-negative]="netBalance() < 0"
+                >
+                  {{ netBalance() >= 0 ? 'Positivo' : 'Negativo' }}
+                </strong>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    } @else {
+      <section class="report-card report-empty-state">
+        <div class="report-empty-icon">
+          <i class="bi bi-bar-chart-line" aria-hidden="true"></i>
+        </div>
+
+        @if (activeFilterCount() > 0) {
+          <h2>No hay datos para estos filtros</h2>
+
+          <p>
+            No hemos encontrado movimientos en
+            <strong>
+              {{ reportRangeLabel() }}
+            </strong>
+            con los filtros seleccionados.
+          </p>
+
+          <button
+            type="button"
+            class="btn btn-outline-primary mt-3 no-export"
+            (click)="clearAnalysisFilters()"
+          >
+            Limpiar filtros
+          </button>
+        } @else {
+          <h2>No hay datos para este periodo</h2>
+
+          <p>
+            No tienes movimientos registrados en
+            <strong> {{ reportRangeLabel() }} </strong>. Prueba con otro periodo o año.
+          </p>
+        }
+      </section>
+    }
+  }
+</section>

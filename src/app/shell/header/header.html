@@ -1,9 +1,13 @@
 <header class="app-header bg-white border-bottom">
   <div class="d-flex align-items-center justify-content-between gap-4 h-100 px-4">
     <div class="d-flex align-items-center gap-2 text-nowrap">
-      <span class="fw-semibold text-dark">Finora App</span>
+      <span class="fw-semibold text-dark"> Finora App </span>
+
       <i class="bi bi-chevron-right small text-secondary" aria-hidden="true"></i>
-      <span class="small text-secondary">Resumen</span>
+
+      <span class="small text-secondary">
+        {{ currentSection() }}
+      </span>
     </div>
 
     <div class="header-actions d-flex align-items-center justify-content-end gap-3 flex-grow-1">
