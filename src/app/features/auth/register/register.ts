@@ -21,6 +21,7 @@ import { catchError, EMPTY, finalize, forkJoin, switchMap, tap, timer } from 'rx
 import { AppBrand } from '../../../shared/app-brand/app-brand';
 import { AuthBackground } from '../auth-background/auth-background';
 import { AuthService } from '../services/auth.service';
+import { passwordStrengthValidator } from '../validators/password.validator';
 
 type AvailabilityStatus = 'idle' | 'checking' | 'available' | 'unavailable' | 'error';
 
@@ -64,7 +65,7 @@ export class Register {
     {
       username: ['', [Validators.required, Validators.minLength(4)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(8), passwordStrengthValidator]],
       confirmPassword: ['', Validators.required],
     },
     {

@@ -530,5 +530,18 @@
       "color": "#6c757d"
     }
   ],
+  "preferences": [
+    {
+      "userId": "user-1",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "dateFormat": "DD/MM/YYYY",
+      "theme": "dark",
+      "budgetWarningEnabled": false,
+      "budgetExceededEnabled": false,
+      "savingsGoalEnabled": false,
+      "id": "GldhgHwGl88"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

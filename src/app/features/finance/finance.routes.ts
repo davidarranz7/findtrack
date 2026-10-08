@@ -23,4 +23,8 @@ export const FINANCE_ROUTES: Routes = [
     path: 'reports',
     loadComponent: () => import('./reports/reports').then((component) => component.Reports),
   },
+  {
+    path: 'settings',
+    loadComponent: () => import('./settings/settings').then((component) => component.Settings),
+  },
 ];

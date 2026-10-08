@@ -1,0 +1,725 @@
+<section class="settings-page">
+  <header class="settings-page-header">
+    <div class="settings-heading">
+      <span class="settings-eyebrow"> CONFIGURACIÓN DE CUENTA </span>
+
+      <h1>Configuración</h1>
+
+      <p>Gestiona tu cuenta, preferencias y alertas.</p>
+    </div>
+
+    <div class="settings-header-actions">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        [disabled]="!hasUnsavedChanges() || isSavingChanges() || isLoadingPreferences()"
+        (click)="discardChanges()"
+      >
+        <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+
+        Descartar
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="
+          !hasUnsavedChanges() ||
+          profileForm.invalid ||
+          preferencesForm.invalid ||
+          isCheckingAvailability() ||
+          isSavingChanges() ||
+          isLoadingPreferences()
+        "
+        (click)="saveChanges()"
+      >
+        @if (isSavingChanges()) {
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+          Guardando...
+        } @else {
+          <i class="bi bi-floppy" aria-hidden="true"></i>
+
+          Guardar cambios
+        }
+      </button>
+    </div>
+  </header>
+
+  @if (isLoadingPreferences()) {
+    <section class="settings-state" aria-live="polite">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden"> Cargando configuración... </span>
+      </div>
+
+      <div>
+        <strong> Cargando configuración </strong>
+
+        <p class="mb-0">Estamos preparando tus preferencias.</p>
+      </div>
+    </section>
+  } @else if (preferencesLoadError()) {
+    <div class="alert alert-danger settings-error" role="alert">
+      <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+      <div>
+        <strong> No hemos podido cargar la configuración. </strong>
+
+        <p class="mb-0">
+          {{ preferencesLoadError() }}
+        </p>
+      </div>
+    </div>
+  } @else {
+    <section class="settings-card settings-profile-card">
+      <header class="settings-card-header">
+        <div class="settings-card-heading">
+          <div class="settings-card-icon">
+            <i class="bi bi-person-circle" aria-hidden="true"></i>
+          </div>
+
+          <div>
+            <h2>Perfil de usuario</h2>
+
+            <p>Información personal y credenciales básicas de acceso.</p>
+          </div>
+        </div>
+
+        <span class="settings-status-badge">
+          <span class="settings-status-dot"></span>
+          CUENTA ACTIVA
+        </span>
+      </header>
+
+      <div class="settings-card-body">
+        <div class="profile-layout" [formGroup]="profileForm">
+          <div class="profile-avatar-column">
+            <div class="profile-avatar" aria-hidden="true">
+              {{ userInitial() }}
+            </div>
+
+            <div class="profile-avatar-info">
+              <strong>
+                {{ currentUser()?.username }}
+              </strong>
+
+              <span>
+                {{ currentUser()?.email }}
+              </span>
+            </div>
+          </div>
+
+          <div class="profile-fields">
+            <div class="settings-field">
+              <div class="settings-label-row">
+                <label class="form-label" for="settings-username"> Nombre de usuario </label>
+
+                <span class="settings-field-required"> Obligatorio </span>
+              </div>
+
+              <div class="position-relative">
+                <input
+                  id="settings-username"
+                  type="text"
+                  class="form-control"
+                  formControlName="username"
+                  autocomplete="username"
+                  [class.is-invalid]="
+                    profileForm.controls.username.touched && profileForm.controls.username.invalid
+                  "
+                  [class.is-valid]="usernameAvailability() === 'available'"
+                />
+
+                @if (usernameAvailability() === 'checking') {
+                  <span class="settings-input-status">
+                    <span
+                      class="spinner-border spinner-border-sm text-secondary"
+                      aria-hidden="true"
+                    ></span>
+                  </span>
+                }
+              </div>
+
+              @if (
+                profileForm.controls.username.touched &&
+                profileForm.controls.username.hasError('required')
+              ) {
+                <div class="invalid-feedback d-block">El nombre de usuario es obligatorio.</div>
+              } @else if (
+                profileForm.controls.username.touched &&
+                profileForm.controls.username.hasError('minlength')
+              ) {
+                <div class="invalid-feedback d-block">Debe tener al menos 4 caracteres.</div>
+              } @else if (profileForm.controls.username.hasError('usernameTaken')) {
+                <div class="invalid-feedback d-block">Este nombre de usuario ya está en uso.</div>
+              } @else if (usernameAvailability() === 'available') {
+                <div class="valid-feedback d-block">Nombre de usuario disponible.</div>
+              } @else if (usernameAvailability() === 'error') {
+                <div class="settings-field-warning">
+                  No se ha podido comprobar la disponibilidad.
+                </div>
+              }
+            </div>
+
+            <div class="settings-field">
+              <div class="settings-label-row">
+                <label class="form-label" for="settings-email"> Correo electrónico </label>
+
+                <span class="settings-field-verified"> Verificado </span>
+              </div>
+
+              <div class="position-relative">
+                <input
+                  id="settings-email"
+                  type="email"
+                  class="form-control"
+                  formControlName="email"
+                  autocomplete="email"
+                  [class.is-invalid]="
+                    profileForm.controls.email.touched && profileForm.controls.email.invalid
+                  "
+                  [class.is-valid]="emailAvailability() === 'available'"
+                />
+
+                @if (emailAvailability() === 'checking') {
+                  <span class="settings-input-status">
+                    <span
+                      class="spinner-border spinner-border-sm text-secondary"
+                      aria-hidden="true"
+                    ></span>
+                  </span>
+                }
+              </div>
+
+              @if (
+                profileForm.controls.email.touched &&
+                profileForm.controls.email.hasError('required')
+              ) {
+                <div class="invalid-feedback d-block">El correo electrónico es obligatorio.</div>
+              } @else if (
+                profileForm.controls.email.touched && profileForm.controls.email.hasError('email')
+              ) {
+                <div class="invalid-feedback d-block">Introduce un correo electrónico válido.</div>
+              } @else if (profileForm.controls.email.hasError('emailTaken')) {
+                <div class="invalid-feedback d-block">Este correo electrónico ya está en uso.</div>
+              } @else if (emailAvailability() === 'available') {
+                <div class="valid-feedback d-block">Correo electrónico disponible.</div>
+              } @else if (emailAvailability() === 'error') {
+                <div class="settings-field-warning">
+                  No se ha podido comprobar la disponibilidad.
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-password-section">
+          <div class="profile-password-summary">
+            <div class="profile-password-info">
+              <div class="profile-password-icon">
+                <i class="bi bi-key" aria-hidden="true"></i>
+              </div>
+
+              <div>
+                <strong> Contraseña </strong>
+
+                <span> Gestiona la contraseña de acceso a tu cuenta. </span>
+              </div>
+            </div>
+
+            @if (!isPasswordEditorOpen()) {
+              <button
+                type="button"
+                class="btn btn-light settings-secondary-action"
+                (click)="openPasswordEditor()"
+              >
+                <i class="bi bi-three-dots" aria-hidden="true"></i>
+
+                Cambiar contraseña
+              </button>
+            }
+          </div>
+
+          @if (isPasswordEditorOpen()) {
+            <div class="password-editor" [formGroup]="passwordForm">
+              <div class="password-editor-grid">
+                <div class="settings-field">
+                  <label class="form-label" for="settings-current-password">
+                    Contraseña actual
+                  </label>
+
+                  <div class="input-group">
+                    <input
+                      id="settings-current-password"
+                      [type]="showCurrentPassword() ? 'text' : 'password'"
+                      class="form-control"
+                      formControlName="currentPassword"
+                      autocomplete="current-password"
+                      [class.is-invalid]="
+                        passwordForm.controls.currentPassword.touched &&
+                        passwordForm.controls.currentPassword.invalid
+                      "
+                    />
+
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary password-toggle"
+                      [attr.aria-label]="
+                        showCurrentPassword()
+                          ? 'Ocultar contraseña actual'
+                          : 'Mostrar contraseña actual'
+                      "
+                      (click)="toggleCurrentPasswordVisibility()"
+                    >
+                      <i
+                        [class]="showCurrentPassword() ? 'bi bi-eye-slash' : 'bi bi-eye'"
+                        aria-hidden="true"
+                      ></i>
+                    </button>
+                  </div>
+
+                  @if (
+                    passwordForm.controls.currentPassword.touched &&
+                    passwordForm.controls.currentPassword.hasError('required')
+                  ) {
+                    <div class="invalid-feedback d-block">Introduce tu contraseña actual.</div>
+                  } @else if (
+                    passwordForm.controls.currentPassword.hasError('invalidCurrentPassword')
+                  ) {
+                    <div class="invalid-feedback d-block">La contraseña actual no es correcta.</div>
+                  }
+                </div>
+
+                <div class="settings-field">
+                  <label class="form-label" for="settings-new-password"> Nueva contraseña </label>
+
+                  <div class="input-group">
+                    <input
+                      id="settings-new-password"
+                      [type]="showNewPassword() ? 'text' : 'password'"
+                      class="form-control"
+                      formControlName="newPassword"
+                      autocomplete="new-password"
+                      [class.is-invalid]="
+                        passwordForm.controls.newPassword.touched &&
+                        passwordForm.controls.newPassword.invalid
+                      "
+                    />
+
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary password-toggle"
+                      [attr.aria-label]="
+                        showNewPassword() ? 'Ocultar nueva contraseña' : 'Mostrar nueva contraseña'
+                      "
+                      (click)="toggleNewPasswordVisibility()"
+                    >
+                      <i
+                        [class]="showNewPassword() ? 'bi bi-eye-slash' : 'bi bi-eye'"
+                        aria-hidden="true"
+                      ></i>
+                    </button>
+                  </div>
+
+                  @if (
+                    passwordForm.controls.newPassword.touched &&
+                    passwordForm.controls.newPassword.hasError('required')
+                  ) {
+                    <div class="invalid-feedback d-block">Introduce una nueva contraseña.</div>
+                  }
+                </div>
+
+                <div class="settings-field">
+                  <label class="form-label" for="settings-confirm-password">
+                    Confirmar contraseña
+                  </label>
+
+                  <div class="input-group">
+                    <input
+                      id="settings-confirm-password"
+                      [type]="showConfirmPassword() ? 'text' : 'password'"
+                      class="form-control"
+                      formControlName="confirmPassword"
+                      autocomplete="new-password"
+                      [class.is-invalid]="
+                        passwordForm.controls.confirmPassword.touched &&
+                        (passwordForm.controls.confirmPassword.invalid ||
+                          passwordForm.hasError('passwordsMismatch'))
+                      "
+                    />
+
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary password-toggle"
+                      [attr.aria-label]="
+                        showConfirmPassword()
+                          ? 'Ocultar confirmación de contraseña'
+                          : 'Mostrar confirmación de contraseña'
+                      "
+                      (click)="toggleConfirmPasswordVisibility()"
+                    >
+                      <i
+                        [class]="showConfirmPassword() ? 'bi bi-eye-slash' : 'bi bi-eye'"
+                        aria-hidden="true"
+                      ></i>
+                    </button>
+                  </div>
+
+                  @if (
+                    passwordForm.controls.confirmPassword.touched &&
+                    passwordForm.controls.confirmPassword.hasError('required')
+                  ) {
+                    <div class="invalid-feedback d-block">Confirma la nueva contraseña.</div>
+                  } @else if (
+                    passwordForm.controls.confirmPassword.touched &&
+                    passwordForm.hasError('passwordsMismatch')
+                  ) {
+                    <div class="invalid-feedback d-block">Las contraseñas no coinciden.</div>
+                  }
+                </div>
+              </div>
+
+              @if (passwordForm.controls.newPassword.value) {
+                <div class="password-strength">
+                  <div class="password-strength-heading">
+                    <span> Fortaleza de la contraseña </span>
+
+                    <strong
+                      [class.password-strength-weak]="passwordStrength().level === 'weak'"
+                      [class.password-strength-minimum]="passwordStrength().level === 'minimum'"
+                      [class.password-strength-medium]="passwordStrength().level === 'medium'"
+                      [class.password-strength-strong]="passwordStrength().level === 'strong'"
+                      [class.password-strength-excellent]="passwordStrength().level === 'excellent'"
+                    >
+                      {{ passwordStrength().label }}
+                    </strong>
+                  </div>
+
+                  <div
+                    class="progress password-strength-progress"
+                    role="progressbar"
+                    aria-label="Fortaleza de la contraseña"
+                    [attr.aria-valuenow]="passwordStrength().percentage"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    <div
+                      class="progress-bar"
+                      [class.password-progress-weak]="passwordStrength().level === 'weak'"
+                      [class.password-progress-minimum]="passwordStrength().level === 'minimum'"
+                      [class.password-progress-medium]="passwordStrength().level === 'medium'"
+                      [class.password-progress-strong]="passwordStrength().level === 'strong'"
+                      [class.password-progress-excellent]="passwordStrength().level === 'excellent'"
+                      [style.width.%]="passwordStrength().percentage"
+                    ></div>
+                  </div>
+
+                  <div class="password-requirements">
+                    <div
+                      class="password-requirement"
+                      [class.is-complete]="passwordRequirements().length"
+                    >
+                      <i
+                        [class]="
+                          passwordRequirements().length ? 'bi bi-check-circle-fill' : 'bi bi-circle'
+                        "
+                        aria-hidden="true"
+                      ></i>
+
+                      <span> 8 caracteres como mínimo </span>
+                    </div>
+
+                    <div
+                      class="password-requirement"
+                      [class.is-complete]="passwordRequirements().uppercase"
+                    >
+                      <i
+                        [class]="
+                          passwordRequirements().uppercase
+                            ? 'bi bi-check-circle-fill'
+                            : 'bi bi-circle'
+                        "
+                        aria-hidden="true"
+                      ></i>
+
+                      <span> Una letra mayúscula </span>
+                    </div>
+
+                    <div
+                      class="password-requirement"
+                      [class.is-complete]="passwordRequirements().number"
+                    >
+                      <i
+                        [class]="
+                          passwordRequirements().number ? 'bi bi-check-circle-fill' : 'bi bi-circle'
+                        "
+                        aria-hidden="true"
+                      ></i>
+
+                      <span> Un número </span>
+                    </div>
+
+                    <div
+                      class="password-requirement"
+                      [class.is-complete]="passwordRequirements().specialCharacter"
+                    >
+                      <i
+                        [class]="
+                          passwordRequirements().specialCharacter
+                            ? 'bi bi-check-circle-fill'
+                            : 'bi bi-circle'
+                        "
+                        aria-hidden="true"
+                      ></i>
+
+                      <span> Un carácter especial </span>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <div class="password-editor-actions">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  [disabled]="isChangingPassword()"
+                  (click)="cancelPasswordChange()"
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  [disabled]="passwordForm.invalid || isChangingPassword()"
+                  (click)="changePassword()"
+                >
+                  @if (isChangingPassword()) {
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+                    Actualizando...
+                  } @else {
+                    <i class="bi bi-key" aria-hidden="true"></i>
+
+                    Cambiar contraseña
+                  }
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <div class="settings-middle-grid">
+      <section class="settings-card settings-preferences-card" [formGroup]="preferencesForm">
+        <header class="settings-card-header">
+          <div class="settings-card-heading">
+            <div class="settings-card-icon">
+              <i class="bi bi-sliders2" aria-hidden="true"></i>
+            </div>
+
+            <div>
+              <h2>Preferencias del sistema</h2>
+
+              <p>Regionalización, moneda y apariencia de interfaz.</p>
+            </div>
+          </div>
+        </header>
+
+        <div class="settings-card-body">
+          <div class="preferences-list">
+            <div class="settings-field">
+              <label class="form-label" for="settings-currency"> Moneda principal </label>
+
+              <select id="settings-currency" class="form-select" formControlName="currency">
+                @for (option of currencyOptions; track option.value) {
+                  <option [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="settings-field">
+              <label class="form-label" for="settings-language"> Idioma del entorno </label>
+
+              <select id="settings-language" class="form-select" formControlName="locale">
+                @for (option of localeOptions; track option.value) {
+                  <option [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="settings-field">
+              <label class="form-label" for="settings-date-format">
+                Formato de fecha contable
+              </label>
+
+              <select id="settings-date-format" class="form-select" formControlName="dateFormat">
+                @for (option of dateFormatOptions; track option.value) {
+                  <option [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="settings-field">
+              <span class="form-label"> Tema visual de pantalla </span>
+
+              <div class="theme-options" role="group" aria-label="Tema visual de pantalla">
+                <button
+                  type="button"
+                  class="theme-option"
+                  [class.is-active]="preferencesForm.controls.theme.value === 'system'"
+                  (click)="preferencesForm.controls.theme.setValue('system')"
+                >
+                  <i class="bi bi-display" aria-hidden="true"></i>
+
+                  <span> Sistema </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="theme-option"
+                  [class.is-active]="preferencesForm.controls.theme.value === 'light'"
+                  (click)="preferencesForm.controls.theme.setValue('light')"
+                >
+                  <i class="bi bi-sun" aria-hidden="true"></i>
+
+                  <span> Modo Claro </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="theme-option"
+                  [class.is-active]="preferencesForm.controls.theme.value === 'dark'"
+                  (click)="preferencesForm.controls.theme.setValue('dark')"
+                >
+                  <i class="bi bi-moon" aria-hidden="true"></i>
+
+                  <span> Modo Oscuro </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="settings-card settings-alerts-card" [formGroup]="preferencesForm">
+        <header class="settings-card-header">
+          <div class="settings-card-heading">
+            <div class="settings-card-icon">
+              <i class="bi bi-bell" aria-hidden="true"></i>
+            </div>
+
+            <div>
+              <h2>Alertas y Notificaciones</h2>
+
+              <p>Reglas automáticas de aviso para tus finanzas.</p>
+            </div>
+          </div>
+        </header>
+
+        <div class="settings-card-body">
+          <div class="settings-alerts-list">
+            <article class="settings-alert-item">
+              <div class="settings-alert-content">
+                <div class="settings-alert-icon settings-alert-icon-warning">
+                  <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+                </div>
+
+                <div>
+                  <strong> Avisar cuando un presupuesto alcance el 80% </strong>
+
+                  <p>Recibe un aviso preventivo antes de agotar tus límites mensuales.</p>
+                </div>
+              </div>
+
+              <div class="form-check form-switch">
+                <input
+                  id="budget-warning-enabled"
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  formControlName="budgetWarningEnabled"
+                />
+
+                <label class="visually-hidden" for="budget-warning-enabled">
+                  Avisar cuando un presupuesto alcance el 80%
+                </label>
+              </div>
+            </article>
+
+            <article class="settings-alert-item">
+              <div class="settings-alert-content">
+                <div class="settings-alert-icon settings-alert-icon-danger">
+                  <i class="bi bi-asterisk" aria-hidden="true"></i>
+                </div>
+
+                <div>
+                  <strong> Avisar cuando se supere un presupuesto </strong>
+
+                  <p>Alerta inmediata al registrar un gasto que desborde la categoría.</p>
+                </div>
+              </div>
+
+              <div class="form-check form-switch">
+                <input
+                  id="budget-exceeded-enabled"
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  formControlName="budgetExceededEnabled"
+                />
+
+                <label class="visually-hidden" for="budget-exceeded-enabled">
+                  Avisar cuando se supere un presupuesto
+                </label>
+              </div>
+            </article>
+
+            <article class="settings-alert-item">
+              <div class="settings-alert-content">
+                <div class="settings-alert-icon settings-alert-icon-success">
+                  <i class="bi bi-piggy-bank" aria-hidden="true"></i>
+                </div>
+
+                <div>
+                  <strong> Avisar al alcanzar una meta de ahorro </strong>
+
+                  <p>Notificación de felicitación al cumplir el objetivo del mes.</p>
+                </div>
+              </div>
+
+              <div class="form-check form-switch">
+                <input
+                  id="savings-goal-enabled"
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  formControlName="savingsGoalEnabled"
+                />
+
+                <label class="visually-hidden" for="savings-goal-enabled">
+                  Avisar al alcanzar una meta de ahorro
+                </label>
+              </div>
+            </article>
+          </div>
+
+          <div class="settings-alerts-note">
+            <i class="bi bi-shield-check" aria-hidden="true"></i>
+
+            <span>
+              Tus preferencias de alertas se guardan de forma independiente para tu cuenta.
+            </span>
+          </div>
+        </div>
+      </section>
+    </div>
+  }
+</section>
