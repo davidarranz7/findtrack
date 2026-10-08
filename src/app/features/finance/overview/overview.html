@@ -75,20 +75,27 @@
           }
 
           @if (alert.status === 'warning' && alert.budget; as budget) {
-            <p class="budget-alert-title mb-1">Te estás acercando al límite</p>
+            <p class="budget-alert-title mb-1">{{ budget.categoryName }} cerca del límite</p>
 
             <p class="budget-alert-text mb-0">
-              {{ budget.categoryName }} lleva consumido el {{ budget.percentage.toFixed(0) }} % de
-              su presupuesto.
+              Has gastado
+              {{ formatCurrency(budget.spent) }}
+              de
+              {{ formatCurrency(budget.limit) }}
+              ({{ budget.percentage.toFixed(0) }}
+              %).
             </p>
           }
 
           @if (alert.status === 'exceeded' && alert.budget; as budget) {
-            <p class="budget-alert-title mb-1">Presupuesto superado</p>
+            <p class="budget-alert-title mb-1">{{ budget.categoryName }} · presupuesto superado</p>
 
             <p class="budget-alert-text mb-0">
-              Has superado el presupuesto de
-              {{ budget.categoryName }} en {{ formatCurrency(-budget.remaining) }}.
+              Has gastado
+              {{ formatCurrency(budget.spent) }}
+              de
+              {{ formatCurrency(budget.limit) }}. Te has excedido en
+              {{ formatCurrency(-budget.remaining) }}.
             </p>
           }
         </div>
@@ -292,7 +299,10 @@
         <div>
           <h2 class="card-title">Presupuestos del Mes</h2>
 
-          <p class="card-subtitle mb-0">Límites y consumo de {{ currentMonthLabel }}</p>
+          <p class="card-subtitle mb-0">
+            Límites y consumo de
+            {{ currentMonthLabel }}
+          </p>
         </div>
 
         <button

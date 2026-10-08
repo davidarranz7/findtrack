@@ -3,6 +3,8 @@
 }
 
 .app-header {
+  position: relative;
+  z-index: 100;
   height: 64px;
 }
 
@@ -19,4 +21,57 @@
   width: 38px;
   height: 38px;
   flex-shrink: 0;
+}
+
+.notification-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.notification-trigger {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -0.3rem;
+  right: -0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  border: 2px solid var(--bs-body-bg);
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--bs-white);
+  background: var(--bs-danger);
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  z-index: 1100;
+}
+
+@media (max-width: 767.98px) {
+  .header-search {
+    display: none;
+  }
+
+  .notification-dropdown {
+    position: fixed;
+    top: 4.5rem;
+    right: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .notification-dropdown app-notification-panel {
+    display: block;
+    width: 100%;
+  }
 }

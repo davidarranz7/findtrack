@@ -1,0 +1,80 @@
+<section class="notification-panel" aria-label="Notificaciones">
+  <header class="notification-panel-header">
+    <div class="notification-panel-title">
+      <h2>Notificaciones</h2>
+
+      @if (unreadCount() > 0) {
+        <span class="notification-count">
+          {{ unreadCount() }}
+          {{ unreadCount() === 1 ? 'nueva' : 'nuevas' }}
+        </span>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="notification-mark-all"
+      [disabled]="unreadCount() === 0"
+      (click)="markAll()"
+    >
+      <i class="bi bi-check2-all" aria-hidden="true"></i>
+
+      <span> Marcar todas como leídas </span>
+    </button>
+  </header>
+
+  @if (isLoading()) {
+    <div class="notification-state" aria-live="polite">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden"> Cargando notificaciones... </span>
+      </div>
+
+      <span> Cargando notificaciones... </span>
+    </div>
+  } @else if (notifications().length === 0) {
+    <div class="notification-empty">
+      <div class="notification-empty-icon">
+        <i class="bi bi-bell" aria-hidden="true"></i>
+      </div>
+
+      <strong> No tienes notificaciones </strong>
+
+      <p>Te avisaremos cuando haya novedades importantes sobre tus presupuestos.</p>
+    </div>
+  } @else {
+    <div class="notification-list">
+      @for (notification of notifications(); track notification.id) {
+        <button
+          type="button"
+          class="notification-item"
+          [class.is-unread]="!notification.isRead"
+          (click)="selectNotification(notification)"
+        >
+          <div [class]="'notification-item-icon ' + getTypeClass(notification.type)">
+            <i [class]="'bi ' + getIcon(notification.type)" aria-hidden="true"></i>
+          </div>
+
+          <div class="notification-item-content">
+            <div class="notification-item-heading">
+              <strong>
+                {{ notification.title }}
+              </strong>
+
+              <span class="notification-time">
+                {{ formatRelativeTime(notification.createdAt) }}
+              </span>
+            </div>
+
+            <p>
+              {{ notification.message }}
+            </p>
+          </div>
+
+          @if (!notification.isRead) {
+            <span class="notification-unread-dot" aria-label="No leída"></span>
+          }
+        </button>
+      }
+    </div>
+  }
+</section>

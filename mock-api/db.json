@@ -300,6 +300,61 @@
       "paymentMethod": "card",
       "notes": "Viaje en madrid con mis amigos",
       "id": "dxbuPwnI_9s"
+    },
+    {
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 80,
+      "description": "mercadona",
+      "categoryId": "category-food",
+      "date": "2026-10-09",
+      "paymentMethod": "bankTransfer",
+      "notes": "",
+      "id": "2oaONlvx718"
+    },
+    {
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 30,
+      "description": "mercadona",
+      "categoryId": "category-food",
+      "date": "2026-10-09",
+      "paymentMethod": "card",
+      "notes": "",
+      "id": "WoCplvGuv-g"
+    },
+    {
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 80,
+      "description": "juegos",
+      "categoryId": "category-leisure",
+      "date": "2026-10-09",
+      "paymentMethod": "card",
+      "notes": "",
+      "id": "5vonrJGhu6E"
+    },
+    {
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 80,
+      "description": "medicias",
+      "categoryId": "category-health",
+      "date": "2026-10-09",
+      "paymentMethod": "card",
+      "notes": "",
+      "id": "R7MkyNEpfa4"
+    },
+    {
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 50,
+      "description": "juegos",
+      "categoryId": "category-leisure",
+      "date": "2026-10-09",
+      "paymentMethod": "card",
+      "notes": "",
+      "id": "nl4vJmO9pkY"
     }
   ],
   "budgets": [
@@ -330,6 +385,27 @@
       "categoryId": "category-health",
       "amount": 80,
       "month": "2026-09"
+    },
+    {
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 100,
+      "month": "2026-10",
+      "id": "OTD2c40V9Uk"
+    },
+    {
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 100,
+      "month": "2026-10",
+      "id": "xaMExJUfn50"
+    },
+    {
+      "userId": "user-1",
+      "categoryId": "category-health",
+      "amount": 100,
+      "month": "2026-10",
+      "id": "q0Nkv9jBFU4"
     }
   ],
   "categories": [
@@ -537,10 +613,60 @@
       "locale": "es-ES",
       "dateFormat": "DD/MM/YYYY",
       "theme": "dark",
-      "budgetWarningEnabled": false,
-      "budgetExceededEnabled": false,
-      "savingsGoalEnabled": false,
+      "budgetWarningEnabled": true,
+      "budgetExceededEnabled": true,
+      "savingsGoalEnabled": true,
       "id": "GldhgHwGl88"
+    }
+  ],
+  "notifications": [
+    {
+      "userId": "user-1",
+      "type": "budgetExceeded",
+      "title": "Presupuesto superado",
+      "message": "Has superado el presupuesto de Alimentación en 10.00 €.",
+      "createdAt": "2026-10-08T23:04:15.439Z",
+      "isRead": true,
+      "eventKey": "budget-exceeded:OTD2c40V9Uk:2026-10",
+      "budgetId": "OTD2c40V9Uk",
+      "categoryId": "category-food",
+      "id": "4uw4sXhzHHk"
+    },
+    {
+      "userId": "user-1",
+      "type": "budgetWarning",
+      "title": "Presupuesto próximo al límite",
+      "message": "Has utilizado el 80% de tu presupuesto de Ocio.",
+      "createdAt": "2026-10-08T23:18:16.958Z",
+      "isRead": false,
+      "eventKey": "budget-warning:xaMExJUfn50:2026-10",
+      "budgetId": "xaMExJUfn50",
+      "categoryId": "category-leisure",
+      "id": "wZjKxxHM4cE"
+    },
+    {
+      "userId": "user-1",
+      "type": "budgetWarning",
+      "title": "Presupuesto próximo al límite",
+      "message": "Has utilizado el 80% de tu presupuesto de Salud.",
+      "createdAt": "2026-10-08T23:24:11.423Z",
+      "isRead": false,
+      "eventKey": "budget-warning:q0Nkv9jBFU4:2026-10",
+      "budgetId": "q0Nkv9jBFU4",
+      "categoryId": "category-health",
+      "id": "TtJAAluKatg"
+    },
+    {
+      "userId": "user-1",
+      "type": "budgetExceeded",
+      "title": "Presupuesto superado",
+      "message": "Has superado el presupuesto de Ocio en 30,00 €.",
+      "createdAt": "2026-10-08T23:30:58.322Z",
+      "isRead": false,
+      "eventKey": "budget-exceeded:xaMExJUfn50:2026-10",
+      "budgetId": "xaMExJUfn50",
+      "categoryId": "category-leisure",
+      "id": "PdxsmT68oGA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

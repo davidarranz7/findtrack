@@ -19,31 +19,11 @@ import {
   type IncomeExpenseChartItem,
 } from '../charts/income-expense-chart/income-expense-chart';
 import { Budget, Category, Transaction } from '../models';
+import { BudgetAnalysisService } from '../services/budget-analysis.service';
 import { BudgetService } from '../services/budget.service';
 import { CategoryService } from '../services/category.service';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionForm } from '../transactions/transaction-form/transaction-form';
-
-type BudgetStatus = 'safe' | 'warning' | 'exceeded';
-
-type BudgetAlertStatus = 'none' | 'safe' | 'warning' | 'exceeded';
-
-interface BudgetProgressItem {
-  budgetId: string;
-  categoryId: string;
-  categoryName: string;
-  categoryColor: string;
-  limit: number;
-  spent: number;
-  remaining: number;
-  percentage: number;
-  status: BudgetStatus;
-}
-
-interface BudgetAlertState {
-  status: BudgetAlertStatus;
-  budget: BudgetProgressItem | null;
-}
 
 @Component({
   selector: 'app-overview',
@@ -57,6 +37,7 @@ export class Overview {
   private readonly transactionService = inject(TransactionService);
   private readonly categoryService = inject(CategoryService);
   private readonly budgetService = inject(BudgetService);
+  private readonly budgetAnalysisService = inject(BudgetAnalysisService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly currentDate = new Date();
@@ -231,79 +212,18 @@ export class Overview {
     }).sort((firstCategory, secondCategory) => secondCategory.amount - firstCategory.amount);
   });
 
-  protected readonly budgetProgress = computed<BudgetProgressItem[]>(() => {
-    const expenses = this.monthlyTransactions().filter(
-      (transaction) => transaction.type === 'expense',
-    );
+  protected readonly budgetProgress = computed(() =>
+    this.budgetAnalysisService.getBudgetProgress(
+      this.budgets(),
+      this.transactions(),
+      this.categories(),
+      this.selectedMonthKey(),
+    ),
+  );
 
-    return this.budgets()
-      .map((budget) => {
-        const category = this.categories().find(
-          (currentCategory) => currentCategory.id === budget.categoryId,
-        );
-
-        const spent = expenses
-          .filter((transaction) => transaction.categoryId === budget.categoryId)
-          .reduce((total, transaction) => total + transaction.amount, 0);
-
-        const percentage = budget.amount > 0 ? (spent / budget.amount) * 100 : 0;
-
-        let status: BudgetStatus = 'safe';
-
-        if (percentage >= 100) {
-          status = 'exceeded';
-        } else if (percentage >= 80) {
-          status = 'warning';
-        }
-
-        return {
-          budgetId: budget.id,
-          categoryId: budget.categoryId,
-          categoryName: category?.name ?? 'Sin categoría',
-          categoryColor: category?.color ?? '#6c757d',
-          limit: budget.amount,
-          spent,
-          remaining: budget.amount - spent,
-          percentage,
-          status,
-        };
-      })
-      .sort((firstBudget, secondBudget) => secondBudget.percentage - firstBudget.percentage);
-  });
-
-  protected readonly budgetAlert = computed<BudgetAlertState>(() => {
-    const budgets = this.budgetProgress();
-
-    if (budgets.length === 0) {
-      return {
-        status: 'none',
-        budget: null,
-      };
-    }
-
-    const exceededBudget = budgets.find((budget) => budget.status === 'exceeded');
-
-    if (exceededBudget) {
-      return {
-        status: 'exceeded',
-        budget: exceededBudget,
-      };
-    }
-
-    const warningBudget = budgets.find((budget) => budget.status === 'warning');
-
-    if (warningBudget) {
-      return {
-        status: 'warning',
-        budget: warningBudget,
-      };
-    }
-
-    return {
-      status: 'safe',
-      budget: budgets[0],
-    };
-  });
+  protected readonly budgetAlert = computed(() =>
+    this.budgetAnalysisService.getBudgetAlert(this.budgetProgress()),
+  );
 
   protected readonly formattedBalance = computed(() =>
     this.currencyFormatter.format(this.availableBalance()),

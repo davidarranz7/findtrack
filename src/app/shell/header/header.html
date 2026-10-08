@@ -24,18 +24,41 @@
         />
       </div>
 
-      <button
-        type="button"
-        class="btn btn-light header-action-button d-flex align-items-center justify-content-center"
-        aria-label="Notificaciones"
-      >
-        <i class="bi bi-bell" aria-hidden="true"></i>
-      </button>
+      <div #notificationWrapper class="notification-wrapper">
+        <button
+          type="button"
+          class="btn btn-light header-action-button notification-trigger d-flex align-items-center justify-content-center"
+          aria-label="Notificaciones"
+          [attr.aria-expanded]="isNotificationPanelOpen()"
+          (click)="toggleNotificationPanel()"
+        >
+          <i class="bi bi-bell" aria-hidden="true"></i>
+
+          @if (unreadNotificationCount() > 0) {
+            <span class="notification-badge" aria-label="Notificaciones sin leer">
+              {{ unreadNotificationCount() }}
+            </span>
+          }
+        </button>
+
+        @if (isNotificationPanelOpen()) {
+          <div class="notification-dropdown">
+            <app-notification-panel
+              [notifications]="notifications()"
+              [isLoading]="isLoadingNotifications()"
+              (notificationSelected)="handleNotificationSelected($event)"
+              (markAllAsRead)="markAllNotificationsAsRead()"
+            />
+          </div>
+        }
+      </div>
 
       <button
         type="button"
         class="btn btn-light header-action-button d-flex align-items-center justify-content-center"
-        aria-label="Perfil de usuario"
+        aria-label="Configuración de usuario"
+        title="Configuración"
+        (click)="openSettings()"
       >
         <i class="bi bi-person-circle" aria-hidden="true"></i>
       </button>

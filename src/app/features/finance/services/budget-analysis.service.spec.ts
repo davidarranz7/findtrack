@@ -54,6 +54,7 @@ describe('BudgetAnalysisService', () => {
     const [budget] = service.getBudgetProgress(budgets, transactions, categories, '2026-10');
 
     expect(budget.status).toBe('warning');
+
     expect(budget.percentage).toBe(80);
   });
 
