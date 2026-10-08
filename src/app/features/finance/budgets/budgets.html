@@ -1,0 +1,356 @@
+<section class="budgets-page">
+  <header class="budgets-header">
+    <div>
+      <p class="budgets-eyebrow mb-1">PLANIFICACIÓN FINANCIERA · CONTROL MENSUAL</p>
+
+      <h1 class="budgets-title mb-1">Presupuestos</h1>
+
+      <p class="budgets-description mb-0">
+        Define límites mensuales y controla cuánto estás gastando en cada categoría.
+      </p>
+    </div>
+
+    <div class="budgets-header-actions">
+      <div class="budget-month-selector">
+        <i class="bi bi-calendar3" aria-hidden="true"></i>
+
+        <input
+          #monthInput
+          type="month"
+          class="budget-month-input"
+          [value]="selectedMonth()"
+          (change)="selectMonth(monthInput.value)"
+        />
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="isLoading() || loadError() !== null || !canCreateBudget()"
+        (click)="openCreateBudgetForm()"
+      >
+        <i class="bi bi-plus-circle me-2" aria-hidden="true"></i>
+
+        Nuevo presupuesto
+      </button>
+    </div>
+  </header>
+
+  @if (loadError()) {
+    <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+      <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+      <span>
+        {{ loadError() }}
+      </span>
+    </div>
+  }
+
+  <section class="budgets-summary" aria-label="Resumen de presupuestos">
+    <article class="budget-summary-card">
+      <div>
+        <p class="budget-summary-label mb-1">Presupuesto total</p>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <strong class="budget-summary-value">
+            {{ formatCurrency(totalBudget()) }}
+          </strong>
+        }
+
+        <p class="budget-summary-detail mb-0">
+          {{ selectedMonthLabel() }}
+        </p>
+      </div>
+
+      <div class="budget-summary-icon budget-summary-icon-primary">
+        <i class="bi bi-wallet2" aria-hidden="true"></i>
+      </div>
+    </article>
+
+    <article class="budget-summary-card">
+      <div>
+        <p class="budget-summary-label mb-1">Gastado</p>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-danger" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <strong class="budget-summary-value">
+            {{ formatCurrency(totalSpent()) }}
+          </strong>
+        }
+
+        <p class="budget-summary-detail mb-0">
+          {{ formatPercentage(totalPercentage()) }}
+          del presupuesto
+        </p>
+      </div>
+
+      <div class="budget-summary-icon budget-summary-icon-expense">
+        <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+      </div>
+    </article>
+
+    <article class="budget-summary-card">
+      <div>
+        <p class="budget-summary-label mb-1">Restante</p>
+
+        @if (isLoading()) {
+          <div class="spinner-border spinner-border-sm text-success" role="status">
+            <span class="visually-hidden"> Cargando... </span>
+          </div>
+        } @else {
+          <strong
+            class="budget-summary-value"
+            [class.text-danger]="totalRemaining() < 0"
+            [class.text-success]="totalRemaining() >= 0"
+          >
+            {{ formatCurrency(totalRemaining()) }}
+          </strong>
+        }
+
+        <p class="budget-summary-detail mb-0">Disponible este mes</p>
+      </div>
+
+      <div class="budget-summary-icon budget-summary-icon-success">
+        <i class="bi bi-piggy-bank" aria-hidden="true"></i>
+      </div>
+    </article>
+  </section>
+
+  <section class="budgets-management">
+    <header class="budgets-management-header">
+      <div>
+        <h2 class="section-title mb-1">Presupuestos de {{ selectedMonthLabel() }}</h2>
+
+        <p class="section-description mb-0">
+          Compara tus límites con los gastos reales de cada categoría.
+        </p>
+      </div>
+
+      @if (!isLoading() && !loadError()) {
+        <span class="budgets-count">
+          {{ budgetItems().length }}
+
+          @if (budgetItems().length === 1) {
+            presupuesto
+          } @else {
+            presupuestos
+          }
+        </span>
+      }
+    </header>
+
+    @if (isLoading()) {
+      <div class="budgets-loading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden"> Cargando presupuestos... </span>
+        </div>
+
+        <p class="mb-0 mt-3">Cargando tus presupuestos...</p>
+      </div>
+    } @else if (!loadError() && budgetItems().length === 0) {
+      <div class="budgets-empty">
+        <div class="budgets-empty-icon">
+          <i class="bi bi-wallet2" aria-hidden="true"></i>
+        </div>
+
+        <h3>No tienes presupuestos este mes</h3>
+
+        <p>Crea un presupuesto para empezar a controlar tus gastos por categoría.</p>
+
+        <button
+          type="button"
+          class="btn btn-primary mt-3"
+          [disabled]="!canCreateBudget()"
+          (click)="openCreateBudgetForm()"
+        >
+          Crear mi primer presupuesto
+        </button>
+      </div>
+    } @else if (!loadError()) {
+      <div class="budgets-grid">
+        @for (item of budgetItems(); track item.budget.id) {
+          <article
+            class="budget-card"
+            [class.budget-card-warning]="item.status === 'warning'"
+            [class.budget-card-exceeded]="item.status === 'exceeded'"
+          >
+            <header class="budget-card-header">
+              <div class="budget-category">
+                <div
+                  class="budget-category-icon"
+                  [style.color]="item.category?.color ?? '#64748b'"
+                  [style.backgroundColor]="(item.category?.color ?? '#64748b') + '18'"
+                >
+                  <i [class]="'bi ' + (item.category?.icon ?? 'bi-tag')" aria-hidden="true"></i>
+                </div>
+
+                <div class="budget-category-content">
+                  <h3 class="budget-category-name mb-1">
+                    {{ item.category?.name ?? 'Categoría no disponible' }}
+                  </h3>
+
+                  <span class="budget-category-limit">
+                    Límite:
+                    {{ formatCurrency(item.budget.amount) }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="budget-card-actions">
+                <button
+                  type="button"
+                  class="budget-action-button"
+                  aria-label="Editar presupuesto"
+                  title="Editar presupuesto"
+                  (click)="openEditBudgetForm(item.budget)"
+                >
+                  <i class="bi bi-pencil" aria-hidden="true"></i>
+                </button>
+
+                <button
+                  type="button"
+                  class="budget-action-button budget-action-delete"
+                  aria-label="Eliminar presupuesto"
+                  title="Eliminar presupuesto"
+                  [disabled]="isDeletingBudget()"
+                  (click)="openDeleteBudgetDialog(item.budget)"
+                >
+                  <i class="bi bi-trash3" aria-hidden="true"></i>
+                </button>
+              </div>
+            </header>
+
+            <div class="budget-progress-section">
+              <div class="budget-progress-header">
+                <span>
+                  {{ formatCurrency(item.spent) }}
+                  gastados
+                </span>
+
+                <strong
+                  [class.text-warning]="item.status === 'warning'"
+                  [class.text-danger]="item.status === 'exceeded'"
+                >
+                  {{ formatPercentage(item.percentage) }}
+                </strong>
+              </div>
+
+              <div
+                class="budget-progress"
+                role="progressbar"
+                [attr.aria-valuenow]="item.progressBarPercentage"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [attr.aria-label]="'Uso del presupuesto de ' + (item.category?.name ?? 'categoría')"
+              >
+                <div
+                  class="budget-progress-bar"
+                  [class.budget-progress-bar-warning]="item.status === 'warning'"
+                  [class.budget-progress-bar-exceeded]="item.status === 'exceeded'"
+                  [style.width.%]="item.progressBarPercentage"
+                ></div>
+              </div>
+            </div>
+
+            <footer class="budget-card-footer">
+              @if (item.remaining >= 0) {
+                <div>
+                  <span class="budget-footer-label"> Disponible </span>
+
+                  <strong class="budget-footer-value">
+                    {{ formatCurrency(item.remaining) }}
+                  </strong>
+                </div>
+              } @else {
+                <div>
+                  <span class="budget-footer-label text-danger"> Presupuesto superado </span>
+
+                  <strong class="budget-footer-value text-danger">
+                    {{ formatCurrency(-item.remaining) }}
+                  </strong>
+                </div>
+              }
+
+              @if (item.status === 'normal') {
+                <span class="budget-status budget-status-normal">
+                  <i class="bi bi-check-circle" aria-hidden="true"></i>
+
+                  En control
+                </span>
+              } @else if (item.status === 'warning') {
+                <span class="budget-status budget-status-warning">
+                  <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+
+                  Cerca del límite
+                </span>
+              } @else {
+                <span class="budget-status budget-status-exceeded">
+                  <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+                  Superado
+                </span>
+              }
+            </footer>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</section>
+
+@if (isBudgetFormOpen()) {
+  <div
+    class="budget-modal-backdrop"
+    role="presentation"
+    (click)="$event.target === $event.currentTarget && closeBudgetForm()"
+  >
+    <section
+      class="budget-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="budget-modal-title"
+    >
+      <app-budget-form
+        [budget]="selectedBudget()"
+        [categories]="categories()"
+        [selectedMonth]="selectedMonth()"
+        [unavailableCategoryIds]="unavailableCategoryIds()"
+        [isSaving]="isSavingBudget()"
+        [errorMessage]="budgetFormError()"
+        (submitted)="saveBudget($event)"
+        (cancelled)="closeBudgetForm()"
+      />
+    </section>
+  </div>
+}
+
+@if (budgetToDelete()) {
+  <app-confirm-dialog
+    title="Eliminar presupuesto"
+    [message]="
+      '¿Quieres eliminar el presupuesto de ' +
+      budgetToDeleteCategoryName() +
+      ' para ' +
+      selectedMonthLabel() +
+      '?'
+    "
+    confirmText="Eliminar presupuesto"
+    processingText="Eliminando..."
+    [isProcessing]="isDeletingBudget()"
+    [errorMessage]="budgetDeleteError()"
+    (confirmed)="confirmDeleteBudget()"
+    (cancelled)="closeDeleteBudgetDialog()"
+  >
+    <p class="mb-0 text-secondary small">
+      Solo se eliminará el presupuesto de este mes. La categoría, tus transacciones y los
+      presupuestos de otros meses se conservarán.
+    </p>
+  </app-confirm-dialog>
+}

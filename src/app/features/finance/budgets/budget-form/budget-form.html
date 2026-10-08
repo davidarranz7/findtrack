@@ -1,0 +1,167 @@
+<form class="budget-form" [formGroup]="budgetForm">
+  <header class="budget-form-header">
+    <div>
+      <p class="budget-form-eyebrow mb-1">
+        {{ isEditMode() ? 'EDITAR PRESUPUESTO' : 'NUEVO PRESUPUESTO' }}
+      </p>
+
+      <h2 id="budget-modal-title" class="budget-form-title mb-1">
+        {{ isEditMode() ? 'Modificar presupuesto' : 'Crear presupuesto' }}
+      </h2>
+
+      <p class="budget-form-description mb-0">
+        @if (isEditMode()) {
+          Actualiza el límite mensual de este presupuesto.
+        } @else {
+          Define cuánto quieres gastar en una categoría durante este mes.
+        }
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="budget-form-close"
+      aria-label="Cerrar formulario"
+      [disabled]="isSaving()"
+      (click)="cancel()"
+    >
+      <i class="bi bi-x-lg" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="budget-form-month">
+    <div class="budget-form-month-icon">
+      <i class="bi bi-calendar3" aria-hidden="true"></i>
+    </div>
+
+    <div>
+      <span class="budget-form-month-label"> Mes del presupuesto </span>
+
+      <strong>
+        {{ selectedMonthLabel() }}
+      </strong>
+    </div>
+  </div>
+
+  <div class="budget-form-field">
+    <label for="budget-category" class="form-label"> Categoría </label>
+
+    <div class="budget-input-wrapper">
+      <i class="bi bi-tag field-icon" aria-hidden="true"></i>
+
+      <select
+        id="budget-category"
+        class="form-select budget-control"
+        formControlName="categoryId"
+        [class.is-invalid]="
+          budgetForm.controls.categoryId.invalid && budgetForm.controls.categoryId.touched
+        "
+      >
+        <option value="" disabled>Selecciona una categoría</option>
+
+        @for (category of availableCategories(); track category.id) {
+          <option [value]="category.id">
+            {{ category.name }}
+          </option>
+        }
+      </select>
+    </div>
+
+    @if (budgetForm.controls.categoryId.invalid && budgetForm.controls.categoryId.touched) {
+      <div class="invalid-feedback d-block">Selecciona una categoría.</div>
+    }
+
+    @if (!isEditMode() && availableCategories().length === 0) {
+      <p class="budget-form-help budget-form-help-warning mb-0">
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+
+        Todas tus categorías ya tienen un presupuesto asignado para este mes.
+      </p>
+    } @else if (isEditMode()) {
+      <p class="budget-form-help mb-0">
+        La categoría no se puede cambiar al editar un presupuesto.
+      </p>
+    } @else {
+      <p class="budget-form-help mb-0">
+        Solo aparecen categorías que todavía no tienen presupuesto este mes.
+      </p>
+    }
+  </div>
+
+  <div class="budget-form-field">
+    <label for="budget-amount" class="form-label"> Límite mensual </label>
+
+    <div class="budget-input-wrapper">
+      <i class="bi bi-currency-euro field-icon" aria-hidden="true"></i>
+
+      <input
+        id="budget-amount"
+        type="number"
+        class="form-control budget-control"
+        formControlName="amount"
+        min="0.01"
+        step="0.01"
+        inputmode="decimal"
+        placeholder="0,00"
+        [class.is-invalid]="
+          budgetForm.controls.amount.invalid && budgetForm.controls.amount.touched
+        "
+      />
+    </div>
+
+    @if (budgetForm.controls.amount.invalid && budgetForm.controls.amount.touched) {
+      <div class="invalid-feedback d-block">
+        @if (budgetForm.controls.amount.hasError('required')) {
+          Introduce un importe.
+        } @else if (budgetForm.controls.amount.hasError('min')) {
+          El importe debe ser mayor que 0 €.
+        } @else {
+          Introduce un importe válido.
+        }
+      </div>
+    }
+
+    <p class="budget-form-help mb-0">
+      Este será el máximo que quieres gastar en esta categoría durante
+      {{ selectedMonthLabel() }}.
+    </p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger budget-form-error" role="alert">
+      <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+      <span>
+        {{ errorMessage() }}
+      </span>
+    </div>
+  }
+
+  <footer class="budget-form-actions">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      [disabled]="isSaving()"
+      (click)="cancel()"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="isSaving() || (!isEditMode() && availableCategories().length === 0)"
+      (click)="submit()"
+    >
+      @if (isSaving()) {
+        <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+        Guardando...
+      } @else {
+        <i class="bi bi-check-lg me-2" aria-hidden="true"></i>
+
+        {{ isEditMode() ? 'Guardar cambios' : 'Crear presupuesto' }}
+      }
+    </button>
+  </footer>
+</form>

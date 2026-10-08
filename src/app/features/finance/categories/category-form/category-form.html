@@ -1,4 +1,4 @@
-<form class="category-form" [formGroup]="categoryForm" (ngSubmit)="submit()">
+<form class="category-form" [formGroup]="categoryForm">
   @if (errorMessage()) {
     <div class="alert alert-danger py-2 px-3" role="alert">
       <i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>
@@ -92,7 +92,7 @@
       Cancelar
     </button>
 
-    <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+    <button type="button" class="btn btn-primary" [disabled]="isSaving()" (click)="submit()">
       @if (isSaving()) {
         <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
 

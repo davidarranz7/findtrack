@@ -27,47 +27,32 @@ import { CategoryForm, CategoryFormValue } from './category-form/category-form';
 })
 export class Categories {
   private readonly authService = inject(AuthService);
-
   private readonly categoryService = inject(CategoryService);
-
   private readonly transactionService = inject(TransactionService);
-
   private readonly budgetService = inject(BudgetService);
-
   private readonly toastService = inject(ToastService);
-
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly categories = signal<Category[]>([]);
-
   protected readonly transactions = signal<Transaction[]>([]);
-
   protected readonly budgets = signal<Budget[]>([]);
 
   protected readonly isLoadingCategories = signal(true);
-
   protected readonly isLoadingTransactions = signal(true);
-
   protected readonly isLoadingBudgets = signal(true);
 
   protected readonly categoryLoadError = signal<string | null>(null);
-
   protected readonly transactionLoadError = signal<string | null>(null);
-
   protected readonly budgetLoadError = signal<string | null>(null);
 
   protected readonly isCategoryFormOpen = signal(false);
-
   protected readonly categoryToEdit = signal<Category | null>(null);
-
   protected readonly categoryToDelete = signal<Category | null>(null);
 
   protected readonly isSavingCategory = signal(false);
-
   protected readonly deletingCategoryId = signal<string | null>(null);
 
   protected readonly categoryFormError = signal<string | null>(null);
-
   protected readonly deleteError = signal<string | null>(null);
 
   protected readonly isEditingCategory = computed(() => this.categoryToEdit() !== null);
@@ -149,19 +134,16 @@ export class Categories {
 
     if (!userId) {
       this.toastService.warning('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
     if (category.userId !== userId) {
       this.toastService.warning('No puedes eliminar esta categoría.');
-
       return;
     }
 
     if (this.isLoadingBudgets()) {
       this.toastService.info('Espera a que termine de cargarse la información de presupuestos.');
-
       return;
     }
 
@@ -169,7 +151,6 @@ export class Categories {
       this.toastService.warning(
         'No se puede eliminar la categoría porque no se ha podido comprobar si tiene presupuestos asociados.',
       );
-
       return;
     }
 
@@ -177,12 +158,10 @@ export class Categories {
       this.toastService.warning(
         `La categoría "${category.name}" tiene un presupuesto asociado. Elimina o modifica primero ese presupuesto.`,
       );
-
       return;
     }
 
     this.deleteError.set(null);
-
     this.categoryToDelete.set(category);
   }
 
@@ -192,7 +171,6 @@ export class Categories {
     }
 
     this.categoryToDelete.set(null);
-
     this.deleteError.set(null);
   }
 
@@ -207,7 +185,6 @@ export class Categories {
 
     if (!userId || category.userId !== userId) {
       this.deleteError.set('No puedes eliminar esta categoría.');
-
       return;
     }
 
@@ -215,14 +192,12 @@ export class Categories {
       this.deleteError.set(
         'Esta categoría tiene un presupuesto asociado. Elimina o modifica primero ese presupuesto.',
       );
-
       return;
     }
 
     const affectedTransactions = this.affectedTransactions();
 
     this.deletingCategoryId.set(category.id);
-
     this.deleteError.set(null);
 
     const unlinkTransactionsRequest =
@@ -261,7 +236,6 @@ export class Categories {
           );
 
           this.categoryToDelete.set(null);
-
           this.deleteError.set(null);
 
           this.toastService.success('Categoría eliminada correctamente.');
@@ -291,12 +265,10 @@ export class Categories {
 
     if (!userId) {
       this.categoryFormError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
     const normalizedName = formValue.name.trim();
-
     const categoryToEdit = this.categoryToEdit();
 
     const categoryAlreadyExists = this.categories().some(
@@ -308,18 +280,15 @@ export class Categories {
 
     if (categoryAlreadyExists) {
       this.categoryFormError.set('Ya existe una categoría con ese nombre.');
-
       return;
     }
 
     if (categoryToEdit && categoryToEdit.userId !== userId) {
       this.categoryFormError.set('No puedes editar esta categoría.');
-
       return;
     }
 
     this.isSavingCategory.set(true);
-
     this.categoryFormError.set(null);
 
     const categoryRequest = categoryToEdit
@@ -357,7 +326,6 @@ export class Categories {
           }
 
           this.categoryToEdit.set(null);
-
           this.isCategoryFormOpen.set(false);
         },
         error: () => {
@@ -400,9 +368,7 @@ export class Categories {
 
     if (!userId) {
       this.isLoadingCategories.set(false);
-
       this.categoryLoadError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
@@ -429,9 +395,7 @@ export class Categories {
 
     if (!userId) {
       this.isLoadingTransactions.set(false);
-
       this.transactionLoadError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
@@ -458,9 +422,7 @@ export class Categories {
 
     if (!userId) {
       this.isLoadingBudgets.set(false);
-
       this.budgetLoadError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 

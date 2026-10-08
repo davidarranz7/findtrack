@@ -4,6 +4,10 @@ import { Observable } from 'rxjs';
 
 import { Budget } from '../models';
 
+type CreateBudgetPayload = Omit<Budget, 'id'>;
+
+type UpdateBudgetPayload = Pick<Budget, 'amount'>;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -26,5 +30,17 @@ export class BudgetService {
         userId,
       },
     });
+  }
+
+  createBudget(budget: CreateBudgetPayload): Observable<Budget> {
+    return this.http.post<Budget>(this.apiUrl, budget);
+  }
+
+  updateBudget(budgetId: string, budget: UpdateBudgetPayload): Observable<Budget> {
+    return this.http.patch<Budget>(`${this.apiUrl}/${budgetId}`, budget);
+  }
+
+  deleteBudget(budgetId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${budgetId}`);
   }
 }
