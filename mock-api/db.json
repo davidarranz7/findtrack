@@ -617,6 +617,28 @@
       "budgetExceededEnabled": true,
       "savingsGoalEnabled": true,
       "id": "GldhgHwGl88"
+    },
+    {
+      "userId": "rXirHvenoQU",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "dateFormat": "DD/MM/YYYY",
+      "theme": "system",
+      "budgetWarningEnabled": true,
+      "budgetExceededEnabled": true,
+      "savingsGoalEnabled": true,
+      "id": "WM3itJNhAZg"
+    },
+    {
+      "userId": "rXirHvenoQU",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "dateFormat": "DD/MM/YYYY",
+      "theme": "system",
+      "budgetWarningEnabled": true,
+      "budgetExceededEnabled": true,
+      "savingsGoalEnabled": true,
+      "id": "7OYp_JRcCCE"
     }
   ],
   "notifications": [

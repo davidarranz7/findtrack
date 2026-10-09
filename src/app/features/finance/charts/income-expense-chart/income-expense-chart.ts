@@ -20,6 +20,9 @@ import {
   Tooltip,
 } from 'chart.js';
 
+import { ThemeService } from '../../services/theme.service';
+import { getChartTheme, getChartTooltipStyle } from '../chart-theme';
+
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 export interface IncomeExpenseChartItem {
@@ -38,6 +41,7 @@ export interface IncomeExpenseChartItem {
 export class IncomeExpenseChart {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly themeService = inject(ThemeService);
 
   private readonly chartCanvas = viewChild<ElementRef<HTMLCanvasElement>>('chartCanvas');
 
@@ -57,15 +61,15 @@ export class IncomeExpenseChart {
       }
 
       const canvas = this.chartCanvas()?.nativeElement;
-
       const items = this.items();
+      const isDark = this.themeService.isDark();
 
       if (!canvas || items.length === 0) {
         this.destroyChart();
         return;
       }
 
-      this.renderChart(canvas, items);
+      this.renderChart(canvas, items, isDark);
     });
 
     this.destroyRef.onDestroy(() => {
@@ -73,8 +77,14 @@ export class IncomeExpenseChart {
     });
   }
 
-  private renderChart(canvas: HTMLCanvasElement, items: IncomeExpenseChartItem[]): void {
+  private renderChart(
+    canvas: HTMLCanvasElement,
+    items: IncomeExpenseChartItem[],
+    isDark: boolean,
+  ): void {
     this.destroyChart();
+
+    const theme = getChartTheme(canvas, isDark);
 
     this.chart = new Chart(canvas, {
       type: 'bar',
@@ -84,14 +94,14 @@ export class IncomeExpenseChart {
           {
             label: 'Ingresos',
             data: items.map((item) => item.income),
-            backgroundColor: '#0d6efd',
+            backgroundColor: theme.primary,
             borderRadius: 6,
             borderSkipped: false,
           },
           {
             label: 'Gastos',
             data: items.map((item) => item.expense),
-            backgroundColor: '#dc3545',
+            backgroundColor: theme.danger,
             borderRadius: 6,
             borderSkipped: false,
           },
@@ -112,13 +122,20 @@ export class IncomeExpenseChart {
             border: {
               display: false,
             },
+            ticks: {
+              color: theme.textSecondary,
+            },
           },
           y: {
             beginAtZero: true,
             border: {
               display: false,
             },
+            grid: {
+              color: theme.border,
+            },
             ticks: {
+              color: theme.textSecondary,
               callback: (value) => this.currencyFormatter.format(Number(value)),
             },
           },
@@ -128,6 +145,7 @@ export class IncomeExpenseChart {
             display: false,
           },
           tooltip: {
+            ...getChartTooltipStyle(theme),
             callbacks: {
               label: (context) => {
                 const value = Number(context.raw);

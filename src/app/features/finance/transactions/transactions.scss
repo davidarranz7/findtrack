@@ -25,7 +25,7 @@
   margin: 0 0 0.25rem;
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .transactions-subtitle-row {
@@ -37,7 +37,7 @@
 
 .transactions-subtitle {
   font-size: 0.875rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .transactions-count {
@@ -47,7 +47,7 @@
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   background: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
+  color: var(--app-primary);
   font-size: 0.7rem;
   font-weight: 600;
 }
@@ -89,9 +89,9 @@
   gap: 1rem;
   min-width: 0;
   padding: 1.15rem 1.25rem;
-  border: 1px solid var(--bs-border-color-translucent);
+  border: 1px solid var(--app-border-subtle);
   border-radius: 0.875rem;
-  background: var(--bs-white);
+  background: var(--app-surface);
 }
 
 .transaction-summary-label {
@@ -101,7 +101,7 @@
   font-weight: 700;
   letter-spacing: 0.035em;
   text-transform: uppercase;
-  color: var(--bs-secondary-color);
+  color: var(--app-text-secondary);
 }
 
 .transaction-summary-value {
@@ -109,7 +109,7 @@
   font-size: 1.55rem;
   font-weight: 700;
   line-height: 1.2;
-  color: var(--bs-dark);
+  color: var(--app-text);
   font-variant-numeric: tabular-nums;
 }
 
@@ -117,7 +117,7 @@
   display: block;
   margin-top: 0.3rem;
   font-size: 0.7rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .transaction-summary-icon {
@@ -133,17 +133,17 @@
 
 .transaction-summary-icon-income {
   background: var(--bs-success-bg-subtle);
-  color: var(--bs-success);
+  color: var(--app-success);
 }
 
 .transaction-summary-icon-expense {
   background: var(--bs-danger-bg-subtle);
-  color: var(--bs-danger);
+  color: var(--app-danger);
 }
 
 .transaction-summary-icon-balance {
   background: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
+  color: var(--app-primary);
 }
 
 .transactions-filters {
@@ -151,9 +151,9 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
-  border: 1px solid var(--bs-border-color-translucent);
+  border: 1px solid var(--app-border-subtle);
   border-radius: 0.875rem;
-  background: var(--bs-white);
+  background: var(--app-surface);
 }
 
 .filters-primary-row,
@@ -171,9 +171,9 @@
   min-height: 42px;
   flex: 1;
   padding: 0 0.85rem;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--app-border);
   border-radius: 0.65rem;
-  background: var(--bs-light);
+  background: var(--app-surface-secondary);
   transition:
     border-color 0.15s ease,
     background-color 0.15s ease,
@@ -181,14 +181,14 @@
 }
 
 .transaction-search:focus-within {
-  border-color: var(--bs-primary);
-  background: var(--bs-white);
+  border-color: var(--app-primary);
+  background: var(--app-surface);
   box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.08);
 }
 
 .transaction-search-icon {
   flex-shrink: 0;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.85rem;
 }
 
@@ -199,12 +199,12 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: var(--bs-dark);
+  color: var(--app-text);
   font-size: 0.8rem;
 }
 
 .transaction-search-input::placeholder {
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .transaction-search-input::-webkit-search-cancel-button {
@@ -217,17 +217,17 @@
   gap: 0.55rem;
   min-height: 42px;
   padding: 0 0.8rem;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--app-border);
   border-radius: 0.65rem;
-  background: var(--bs-white);
-  color: var(--bs-secondary);
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 }
 
 .month-filter:focus-within {
-  border-color: var(--bs-primary);
+  border-color: var(--app-primary);
   box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.08);
 }
 
@@ -242,7 +242,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: var(--bs-dark);
+  color: var(--app-text);
   font-size: 0.8rem;
   cursor: pointer;
 }
@@ -254,7 +254,7 @@
   min-height: 42px;
   padding: 0.25rem;
   border-radius: 0.65rem;
-  background: var(--bs-light);
+  background: var(--app-surface-secondary);
 }
 
 .transaction-type-filter-button {
@@ -267,7 +267,7 @@
   border: 1px solid transparent;
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
@@ -278,14 +278,14 @@
 }
 
 .transaction-type-filter-button:hover {
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .transaction-type-filter-button.active {
-  border-color: var(--bs-border-color-translucent);
-  background: var(--bs-white);
-  color: var(--bs-primary);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  border-color: var(--app-border-subtle);
+  background: var(--app-surface);
+  color: var(--app-primary);
+  box-shadow: var(--app-shadow);
 }
 
 .filter-count {
@@ -296,20 +296,20 @@
   height: 20px;
   padding: 0 0.3rem;
   border-radius: 999px;
-  background: var(--bs-secondary-bg);
-  color: var(--bs-secondary);
+  background: var(--app-surface-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.65rem;
   font-weight: 700;
 }
 
 .transaction-type-filter-button.active .filter-count {
   background: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
+  color: var(--app-primary);
 }
 
 .filters-secondary-row {
   padding-top: 1rem;
-  border-top: 1px solid var(--bs-border-color-translucent);
+  border-top: 1px solid var(--app-border-subtle);
 }
 
 .filter-select-wrapper {
@@ -318,17 +318,17 @@
   gap: 0.55rem;
   min-height: 40px;
   padding: 0 0.75rem;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--app-border);
   border-radius: 0.65rem;
-  background: var(--bs-white);
-  color: var(--bs-secondary);
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 }
 
 .filter-select-wrapper:focus-within {
-  border-color: var(--bs-primary);
+  border-color: var(--app-primary);
   box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.08);
 }
 
@@ -343,19 +343,19 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: var(--bs-dark);
+  color: var(--app-text);
   font-size: 0.75rem;
   cursor: pointer;
 }
 
 .filter-select:disabled {
   cursor: not-allowed;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .filters-result {
   margin-left: auto;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.72rem;
   white-space: nowrap;
 }
@@ -370,7 +370,7 @@
   border: 0;
   border-radius: 0.55rem;
   background: transparent;
-  color: var(--bs-primary);
+  color: var(--app-primary);
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
@@ -386,7 +386,7 @@
 
 .clear-filters-button:disabled {
   cursor: default;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   opacity: 0.45;
 }
 
@@ -394,15 +394,15 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  color: var(--bs-danger);
+  color: var(--app-danger);
   font-size: 0.72rem;
 }
 
 .transactions-content {
   overflow: hidden;
-  border: 1px solid var(--bs-border-color-translucent);
+  border: 1px solid var(--app-border-subtle);
   border-radius: 0.875rem;
-  background: var(--bs-white);
+  background: var(--app-surface);
 }
 
 .transactions-table-header {
@@ -411,19 +411,19 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1.15rem 1.25rem;
-  border-bottom: 1px solid var(--bs-border-color-translucent);
+  border-bottom: 1px solid var(--app-border-subtle);
 }
 
 .transactions-table-title {
   margin: 0 0 0.2rem;
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .transactions-table-subtitle {
   font-size: 0.72rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .transactions-table-count {
@@ -432,8 +432,8 @@
   min-height: 26px;
   padding: 0.3rem 0.65rem;
   border-radius: 999px;
-  background: var(--bs-light);
-  color: var(--bs-secondary);
+  background: var(--app-surface-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.68rem;
   font-weight: 600;
   white-space: nowrap;
@@ -446,6 +446,7 @@
 
 .transactions-table {
   width: 100%;
+  color: var(--app-text);
   min-width: 1080px;
   border-collapse: collapse;
   font-size: 0.78rem;
@@ -455,12 +456,12 @@
 .transactions-table td {
   padding: 0.9rem 1rem;
   vertical-align: middle;
-  border-bottom: 1px solid var(--bs-border-color-translucent);
+  border-bottom: 1px solid var(--app-border-subtle);
 }
 
 .transactions-table th {
-  background: var(--bs-light);
-  color: var(--bs-secondary-color);
+  background: var(--app-surface-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.025em;
@@ -473,7 +474,7 @@
 }
 
 .transactions-table tbody tr:hover {
-  background: rgba(var(--bs-primary-rgb), 0.025);
+  background: var(--app-surface-hover);
 }
 
 .transactions-table tbody tr:last-child td {
@@ -481,7 +482,7 @@
 }
 
 .transaction-date {
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.75rem;
   white-space: nowrap;
 }
@@ -506,12 +507,12 @@
 
 .transaction-description-icon-income {
   background: var(--bs-success-bg-subtle);
-  color: var(--bs-success);
+  color: var(--app-success);
 }
 
 .transaction-description-icon-expense {
   background: var(--bs-danger-bg-subtle);
-  color: var(--bs-danger);
+  color: var(--app-danger);
 }
 
 .transaction-description-content {
@@ -524,7 +525,7 @@
 .transaction-description-title {
   max-width: 240px;
   overflow: hidden;
-  color: var(--bs-dark);
+  color: var(--app-text);
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -533,7 +534,7 @@
 .transaction-description-notes {
   max-width: 240px;
   overflow: hidden;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.68rem;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -553,16 +554,16 @@
 
 .transaction-type-income {
   background: var(--bs-success-bg-subtle);
-  color: var(--bs-success);
+  color: var(--app-success);
 }
 
 .transaction-type-expense {
   background: var(--bs-danger-bg-subtle);
-  color: var(--bs-danger);
+  color: var(--app-danger);
 }
 
 .transaction-category {
-  color: var(--bs-dark);
+  color: var(--app-text);
   font-size: 0.75rem;
   font-weight: 500;
   white-space: nowrap;
@@ -572,7 +573,7 @@
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   white-space: nowrap;
 }
 
@@ -588,11 +589,11 @@
 }
 
 .transaction-amount-income {
-  color: var(--bs-success);
+  color: var(--app-success);
 }
 
 .transaction-amount-expense {
-  color: var(--bs-danger);
+  color: var(--app-danger);
 }
 
 .transaction-actions {
@@ -612,7 +613,7 @@
   border: 1px solid transparent;
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.78rem;
   transition:
     border-color 0.15s ease,
@@ -624,13 +625,13 @@
 .transaction-action-button:hover:not(:disabled) {
   border-color: var(--bs-primary-border-subtle);
   background: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
+  color: var(--app-primary);
 }
 
 .transaction-delete-button:hover:not(:disabled) {
   border-color: var(--bs-danger-border-subtle);
   background: var(--bs-danger-bg-subtle);
-  color: var(--bs-danger);
+  color: var(--app-danger);
 }
 
 .transaction-action-button:disabled {
@@ -650,18 +651,18 @@
   gap: 1rem;
   min-height: 68px;
   padding: 0.85rem 1.25rem;
-  border-top: 1px solid var(--bs-border-color-translucent);
-  background: var(--bs-white);
+  border-top: 1px solid var(--app-border-subtle);
+  background: var(--app-surface);
 }
 
 .pagination-summary {
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.72rem;
   white-space: nowrap;
 }
 
 .pagination-summary strong {
-  color: var(--bs-dark);
+  color: var(--app-text);
   font-weight: 600;
 }
 
@@ -674,7 +675,7 @@
 
 .page-size-label {
   margin: 0;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.7rem;
   white-space: nowrap;
 }
@@ -683,11 +684,11 @@
   min-width: 62px;
   min-height: 34px;
   padding: 0.35rem 1.6rem 0.35rem 0.65rem;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--app-border);
   border-radius: 0.5rem;
   outline: 0;
-  background-color: var(--bs-white);
-  color: var(--bs-dark);
+  background-color: var(--app-surface);
+  color: var(--app-text);
   font-size: 0.72rem;
   cursor: pointer;
   transition:
@@ -696,7 +697,7 @@
 }
 
 .page-size-select:focus {
-  border-color: var(--bs-primary);
+  border-color: var(--app-primary);
   box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.08);
 }
 
@@ -719,10 +720,10 @@
   min-width: 34px;
   height: 34px;
   padding: 0 0.55rem;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--app-border);
   border-radius: 0.5rem;
-  background: var(--bs-white);
-  color: var(--bs-secondary);
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
   font-size: 0.72rem;
   font-weight: 600;
   transition:
@@ -735,7 +736,7 @@
 .pagination-button:hover:not(:disabled):not(.active) {
   border-color: var(--bs-primary-border-subtle);
   background: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
+  color: var(--app-primary);
 }
 
 .pagination-button.active {
@@ -772,7 +773,7 @@
   margin-bottom: 0.8rem;
   border-radius: 0.75rem;
   background: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
+  color: var(--app-primary);
   font-size: 1.1rem;
 }
 
@@ -780,13 +781,13 @@
   margin-bottom: 0.35rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .transactions-placeholder-text {
   max-width: 420px;
   font-size: 0.8rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .transaction-modal-backdrop {
@@ -813,9 +814,9 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px solid var(--bs-border-color-translucent);
+  border: 1px solid var(--app-border-subtle);
   border-radius: 0.75rem;
-  background: var(--bs-light);
+  background: var(--app-surface-secondary);
 }
 
 .delete-transaction-preview-icon {
@@ -831,12 +832,12 @@
 
 .delete-transaction-preview-income {
   background: var(--bs-success-bg-subtle);
-  color: var(--bs-success);
+  color: var(--app-success);
 }
 
 .delete-transaction-preview-expense {
   background: var(--bs-danger-bg-subtle);
-  color: var(--bs-danger);
+  color: var(--app-danger);
 }
 
 .delete-transaction-preview-content {
@@ -849,7 +850,7 @@
 
 .delete-transaction-description {
   overflow: hidden;
-  color: var(--bs-dark);
+  color: var(--app-text);
   font-size: 0.825rem;
   font-weight: 600;
   text-overflow: ellipsis;
@@ -858,7 +859,7 @@
 
 .delete-transaction-details {
   overflow: hidden;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
   font-size: 0.7rem;
   text-overflow: ellipsis;
   white-space: nowrap;

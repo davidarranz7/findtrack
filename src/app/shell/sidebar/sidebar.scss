@@ -6,6 +6,11 @@
 .sidebar {
   width: 250px;
   padding: 1rem;
+  background-color: var(--app-surface);
+  border-right: 1px solid var(--app-border);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease;
 }
 
 .sidebar-brand {
@@ -16,20 +21,25 @@
   .nav-link {
     padding: 0.65rem 0.75rem;
     border-radius: 0.5rem;
-    color: #5f6673;
+    color: var(--app-text-secondary);
     font-size: 0.875rem;
     transition:
       background-color 0.2s ease,
       color 0.2s ease;
 
     &:hover {
-      background-color: #f3f6fb;
-      color: #212529;
+      background-color: var(--app-surface-hover);
+      color: var(--app-text);
     }
 
     &.active {
       background-color: var(--bs-primary);
-      color: #fff;
+      color: #ffffff;
+
+      &:hover {
+        background-color: var(--bs-primary);
+        color: #ffffff;
+      }
     }
   }
 }

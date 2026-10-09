@@ -6,6 +6,20 @@
   position: relative;
   z-index: 100;
   height: 64px;
+  background-color: var(--app-surface);
+  border-bottom: 1px solid var(--app-border);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+.header-breadcrumb {
+  color: var(--app-text);
+}
+
+.header-breadcrumb > i,
+.header-current-section {
+  color: var(--app-text-secondary);
 }
 
 .header-actions {
@@ -17,10 +31,54 @@
   max-width: 320px;
 }
 
+.header-search .input-group-text {
+  color: var(--app-text-secondary);
+  background-color: var(--app-surface);
+  border-color: var(--app-border);
+}
+
+.header-search .form-control {
+  color: var(--app-text);
+  background-color: var(--app-surface);
+  border-color: var(--app-border);
+}
+
+.header-search .form-control::placeholder {
+  color: var(--app-text-muted);
+}
+
+.header-search .form-control:focus {
+  border-color: var(--app-primary);
+  box-shadow: none;
+}
+
 .header-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 38px;
   height: 38px;
   flex-shrink: 0;
+  padding: 0;
+  color: var(--app-text-secondary);
+  background-color: var(--app-surface-secondary);
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.header-action-button:hover {
+  color: var(--app-primary);
+  background-color: var(--app-primary-soft);
+}
+
+.header-action-button:focus-visible {
+  outline: 2px solid var(--app-primary);
+  outline-offset: 2px;
 }
 
 .notification-wrapper {
@@ -42,12 +100,12 @@
   min-width: 1.15rem;
   height: 1.15rem;
   padding: 0 0.25rem;
-  border: 2px solid var(--bs-body-bg);
+  border: 2px solid var(--app-surface);
   border-radius: 999px;
   font-size: 0.58rem;
   font-weight: 700;
   line-height: 1;
-  color: var(--bs-white);
+  color: #ffffff;
   background: var(--bs-danger);
 }
 

@@ -13,6 +13,9 @@ import {
 } from '@angular/core';
 import { ArcElement, Chart, DoughnutController, Legend, Tooltip } from 'chart.js';
 
+import { ThemeService } from '../../services/theme.service';
+import { getChartTheme, getChartTooltipStyle } from '../chart-theme';
+
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
 export interface ExpenseDistributionItem {
@@ -33,6 +36,7 @@ export interface ExpenseDistributionItem {
 export class ExpenseDistributionChart {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly themeService = inject(ThemeService);
 
   private readonly chartCanvas = viewChild<ElementRef<HTMLCanvasElement>>('chartCanvas');
 
@@ -57,13 +61,14 @@ export class ExpenseDistributionChart {
 
       const canvas = this.chartCanvas()?.nativeElement;
       const items = this.items();
+      const isDark = this.themeService.isDark();
 
       if (!canvas || items.length === 0) {
         this.destroyChart();
         return;
       }
 
-      this.renderChart(canvas, items);
+      this.renderChart(canvas, items, isDark);
     });
 
     this.destroyRef.onDestroy(() => {
@@ -71,8 +76,14 @@ export class ExpenseDistributionChart {
     });
   }
 
-  private renderChart(canvas: HTMLCanvasElement, items: ExpenseDistributionItem[]): void {
+  private renderChart(
+    canvas: HTMLCanvasElement,
+    items: ExpenseDistributionItem[],
+    isDark: boolean,
+  ): void {
     this.destroyChart();
+
+    const theme = getChartTheme(canvas, isDark);
 
     this.chart = new Chart(canvas, {
       type: 'doughnut',
@@ -96,6 +107,7 @@ export class ExpenseDistributionChart {
             display: false,
           },
           tooltip: {
+            ...getChartTooltipStyle(theme),
             callbacks: {
               label: (context) => {
                 const value = Number(context.raw);

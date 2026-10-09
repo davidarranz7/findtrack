@@ -22,7 +22,7 @@ import { ToastService } from '../../../shared/ui/toast/toast.service';
 import { AuthService } from '../../auth/services/auth.service';
 import { passwordStrengthValidator } from '../../auth/validators/password.validator';
 import { PreferencesService } from '../services/preferences.service';
-import { AppTheme, UserPreferences } from './user-preferences';
+import { UserPreferences } from './user-preferences';
 
 type AvailabilityStatus = 'idle' | 'checking' | 'available' | 'unavailable' | 'error';
 
@@ -53,17 +53,14 @@ export class Settings {
   protected readonly currentUser = this.authService.currentUser;
 
   protected readonly preferences = signal<UserPreferences | null>(null);
-
   protected readonly isLoadingPreferences = signal(true);
   protected readonly preferencesLoadError = signal<string | null>(null);
 
   protected readonly isSavingChanges = signal(false);
   protected readonly isChangingPassword = signal(false);
-
   protected readonly isPasswordEditorOpen = signal(false);
 
   protected readonly usernameAvailability = signal<AvailabilityStatus>('idle');
-
   protected readonly emailAvailability = signal<AvailabilityStatus>('idle');
 
   protected readonly showCurrentPassword = signal(false);
@@ -91,24 +88,6 @@ export class Settings {
     },
   ] as const;
 
-  protected readonly themeOptions: {
-    value: AppTheme;
-    label: string;
-  }[] = [
-    {
-      value: 'system',
-      label: 'Sistema',
-    },
-    {
-      value: 'light',
-      label: 'Claro',
-    },
-    {
-      value: 'dark',
-      label: 'Oscuro',
-    },
-  ];
-
   protected readonly profileForm = this.formBuilder.nonNullable.group({
     username: [this.currentUser()?.username ?? '', [Validators.required, Validators.minLength(4)]],
     email: [this.currentUser()?.email ?? '', [Validators.required, Validators.email]],
@@ -118,7 +97,6 @@ export class Settings {
     currency: ['EUR' as const],
     locale: ['es-ES' as const],
     dateFormat: ['DD/MM/YYYY' as const],
-    theme: ['system' as AppTheme],
     budgetWarningEnabled: [true],
     budgetExceededEnabled: [true],
     savingsGoalEnabled: [true],
@@ -194,7 +172,6 @@ export class Settings {
       currentPreferences.currency === savedPreferences.currency &&
       currentPreferences.locale === savedPreferences.locale &&
       currentPreferences.dateFormat === savedPreferences.dateFormat &&
-      currentPreferences.theme === savedPreferences.theme &&
       currentPreferences.budgetWarningEnabled === savedPreferences.budgetWarningEnabled &&
       currentPreferences.budgetExceededEnabled === savedPreferences.budgetExceededEnabled &&
       currentPreferences.savingsGoalEnabled === savedPreferences.savingsGoalEnabled
@@ -292,9 +269,7 @@ export class Settings {
     }
 
     const profileChanged = !this.isProfileUnchanged();
-
     const preferencesChanged = !this.isPreferencesUnchanged();
-
     const { username, email } = this.profileForm.getRawValue();
 
     this.isSavingChanges.set(true);
@@ -346,7 +321,6 @@ export class Settings {
           this.preferencesForm.markAsPristine();
 
           this.usernameAvailability.set('idle');
-
           this.emailAvailability.set('idle');
 
           this.toastService.success('Configuración guardada correctamente.');
@@ -373,7 +347,6 @@ export class Settings {
         currency: savedPreferences.currency,
         locale: savedPreferences.locale,
         dateFormat: savedPreferences.dateFormat,
-        theme: savedPreferences.theme,
         budgetWarningEnabled: savedPreferences.budgetWarningEnabled,
         budgetExceededEnabled: savedPreferences.budgetExceededEnabled,
         savingsGoalEnabled: savedPreferences.savingsGoalEnabled,
@@ -382,7 +355,6 @@ export class Settings {
 
     this.usernameAvailability.set('idle');
     this.emailAvailability.set('idle');
-
     this.profileForm.markAsPristine();
     this.preferencesForm.markAsPristine();
   }
@@ -434,7 +406,6 @@ export class Settings {
           this.showCurrentPassword.set(false);
           this.showNewPassword.set(false);
           this.showConfirmPassword.set(false);
-
           this.isPasswordEditorOpen.set(false);
 
           this.toastService.success('Contraseña actualizada correctamente.');
@@ -458,7 +429,6 @@ export class Settings {
 
   protected logout(): void {
     this.authService.clearCurrentUser();
-
     void this.router.navigate(['/login']);
   }
 
@@ -479,9 +449,7 @@ export class Settings {
 
     if (!userId) {
       this.isLoadingPreferences.set(false);
-
       this.preferencesLoadError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
@@ -502,7 +470,6 @@ export class Settings {
             currency: preferences.currency,
             locale: preferences.locale,
             dateFormat: preferences.dateFormat,
-            theme: preferences.theme,
             budgetWarningEnabled: preferences.budgetWarningEnabled,
             budgetExceededEnabled: preferences.budgetExceededEnabled,
             savingsGoalEnabled: preferences.savingsGoalEnabled,
@@ -523,12 +490,10 @@ export class Settings {
       .pipe(
         tap(() => {
           this.usernameAvailability.set('idle');
-
           this.removeControlError(usernameControl, 'usernameTaken');
         }),
         switchMap((username) => {
           const user = this.currentUser();
-
           const normalizedUsername = username.trim();
 
           if (
@@ -548,7 +513,6 @@ export class Settings {
             ),
             catchError(() => {
               this.usernameAvailability.set('error');
-
               return EMPTY;
             }),
           );
@@ -558,7 +522,6 @@ export class Settings {
       .subscribe((available) => {
         if (available) {
           this.usernameAvailability.set('available');
-
           return;
         }
 
@@ -578,12 +541,10 @@ export class Settings {
       .pipe(
         tap(() => {
           this.emailAvailability.set('idle');
-
           this.removeControlError(emailControl, 'emailTaken');
         }),
         switchMap((email) => {
           const user = this.currentUser();
-
           const normalizedEmail = email.trim().toLowerCase();
 
           if (
@@ -601,7 +562,6 @@ export class Settings {
             switchMap(() => this.authService.checkEmailAvailability(normalizedEmail, user.id)),
             catchError(() => {
               this.emailAvailability.set('error');
-
               return EMPTY;
             }),
           );
@@ -611,7 +571,6 @@ export class Settings {
       .subscribe((available) => {
         if (available) {
           this.emailAvailability.set('available');
-
           return;
         }
 
@@ -620,6 +579,7 @@ export class Settings {
           emailTaken: true,
         });
 
+        this.usernameAvailability.set('idle');
         this.emailAvailability.set('unavailable');
       });
   }
@@ -642,7 +602,6 @@ export class Settings {
       });
 
       this.usernameAvailability.set('unavailable');
-
       return;
     }
 
@@ -655,7 +614,6 @@ export class Settings {
       });
 
       this.emailAvailability.set('unavailable');
-
       return;
     }
 

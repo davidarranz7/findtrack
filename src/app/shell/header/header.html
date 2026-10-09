@@ -1,19 +1,19 @@
-<header class="app-header bg-white border-bottom">
+<header class="app-header">
   <div class="d-flex align-items-center justify-content-between gap-4 h-100 px-4">
-    <div class="d-flex align-items-center gap-2 text-nowrap">
-      <span class="fw-semibold text-dark"> Finora App </span>
+    <div class="header-breadcrumb d-flex align-items-center gap-2 text-nowrap">
+      <span class="fw-semibold">Finora App</span>
 
-      <i class="bi bi-chevron-right small text-secondary" aria-hidden="true"></i>
+      <i class="bi bi-chevron-right small" aria-hidden="true"></i>
 
-      <span class="small text-secondary">
+      <span class="header-current-section small">
         {{ currentSection() }}
       </span>
     </div>
 
     <div class="header-actions d-flex align-items-center justify-content-end gap-3 flex-grow-1">
       <div class="header-search input-group input-group-sm">
-        <span class="input-group-text bg-white border-end-0">
-          <i class="bi bi-search text-secondary" aria-hidden="true"></i>
+        <span class="input-group-text border-end-0">
+          <i class="bi bi-search" aria-hidden="true"></i>
         </span>
 
         <input
@@ -24,10 +24,22 @@
         />
       </div>
 
+      <button
+        type="button"
+        class="header-action-button d-flex align-items-center justify-content-center"
+        [disabled]="isSavingTheme()"
+        [attr.aria-busy]="isSavingTheme()"
+        [attr.aria-label]="isDark() ? 'Activar modo claro' : 'Activar modo oscuro'"
+        [attr.title]="isDark() ? 'Modo claro' : 'Modo oscuro'"
+        (click)="toggleTheme()"
+      >
+        <i [class]="isDark() ? 'bi bi-sun' : 'bi bi-moon'" aria-hidden="true"></i>
+      </button>
+
       <div #notificationWrapper class="notification-wrapper">
         <button
           type="button"
-          class="btn btn-light header-action-button notification-trigger d-flex align-items-center justify-content-center"
+          class="header-action-button notification-trigger d-flex align-items-center justify-content-center"
           aria-label="Notificaciones"
           [attr.aria-expanded]="isNotificationPanelOpen()"
           (click)="toggleNotificationPanel()"
@@ -55,7 +67,7 @@
 
       <button
         type="button"
-        class="btn btn-light header-action-button d-flex align-items-center justify-content-center"
+        class="header-action-button d-flex align-items-center justify-content-center"
         aria-label="Configuración de usuario"
         title="Configuración"
         (click)="openSettings()"
@@ -65,7 +77,7 @@
 
       <button
         type="button"
-        class="btn btn-light header-action-button d-flex align-items-center justify-content-center"
+        class="header-action-button d-flex align-items-center justify-content-center"
         aria-label="Cerrar sesión"
         title="Cerrar sesión"
         (click)="logout()"

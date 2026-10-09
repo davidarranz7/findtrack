@@ -351,10 +351,24 @@
   justify-content: center;
   gap: 0.4rem;
   flex: 0 0 auto;
-  border: 1px solid var(--bs-border-color-translucent);
+  border: 1px solid var(--bs-border-color);
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--bs-emphasis-color);
+  background-color: var(--bs-secondary-bg);
+
+  &:hover {
+    color: var(--bs-emphasis-color);
+    background-color: var(--bs-tertiary-bg);
+    border-color: var(--bs-border-color);
+  }
+
+  &:focus-visible {
+    color: var(--bs-emphasis-color);
+    background-color: var(--bs-secondary-bg);
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+  }
 }
 
 .password-editor {
@@ -497,52 +511,6 @@
 .settings-preferences-card {
   .settings-card-body {
     padding: 1.2rem;
-  }
-}
-
-.theme-options {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.35rem;
-  padding: 0.25rem;
-  border-radius: 0.7rem;
-  background: var(--bs-tertiary-bg);
-}
-
-.theme-option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 0.25rem;
-  min-height: 3.65rem;
-  padding: 0.45rem;
-  border: 1px solid transparent;
-  border-radius: 0.6rem;
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--bs-secondary-color);
-  background: transparent;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-
-  i {
-    font-size: 1rem;
-  }
-
-  &:hover {
-    color: var(--bs-primary);
-    background: var(--bs-body-bg);
-  }
-
-  &.is-active {
-    border-color: var(--bs-primary);
-    color: var(--bs-white);
-    background: var(--bs-primary);
-    box-shadow: 0 0.2rem 0.5rem rgba(var(--bs-primary-rgb), 0.18);
   }
 }
 
@@ -749,15 +717,6 @@
     .btn {
       width: 100%;
     }
-  }
-
-  .theme-options {
-    grid-template-columns: 1fr;
-  }
-
-  .theme-option {
-    flex-direction: row;
-    min-height: 2.8rem;
   }
 
   .password-editor-actions {

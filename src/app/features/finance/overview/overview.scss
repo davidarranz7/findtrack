@@ -19,12 +19,12 @@
   margin: 0 0 0.25rem;
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .overview-subtitle {
   font-size: 0.875rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .overview-header-actions {
@@ -39,10 +39,10 @@
   gap: 1rem;
   min-height: 42px;
   padding-inline: 1rem;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--app-border);
   border-radius: 0.75rem;
-  background: var(--bs-white);
-  color: var(--bs-dark);
+  background: var(--app-surface);
+  color: var(--app-text);
   font-size: 0.875rem;
 }
 
@@ -92,30 +92,30 @@
   height: 36px;
   flex-shrink: 0;
   border-radius: 0.5rem;
-  background: var(--bs-white);
+  background: var(--app-surface);
 }
 
 .budget-alert-safe .budget-alert-icon {
-  color: var(--bs-success);
+  color: var(--app-success);
 }
 
 .budget-alert-warning .budget-alert-icon {
-  color: var(--bs-warning);
+  color: var(--app-warning);
 }
 
 .budget-alert-exceeded .budget-alert-icon {
-  color: var(--bs-danger);
+  color: var(--app-danger);
 }
 
 .budget-alert-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .budget-alert-text {
   font-size: 0.8rem;
-  color: var(--bs-secondary-color);
+  color: var(--app-text-secondary);
 }
 
 .summary-grid {
@@ -126,9 +126,9 @@
 
 .summary-card,
 .overview-card {
-  border: 1px solid var(--bs-border-color-translucent);
+  border: 1px solid var(--app-border);
   border-radius: 0.875rem;
-  background: var(--bs-white);
+  background: var(--app-surface);
 }
 
 .summary-card {
@@ -148,7 +148,7 @@
   font-weight: 600;
   letter-spacing: 0.035em;
   text-transform: uppercase;
-  color: var(--bs-secondary-color);
+  color: var(--app-text-secondary);
 }
 
 .summary-icon {
@@ -163,30 +163,30 @@
 
 .summary-icon-balance,
 .summary-icon-saving {
-  background: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
 }
 
 .summary-icon-income {
-  background: var(--bs-success-bg-subtle);
-  color: var(--bs-success);
+  background: var(--app-success-soft);
+  color: var(--app-success);
 }
 
 .summary-icon-expense {
-  background: var(--bs-danger-bg-subtle);
-  color: var(--bs-danger);
+  background: var(--app-danger-soft);
+  color: var(--app-danger);
 }
 
 .summary-value {
   font-size: 1.65rem;
   font-weight: 700;
   line-height: 1.15;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .summary-description {
   font-size: 0.75rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .charts-grid {
@@ -222,12 +222,12 @@
   margin: 0 0 0.15rem;
   font-size: 1rem;
   font-weight: 700;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .card-subtitle {
   font-size: 0.75rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .chart-legend {
@@ -236,7 +236,7 @@
   gap: 1rem;
   flex-shrink: 0;
   font-size: 0.7rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .chart-legend span {
@@ -252,11 +252,11 @@
 }
 
 .legend-income {
-  background: var(--bs-primary);
+  background: var(--app-primary);
 }
 
 .legend-expense {
-  background: var(--bs-danger);
+  background: var(--app-danger);
 }
 
 .chart-placeholder,
@@ -271,25 +271,25 @@
   min-height: 220px;
   flex-direction: column;
   gap: 0.75rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .chart-placeholder > i {
   font-size: 2rem;
-  color: var(--bs-border-color);
+  color: var(--app-text-muted);
 }
 
 .chart-placeholder-title,
 .empty-state-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .chart-placeholder-text,
 .empty-state-text {
   font-size: 0.75rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .empty-state {
@@ -305,8 +305,8 @@
   height: 42px;
   margin-bottom: 0.75rem;
   border-radius: 0.75rem;
-  background: var(--bs-light);
-  color: var(--bs-secondary);
+  background: var(--app-surface-secondary);
+  color: var(--app-text-secondary);
 }
 
 .card-action-button {
@@ -318,14 +318,14 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .view-all-button {
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--bs-primary);
+  color: var(--app-primary);
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -337,7 +337,7 @@
   gap: 0.6rem;
   min-height: 190px;
   font-size: 0.8rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .budget-list {
@@ -348,7 +348,7 @@
 
 .budget-item {
   padding: 0.8rem 0;
-  border-bottom: 1px solid var(--bs-border-color-translucent);
+  border-bottom: 1px solid var(--app-border-subtle);
 }
 
 .budget-item:first-child {
@@ -390,13 +390,13 @@
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .budget-values {
   margin-top: 0.2rem;
   font-size: 0.72rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .budget-percentage {
@@ -410,7 +410,7 @@
   margin-top: 0.65rem;
   overflow: hidden;
   border-radius: 999px;
-  background: var(--bs-secondary-bg);
+  background: var(--app-surface-secondary);
 }
 
 .budget-progress .progress-bar {
@@ -421,7 +421,7 @@
 .budget-remaining {
   margin-top: 0.45rem;
   font-size: 0.7rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .recent-transactions {
@@ -436,7 +436,7 @@
   gap: 0.75rem;
   min-width: 0;
   padding: 0.7rem 0;
-  border-bottom: 1px solid var(--bs-border-color-translucent);
+  border-bottom: 1px solid var(--app-border-subtle);
 }
 
 .recent-transaction:last-child {
@@ -454,13 +454,13 @@
 }
 
 .transaction-icon-income {
-  background: var(--bs-success-bg-subtle);
-  color: var(--bs-success);
+  background: var(--app-success-soft);
+  color: var(--app-success);
 }
 
 .transaction-icon-expense {
-  background: var(--bs-danger-bg-subtle);
-  color: var(--bs-danger);
+  background: var(--app-danger-soft);
+  color: var(--app-danger);
 }
 
 .transaction-information {
@@ -474,7 +474,7 @@
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .transaction-meta {
@@ -483,7 +483,7 @@
   gap: 0.35rem;
   margin-top: 0.15rem;
   font-size: 0.7rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .transaction-amount {
@@ -493,11 +493,11 @@
 }
 
 .transaction-amount-income {
-  color: var(--bs-success);
+  color: var(--app-success);
 }
 
 .transaction-amount-expense {
-  color: var(--bs-danger);
+  color: var(--app-danger);
 }
 
 .transaction-modal-backdrop {

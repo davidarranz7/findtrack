@@ -5,7 +5,7 @@ import { map, Observable, switchMap } from 'rxjs';
 import { UserPreferences } from '../settings/user-preferences';
 
 type CreateUserPreferencesPayload = Omit<UserPreferences, 'id'>;
-type UpdateUserPreferencesPayload = Omit<UserPreferences, 'id' | 'userId'>;
+type UpdateUserPreferencesPayload = Partial<Omit<UserPreferences, 'id' | 'userId'>>;
 
 @Injectable({
   providedIn: 'root',
@@ -53,12 +53,12 @@ export class PreferencesService {
     return this.http.post<UserPreferences>(this.apiUrl, preferences);
   }
 
-  private getDefaultPreferences(): UpdateUserPreferencesPayload {
+  private getDefaultPreferences(): Omit<UserPreferences, 'id' | 'userId'> {
     return {
       currency: 'EUR',
       locale: 'es-ES',
       dateFormat: 'DD/MM/YYYY',
-      theme: 'system',
+      theme: 'light',
       budgetWarningEnabled: true,
       budgetExceededEnabled: true,
       savingsGoalEnabled: true,

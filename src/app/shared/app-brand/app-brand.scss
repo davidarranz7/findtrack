@@ -15,7 +15,7 @@
 }
 
 .brand-name {
-  color: var(--brand-text-color, #fff);
+  color: var(--brand-text-color, var(--app-text, #fff));
   font-size: 2.25rem;
   line-height: 1;
   font-weight: 600;

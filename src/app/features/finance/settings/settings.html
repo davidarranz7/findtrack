@@ -1,10 +1,8 @@
 <section class="settings-page">
   <header class="settings-page-header">
     <div class="settings-heading">
-      <span class="settings-eyebrow"> CONFIGURACIÓN DE CUENTA </span>
-
+      <span class="settings-eyebrow">CONFIGURACIÓN DE CUENTA</span>
       <h1>Configuración</h1>
-
       <p>Gestiona tu cuenta, preferencias y alertas.</p>
     </div>
 
@@ -16,7 +14,6 @@
         (click)="discardChanges()"
       >
         <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
-
         Descartar
       </button>
 
@@ -35,11 +32,9 @@
       >
         @if (isSavingChanges()) {
           <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-
           Guardando...
         } @else {
           <i class="bi bi-floppy" aria-hidden="true"></i>
-
           Guardar cambios
         }
       </button>
@@ -49,25 +44,20 @@
   @if (isLoadingPreferences()) {
     <section class="settings-state" aria-live="polite">
       <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden"> Cargando configuración... </span>
+        <span class="visually-hidden">Cargando configuración...</span>
       </div>
 
       <div>
-        <strong> Cargando configuración </strong>
-
+        <strong>Cargando configuración</strong>
         <p class="mb-0">Estamos preparando tus preferencias.</p>
       </div>
     </section>
   } @else if (preferencesLoadError()) {
     <div class="alert alert-danger settings-error" role="alert">
       <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-
       <div>
-        <strong> No hemos podido cargar la configuración. </strong>
-
-        <p class="mb-0">
-          {{ preferencesLoadError() }}
-        </p>
+        <strong>No hemos podido cargar la configuración.</strong>
+        <p class="mb-0">{{ preferencesLoadError() }}</p>
       </div>
     </div>
   } @else {
@@ -80,7 +70,6 @@
 
           <div>
             <h2>Perfil de usuario</h2>
-
             <p>Información personal y credenciales básicas de acceso.</p>
           </div>
         </div>
@@ -99,13 +88,8 @@
             </div>
 
             <div class="profile-avatar-info">
-              <strong>
-                {{ currentUser()?.username }}
-              </strong>
-
-              <span>
-                {{ currentUser()?.email }}
-              </span>
+              <strong>{{ currentUser()?.username }}</strong>
+              <span>{{ currentUser()?.email }}</span>
             </div>
           </div>
 
@@ -113,8 +97,7 @@
             <div class="settings-field">
               <div class="settings-label-row">
                 <label class="form-label" for="settings-username"> Nombre de usuario </label>
-
-                <span class="settings-field-required"> Obligatorio </span>
+                <span class="settings-field-required">Obligatorio</span>
               </div>
 
               <div class="position-relative">
@@ -164,8 +147,7 @@
             <div class="settings-field">
               <div class="settings-label-row">
                 <label class="form-label" for="settings-email"> Correo electrónico </label>
-
-                <span class="settings-field-verified"> Verificado </span>
+                <span class="settings-field-verified">Verificado</span>
               </div>
 
               <div class="position-relative">
@@ -221,9 +203,8 @@
               </div>
 
               <div>
-                <strong> Contraseña </strong>
-
-                <span> Gestiona la contraseña de acceso a tu cuenta. </span>
+                <strong>Contraseña</strong>
+                <span>Gestiona la contraseña de acceso a tu cuenta.</span>
               </div>
             </div>
 
@@ -234,7 +215,6 @@
                 (click)="openPasswordEditor()"
               >
                 <i class="bi bi-three-dots" aria-hidden="true"></i>
-
                 Cambiar contraseña
               </button>
             }
@@ -382,7 +362,7 @@
               @if (passwordForm.controls.newPassword.value) {
                 <div class="password-strength">
                   <div class="password-strength-heading">
-                    <span> Fortaleza de la contraseña </span>
+                    <span>Fortaleza de la contraseña</span>
 
                     <strong
                       [class.password-strength-weak]="passwordStrength().level === 'weak'"
@@ -425,8 +405,7 @@
                         "
                         aria-hidden="true"
                       ></i>
-
-                      <span> 8 caracteres como mínimo </span>
+                      <span>8 caracteres como mínimo</span>
                     </div>
 
                     <div
@@ -441,8 +420,7 @@
                         "
                         aria-hidden="true"
                       ></i>
-
-                      <span> Una letra mayúscula </span>
+                      <span>Una letra mayúscula</span>
                     </div>
 
                     <div
@@ -455,8 +433,7 @@
                         "
                         aria-hidden="true"
                       ></i>
-
-                      <span> Un número </span>
+                      <span>Un número</span>
                     </div>
 
                     <div
@@ -471,8 +448,7 @@
                         "
                         aria-hidden="true"
                       ></i>
-
-                      <span> Un carácter especial </span>
+                      <span>Un carácter especial</span>
                     </div>
                   </div>
                 </div>
@@ -496,11 +472,9 @@
                 >
                   @if (isChangingPassword()) {
                     <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-
                     Actualizando...
                   } @else {
                     <i class="bi bi-key" aria-hidden="true"></i>
-
                     Cambiar contraseña
                   }
                 </button>
@@ -521,8 +495,7 @@
 
             <div>
               <h2>Preferencias del sistema</h2>
-
-              <p>Regionalización, moneda y apariencia de interfaz.</p>
+              <p>Regionalización, moneda y formato de fecha.</p>
             </div>
           </div>
         </header>
@@ -566,45 +539,6 @@
                 }
               </select>
             </div>
-
-            <div class="settings-field">
-              <span class="form-label"> Tema visual de pantalla </span>
-
-              <div class="theme-options" role="group" aria-label="Tema visual de pantalla">
-                <button
-                  type="button"
-                  class="theme-option"
-                  [class.is-active]="preferencesForm.controls.theme.value === 'system'"
-                  (click)="preferencesForm.controls.theme.setValue('system')"
-                >
-                  <i class="bi bi-display" aria-hidden="true"></i>
-
-                  <span> Sistema </span>
-                </button>
-
-                <button
-                  type="button"
-                  class="theme-option"
-                  [class.is-active]="preferencesForm.controls.theme.value === 'light'"
-                  (click)="preferencesForm.controls.theme.setValue('light')"
-                >
-                  <i class="bi bi-sun" aria-hidden="true"></i>
-
-                  <span> Modo Claro </span>
-                </button>
-
-                <button
-                  type="button"
-                  class="theme-option"
-                  [class.is-active]="preferencesForm.controls.theme.value === 'dark'"
-                  (click)="preferencesForm.controls.theme.setValue('dark')"
-                >
-                  <i class="bi bi-moon" aria-hidden="true"></i>
-
-                  <span> Modo Oscuro </span>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -618,7 +552,6 @@
 
             <div>
               <h2>Alertas y Notificaciones</h2>
-
               <p>Reglas automáticas de aviso para tus finanzas.</p>
             </div>
           </div>
@@ -633,8 +566,7 @@
                 </div>
 
                 <div>
-                  <strong> Avisar cuando un presupuesto alcance el 80% </strong>
-
+                  <strong>Avisar cuando un presupuesto alcance el 80%</strong>
                   <p>Recibe un aviso preventivo antes de agotar tus límites mensuales.</p>
                 </div>
               </div>
@@ -647,7 +579,6 @@
                   role="switch"
                   formControlName="budgetWarningEnabled"
                 />
-
                 <label class="visually-hidden" for="budget-warning-enabled">
                   Avisar cuando un presupuesto alcance el 80%
                 </label>
@@ -661,8 +592,7 @@
                 </div>
 
                 <div>
-                  <strong> Avisar cuando se supere un presupuesto </strong>
-
+                  <strong>Avisar cuando se supere un presupuesto</strong>
                   <p>Alerta inmediata al registrar un gasto que desborde la categoría.</p>
                 </div>
               </div>
@@ -675,7 +605,6 @@
                   role="switch"
                   formControlName="budgetExceededEnabled"
                 />
-
                 <label class="visually-hidden" for="budget-exceeded-enabled">
                   Avisar cuando se supere un presupuesto
                 </label>
@@ -689,8 +618,7 @@
                 </div>
 
                 <div>
-                  <strong> Avisar al alcanzar una meta de ahorro </strong>
-
+                  <strong>Avisar al alcanzar una meta de ahorro</strong>
                   <p>Notificación de felicitación al cumplir el objetivo del mes.</p>
                 </div>
               </div>
@@ -703,7 +631,6 @@
                   role="switch"
                   formControlName="savingsGoalEnabled"
                 />
-
                 <label class="visually-hidden" for="savings-goal-enabled">
                   Avisar al alcanzar una meta de ahorro
                 </label>
@@ -713,7 +640,6 @@
 
           <div class="settings-alerts-note">
             <i class="bi bi-shield-check" aria-hidden="true"></i>
-
             <span>
               Tus preferencias de alertas se guardan de forma independiente para tu cuenta.
             </span>

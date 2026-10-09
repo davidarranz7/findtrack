@@ -1,1 +1,114 @@
-/* You can add global styles to this file, and also import other style files */
+:root,
+[data-bs-theme='light'] {
+  color-scheme: light;
+
+  --app-bg: #f8fafc;
+  --app-surface: #ffffff;
+  --app-surface-rgb: 255, 255, 255;
+  --app-surface-secondary: #f1f5f9;
+  --app-surface-secondary-rgb: 241, 245, 249;
+  --app-surface-hover: #f8fafc;
+
+  --app-text: #0f172a;
+  --app-text-rgb: 15, 23, 42;
+  --app-text-secondary: #64748b;
+  --app-text-muted: #94a3b8;
+
+  --app-border: #e2e8f0;
+  --app-border-subtle: #e5e7eb;
+
+  --app-shadow: 0 2px 8px rgb(15 23 42 / 4%);
+  --app-shadow-hover: 0 8px 22px rgb(15 23 42 / 7%);
+
+  --app-primary: #2563eb;
+  --app-primary-soft: #eff6ff;
+
+  --app-success: #16a34a;
+  --app-success-soft: #f0fdf4;
+
+  --app-danger: #dc2626;
+  --app-danger-soft: #fef2f2;
+
+  --app-warning: #d97706;
+  --app-warning-soft: #fffbeb;
+}
+
+[data-bs-theme='dark'] {
+  color-scheme: dark;
+
+  --app-bg: #0b1220;
+  --app-surface: #172235;
+  --app-surface-rgb: 23, 34, 53;
+  --app-surface-secondary: #1e293b;
+  --app-surface-secondary-rgb: 30, 41, 59;
+  --app-surface-hover: #253247;
+
+  --app-text: #f1f5f9;
+  --app-text-rgb: 241, 245, 249;
+  --app-text-secondary: #cbd5e1;
+  --app-text-muted: #94a3b8;
+
+  --app-border: #334155;
+  --app-border-subtle: #29384d;
+
+  --app-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+  --app-shadow-hover: 0 8px 22px rgb(0 0 0 / 22%);
+
+  --app-primary: #60a5fa;
+  --app-primary-soft: #1e3a5f;
+
+  --app-success: #4ade80;
+  --app-success-soft: #163c30;
+
+  --app-danger: #f87171;
+  --app-danger-soft: #45252b;
+
+  --app-warning: #fbbf24;
+  --app-warning-soft: #44351c;
+}
+
+:root,
+[data-bs-theme='light'],
+[data-bs-theme='dark'] {
+  --bs-body-bg: var(--app-surface);
+  --bs-body-bg-rgb: var(--app-surface-rgb);
+  --bs-body-color: var(--app-text);
+  --bs-body-color-rgb: var(--app-text-rgb);
+  --bs-emphasis-color: var(--app-text);
+  --bs-emphasis-color-rgb: var(--app-text-rgb);
+  --bs-secondary-color: var(--app-text-secondary);
+  --bs-border-color: var(--app-border);
+  --bs-secondary-bg: var(--app-surface-secondary);
+  --bs-secondary-bg-rgb: var(--app-surface-secondary-rgb);
+  --bs-tertiary-bg: var(--app-surface-secondary);
+  --bs-tertiary-bg-rgb: var(--app-surface-secondary-rgb);
+  --bs-primary-bg-subtle: var(--app-primary-soft);
+  --bs-success-bg-subtle: var(--app-success-soft);
+  --bs-danger-bg-subtle: var(--app-danger-soft);
+  --bs-warning-bg-subtle: var(--app-warning-soft);
+}
+
+.app-card {
+  min-width: 0;
+  padding: 1.25rem;
+  color: var(--app-text);
+  background-color: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.875rem;
+  box-shadow: var(--app-shadow);
+}
+
+.app-surface-secondary {
+  color: var(--app-text);
+  background-color: var(--app-surface-secondary);
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+}
+
+.app-text-secondary {
+  color: var(--app-text-secondary);
+}
+
+.app-text-muted {
+  color: var(--app-text-muted);
+}

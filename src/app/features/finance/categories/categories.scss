@@ -5,9 +5,7 @@
 
 .categories-page {
   width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 2rem;
+  min-width: 0;
 }
 
 .categories-header {
@@ -25,7 +23,7 @@
 }
 
 .categories-eyebrow {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -33,14 +31,14 @@
 }
 
 .categories-title {
-  color: #0f172a;
+  color: var(--app-text);
   font-size: clamp(1.8rem, 2vw, 2.3rem);
   font-weight: 700;
   letter-spacing: -0.035em;
 }
 
 .categories-description {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 0.9rem;
 }
 
@@ -58,14 +56,14 @@
   min-width: 0;
   min-height: 125px;
   padding: 1.25rem;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border-subtle);
   border-radius: 0.9rem;
-  box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
+  box-shadow: var(--app-shadow);
 }
 
 .summary-label {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.045em;
@@ -75,14 +73,14 @@
 .summary-value {
   display: block;
   margin-bottom: 0.25rem;
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 1.8rem;
   font-weight: 700;
   line-height: 1;
 }
 
 .summary-detail {
-  color: #94a3b8;
+  color: var(--app-text-muted);
   font-size: 0.76rem;
 }
 
@@ -98,26 +96,26 @@
 }
 
 .summary-icon-primary {
-  color: #2563eb;
-  background: #eff6ff;
+  color: var(--app-primary);
+  background: var(--app-primary-soft);
 }
 
 .summary-icon-success {
-  color: #16a34a;
-  background: #f0fdf4;
+  color: var(--app-success);
+  background: var(--app-success-soft);
 }
 
 .summary-icon-warning {
-  color: #d97706;
-  background: #fffbeb;
+  color: var(--app-warning);
+  background: var(--app-warning-soft);
 }
 
 .categories-management {
   padding: 1.5rem;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border-subtle);
   border-radius: 1rem;
-  box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
+  box-shadow: var(--app-shadow);
 }
 
 .categories-management-header {
@@ -129,13 +127,13 @@
 }
 
 .section-title {
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 1.05rem;
   font-weight: 700;
 }
 
 .section-description {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 0.82rem;
 }
 
@@ -144,8 +142,8 @@
   align-items: center;
   flex: 0 0 auto;
   padding: 0.4rem 0.7rem;
-  color: #475569;
-  background: #f1f5f9;
+  color: var(--app-text-secondary);
+  background: var(--app-surface-secondary);
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 600;
@@ -164,8 +162,8 @@
   min-width: 0;
   min-height: 145px;
   padding: 1.1rem;
-  background: #ffffff;
-  border: 1px solid #e5eaf1;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
   border-radius: 0.85rem;
   transition:
     transform 150ms ease,
@@ -174,8 +172,8 @@
 
   &:hover {
     transform: translateY(-2px);
-    border-color: #d7dfeb;
-    box-shadow: 0 8px 22px rgb(15 23 42 / 7%);
+    border-color: var(--app-primary);
+    box-shadow: var(--app-shadow-hover);
   }
 }
 
@@ -203,7 +201,7 @@
 
 .category-name {
   overflow: hidden;
-  color: #1e293b;
+  color: var(--app-text);
   font-size: 0.92rem;
   font-weight: 700;
   text-overflow: ellipsis;
@@ -211,7 +209,7 @@
 }
 
 .category-usage {
-  color: #94a3b8;
+  color: var(--app-text-muted);
   font-size: 0.75rem;
 }
 
@@ -243,24 +241,25 @@
   width: 2rem;
   height: 2rem;
   padding: 0;
-  color: #64748b;
+  color: var(--app-text-secondary);
   background: transparent;
   border: 0;
   border-radius: 0.45rem;
 
   &:not(:disabled):hover {
-    color: #2563eb;
-    background: #eff6ff;
+    color: var(--app-primary);
+    background: var(--app-primary-soft);
   }
 
   &:disabled {
+    cursor: not-allowed;
     opacity: 0.4;
   }
 }
 
 .category-action-delete:not(:disabled):hover {
-  color: #dc2626;
-  background: #fef2f2;
+  color: var(--app-danger);
+  background: var(--app-danger-soft);
 }
 
 .categories-loading,
@@ -278,14 +277,14 @@
 
 .categories-empty h3 {
   margin: 0.8rem 0 0.25rem;
-  color: #334155;
+  color: var(--app-text);
   font-size: 1rem;
   font-weight: 700;
 }
 
 .categories-empty p {
   margin: 0;
-  color: #94a3b8;
+  color: var(--app-text-muted);
   font-size: 0.82rem;
 }
 
@@ -295,8 +294,8 @@
   justify-content: center;
   width: 3.25rem;
   height: 3.25rem;
-  color: #64748b;
-  background: #f1f5f9;
+  color: var(--app-text-secondary);
+  background: var(--app-surface-secondary);
   border-radius: 0.85rem;
   font-size: 1.2rem;
 }
@@ -317,10 +316,11 @@
   width: min(100%, 580px);
   max-height: calc(100vh - 2.5rem);
   overflow: hidden auto;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  color: var(--app-text);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
   border-radius: 1rem;
-  box-shadow: 0 24px 70px rgb(15 23 42 / 22%);
+  box-shadow: var(--app-shadow-hover);
 }
 
 .category-modal-header {
@@ -329,7 +329,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1.4rem 1.5rem;
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid var(--app-border-subtle);
 }
 
 .category-modal-heading {
@@ -345,19 +345,19 @@
   flex: 0 0 auto;
   width: 2.5rem;
   height: 2.5rem;
-  color: #2563eb;
-  background: #eff6ff;
+  color: var(--app-primary);
+  background: var(--app-primary-soft);
   border-radius: 0.7rem;
 }
 
 .category-modal-title {
-  color: #0f172a;
+  color: var(--app-text);
   font-size: 1.1rem;
   font-weight: 700;
 }
 
 .category-modal-description {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 0.8rem;
 }
 
@@ -369,14 +369,14 @@
   width: 2.25rem;
   height: 2.25rem;
   padding: 0;
-  color: #64748b;
+  color: var(--app-text-secondary);
   background: transparent;
   border: 0;
   border-radius: 0.5rem;
 
   &:hover:not(:disabled) {
-    color: #0f172a;
-    background: #f1f5f9;
+    color: var(--app-text);
+    background: var(--app-surface-secondary);
   }
 
   &:disabled {
@@ -399,10 +399,6 @@
 }
 
 @media (max-width: 767.98px) {
-  .categories-page {
-    padding: 1.25rem;
-  }
-
   .categories-header,
   .categories-management-header {
     flex-direction: column;

@@ -40,13 +40,13 @@
   font-size: 1rem;
   font-weight: 700;
   white-space: nowrap;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 .chart-center span {
   margin-top: 0.1rem;
   font-size: 0.68rem;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .distribution-legend {
@@ -77,12 +77,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--bs-secondary);
+  color: var(--app-text-secondary);
 }
 
 .category-percentage {
   font-weight: 600;
-  color: var(--bs-dark);
+  color: var(--app-text);
 }
 
 @media (max-width: 575.98px) {

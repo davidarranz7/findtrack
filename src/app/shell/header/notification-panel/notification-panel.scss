@@ -5,10 +5,10 @@
 .notification-panel {
   width: min(26rem, calc(100vw - 2rem));
   overflow: hidden;
-  border: 1px solid var(--bs-border-color-translucent);
+  border: 1px solid var(--app-border);
   border-radius: 0.9rem;
-  background: var(--bs-body-bg);
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.14);
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow-hover);
 }
 
 .notification-panel-header {
@@ -17,7 +17,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1rem 0.9rem;
-  border-bottom: 1px solid var(--bs-border-color-translucent);
+  border-bottom: 1px solid var(--app-border-subtle);
 }
 
 .notification-panel-title {
@@ -30,7 +30,7 @@
     margin: 0;
     font-size: 0.95rem;
     font-weight: 700;
-    color: var(--bs-emphasis-color);
+    color: var(--app-text);
   }
 }
 
@@ -43,8 +43,8 @@
   border-radius: 999px;
   font-size: 0.62rem;
   font-weight: 700;
-  color: var(--bs-white);
-  background: var(--bs-primary);
+  color: #ffffff;
+  background: var(--app-primary);
 }
 
 .notification-mark-all {
@@ -55,7 +55,7 @@
   border: 0;
   font-size: 0.67rem;
   font-weight: 600;
-  color: var(--bs-primary);
+  color: var(--app-primary);
   background: transparent;
 
   &:hover:not(:disabled) {
@@ -79,7 +79,7 @@
   justify-content: center;
   min-height: 10rem;
   padding: 1.5rem;
-  color: var(--bs-secondary-color);
+  color: var(--app-text-secondary);
 }
 
 .notification-state {
@@ -94,7 +94,7 @@
   strong {
     margin-top: 0.65rem;
     font-size: 0.88rem;
-    color: var(--bs-emphasis-color);
+    color: var(--app-text);
   }
 
   p {
@@ -113,8 +113,8 @@
   height: 2.7rem;
   border-radius: 50%;
   font-size: 1.1rem;
-  color: var(--bs-primary);
-  background: var(--bs-primary-bg-subtle);
+  color: var(--app-primary);
+  background: var(--app-primary-soft);
 }
 
 .notification-list {
@@ -133,21 +133,22 @@
   width: 100%;
   padding: 0.9rem 1rem;
   border: 0;
-  border-bottom: 1px solid var(--bs-border-color-translucent);
+  border-bottom: 1px solid var(--app-border-subtle);
   text-align: left;
-  background: var(--bs-body-bg);
+  color: var(--app-text);
+  background: var(--app-surface);
   transition: background-color 0.15s ease;
 
   &:hover {
-    background: var(--bs-tertiary-bg);
+    background: var(--app-surface-hover);
   }
 
   &.is-unread {
-    background: rgba(var(--bs-primary-rgb), 0.025);
+    background: var(--app-surface-secondary);
   }
 
   &.is-unread:hover {
-    background: rgba(var(--bs-primary-rgb), 0.055);
+    background: var(--app-primary-soft);
   }
 }
 
@@ -163,23 +164,23 @@
 }
 
 .notification-warning {
-  color: var(--bs-warning-text-emphasis);
-  background: var(--bs-warning-bg-subtle);
+  color: var(--app-warning);
+  background: var(--app-warning-soft);
 }
 
 .notification-danger {
-  color: var(--bs-danger);
-  background: var(--bs-danger-bg-subtle);
+  color: var(--app-danger);
+  background: var(--app-danger-soft);
 }
 
 .notification-success {
-  color: var(--bs-success);
-  background: var(--bs-success-bg-subtle);
+  color: var(--app-success);
+  background: var(--app-success-soft);
 }
 
 .notification-info {
-  color: var(--bs-info-text-emphasis);
-  background: var(--bs-info-bg-subtle);
+  color: var(--app-primary);
+  background: var(--app-primary-soft);
 }
 
 .notification-item-content {
@@ -197,7 +198,7 @@
     font-size: 0.76rem;
     font-weight: 700;
     line-height: 1.35;
-    color: var(--bs-emphasis-color);
+    color: var(--app-text);
   }
 }
 
@@ -206,7 +207,7 @@
   padding-top: 0.05rem;
   font-size: 0.62rem;
   white-space: nowrap;
-  color: var(--bs-secondary-color);
+  color: var(--app-text-muted);
 }
 
 .notification-item-content p {
@@ -217,7 +218,7 @@
   -webkit-line-clamp: 2;
   font-size: 0.7rem;
   line-height: 1.45;
-  color: var(--bs-secondary-color);
+  color: var(--app-text-secondary);
 }
 
 .notification-unread-dot {
@@ -226,13 +227,13 @@
   height: 0.42rem;
   margin-top: 0.15rem;
   border-radius: 50%;
-  background: var(--bs-primary);
+  background: var(--app-primary);
   box-shadow: 0 0 0 0.18rem rgba(var(--bs-primary-rgb), 0.08);
 }
 
 .notification-panel-footer {
   padding: 0.75rem 1rem;
-  background: var(--bs-tertiary-bg);
+  background: var(--app-surface-secondary);
 }
 
 .notification-view-all {
@@ -245,7 +246,7 @@
   border: 0;
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--bs-primary);
+  color: var(--app-primary);
   background: transparent;
 
   &:hover {

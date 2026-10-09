@@ -16,7 +16,10 @@ import { catchError, filter, finalize, forkJoin, of, switchMap } from 'rxjs';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { Notification } from '../../features/finance/models/notification';
 import { NotificationService } from '../../features/finance/services/notification.service';
+import { PreferencesService } from '../../features/finance/services/preferences.service';
+import { ThemeService } from '../../features/finance/services/theme.service';
 import { TransactionService } from '../../features/finance/services/transaction.service';
+import { ToastService } from '../../shared/ui/toast/toast.service';
 import { NotificationPanel } from './notification-panel/notification-panel';
 
 @Component({
@@ -28,14 +31,20 @@ import { NotificationPanel } from './notification-panel/notification-panel';
 })
 export class Header {
   private readonly authService = inject(AuthService);
+  private readonly themeService = inject(ThemeService);
+  private readonly preferencesService = inject(PreferencesService);
   private readonly notificationService = inject(NotificationService);
   private readonly transactionService = inject(TransactionService);
+  private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly notificationWrapper = viewChild<ElementRef<HTMLElement>>('notificationWrapper');
 
   protected readonly currentSection = signal(this.getSectionLabel(this.router.url));
+
+  protected readonly isDark = this.themeService.isDark;
+  protected readonly isSavingTheme = signal(false);
 
   protected readonly notifications = signal<Notification[]>([]);
   protected readonly isNotificationPanelOpen = signal(false);
@@ -46,6 +55,8 @@ export class Header {
   );
 
   constructor() {
+    this.themeService.setTheme(this.themeService.theme());
+
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -74,7 +85,6 @@ export class Header {
     }
 
     const wrapper = this.notificationWrapper()?.nativeElement;
-
     const target = event.target;
 
     if (wrapper && target instanceof Node && !wrapper.contains(target)) {
@@ -85,6 +95,52 @@ export class Header {
   @HostListener('document:keydown.escape')
   protected handleEscapeKey(): void {
     this.closeNotificationPanel();
+  }
+
+  protected toggleTheme(): void {
+    if (this.isSavingTheme()) {
+      return;
+    }
+
+    const userId = this.authService.currentUser()?.id;
+
+    if (!userId) {
+      return;
+    }
+
+    const previousTheme = this.themeService.theme();
+    const nextTheme = previousTheme === 'light' ? 'dark' : 'light';
+
+    this.themeService.setTheme(nextTheme);
+    this.isSavingTheme.set(true);
+
+    this.preferencesService
+      .getOrCreatePreferences(userId)
+      .pipe(
+        switchMap((preferences) =>
+          this.preferencesService.updatePreferences(preferences.id, {
+            currency: preferences.currency,
+            locale: preferences.locale,
+            dateFormat: preferences.dateFormat,
+            theme: nextTheme,
+            budgetWarningEnabled: preferences.budgetWarningEnabled,
+            budgetExceededEnabled: preferences.budgetExceededEnabled,
+            savingsGoalEnabled: preferences.savingsGoalEnabled,
+          }),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isSavingTheme.set(false)),
+      )
+      .subscribe({
+        error: () => {
+          if (this.authService.currentUser()?.id !== userId) {
+            return;
+          }
+
+          this.themeService.setTheme(previousTheme);
+          this.toastService.error('No se ha podido guardar el tema visual.');
+        },
+      });
   }
 
   protected toggleNotificationPanel(): void {
@@ -104,7 +160,6 @@ export class Header {
   protected handleNotificationSelected(notification: Notification): void {
     if (notification.isRead) {
       this.openNotificationDestination(notification);
-
       return;
     }
 
@@ -114,7 +169,6 @@ export class Header {
       .subscribe({
         next: (updatedNotification) => {
           this.updateNotification(updatedNotification);
-
           this.openNotificationDestination(updatedNotification);
         },
         error: () => {
@@ -156,6 +210,8 @@ export class Header {
   }
 
   protected logout(): void {
+    this.closeNotificationPanel();
+    this.themeService.setTheme('light');
     this.authService.clearCurrentUser();
 
     void this.router.navigate(['/login']);
@@ -166,7 +222,6 @@ export class Header {
 
     if (!userId) {
       this.notifications.set([]);
-
       return;
     }
 
@@ -203,7 +258,6 @@ export class Header {
 
     if (notification.type === 'savingsGoal') {
       void this.router.navigate(['/overview']);
-
       return;
     }
 

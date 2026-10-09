@@ -21,6 +21,9 @@ import {
   Tooltip,
 } from 'chart.js';
 
+import { ThemeService } from '../../services/theme.service';
+import { getChartTheme, getChartTooltipStyle } from '../chart-theme';
+
 Chart.register(
   LineController,
   LineElement,
@@ -46,6 +49,7 @@ export interface BalanceEvolutionChartItem {
 export class BalanceEvolutionChart {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly themeService = inject(ThemeService);
 
   private readonly chartCanvas = viewChild<ElementRef<HTMLCanvasElement>>('chartCanvas');
 
@@ -66,13 +70,14 @@ export class BalanceEvolutionChart {
 
       const canvas = this.chartCanvas()?.nativeElement;
       const items = this.items();
+      const isDark = this.themeService.isDark();
 
       if (!canvas || items.length === 0) {
         this.destroyChart();
         return;
       }
 
-      this.renderChart(canvas, items);
+      this.renderChart(canvas, items, isDark);
     });
 
     this.destroyRef.onDestroy(() => {
@@ -80,8 +85,14 @@ export class BalanceEvolutionChart {
     });
   }
 
-  private renderChart(canvas: HTMLCanvasElement, items: BalanceEvolutionChartItem[]): void {
+  private renderChart(
+    canvas: HTMLCanvasElement,
+    items: BalanceEvolutionChartItem[],
+    isDark: boolean,
+  ): void {
     this.destroyChart();
+
+    const theme = getChartTheme(canvas, isDark);
 
     this.chart = new Chart(canvas, {
       type: 'line',
@@ -91,10 +102,10 @@ export class BalanceEvolutionChart {
           {
             label: 'Balance acumulado',
             data: items.map((item) => item.balance),
-            borderColor: '#0d6efd',
-            backgroundColor: 'rgba(13, 110, 253, 0.08)',
-            pointBackgroundColor: '#ffffff',
-            pointBorderColor: '#0d6efd',
+            borderColor: theme.primary,
+            backgroundColor: theme.areaFill,
+            pointBackgroundColor: theme.surface,
+            pointBorderColor: theme.primary,
             pointBorderWidth: 2,
             pointRadius: 4,
             pointHoverRadius: 6,
@@ -119,19 +130,32 @@ export class BalanceEvolutionChart {
             border: {
               display: false,
             },
+            ticks: {
+              color: theme.textSecondary,
+            },
           },
           y: {
             beginAtZero: true,
             border: {
               display: false,
             },
+            grid: {
+              color: theme.border,
+            },
             ticks: {
+              color: theme.textSecondary,
               callback: (value) => this.currencyFormatter.format(Number(value)),
             },
           },
         },
         plugins: {
+          legend: {
+            labels: {
+              color: theme.textSecondary,
+            },
+          },
           tooltip: {
+            ...getChartTooltipStyle(theme),
             callbacks: {
               label: (context) => `Balance: ${this.currencyFormatter.format(Number(context.raw))}`,
             },
