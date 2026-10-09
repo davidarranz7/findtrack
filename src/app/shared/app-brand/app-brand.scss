@@ -1,22 +1,29 @@
 :host {
   display: block;
+  width: 100%;
 }
 
 .app-brand {
-  width: 260px;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
   min-height: 68px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .brand-logo {
-  width: 82px;
-  height: 82px;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
   object-fit: contain;
 }
 
 .brand-name {
-  color: var(--brand-text-color, var(--app-text, #fff));
-  font-size: 2.25rem;
+  margin: 0;
+  color: var(--brand-text-color, var(--app-text));
+  font-size: 2rem;
   line-height: 1;
   font-weight: 600;
   letter-spacing: -0.02em;

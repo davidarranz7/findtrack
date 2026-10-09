@@ -5,7 +5,10 @@
 
 .sidebar {
   width: 250px;
-  padding: 1rem;
+  height: 100vh;
+  padding: 1rem 0.875rem;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: var(--app-surface);
   border-right: 1px solid var(--app-border);
   transition:
@@ -14,32 +17,69 @@
 }
 
 .sidebar-brand {
-  padding: 0.25rem 0.5rem 1.5rem;
+  padding: 0.25rem 0.5rem 1.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--app-border-subtle);
 }
 
-.sidebar-navigation {
-  .nav-link {
-    padding: 0.65rem 0.75rem;
-    border-radius: 0.5rem;
-    color: var(--app-text-secondary);
-    font-size: 0.875rem;
-    transition:
-      background-color 0.2s ease,
-      color 0.2s ease;
+.sidebar-navigation .nav {
+  gap: 0.5rem;
+}
 
-    &:hover {
-      background-color: var(--app-surface-hover);
-      color: var(--app-text);
-    }
+.sidebar-navigation .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 0.875rem;
+  border: 1px solid var(--app-border-subtle);
+  border-radius: 0.75rem;
+  color: var(--app-text-secondary);
+  background-color: var(--app-surface);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
 
-    &.active {
-      background-color: var(--bs-primary);
-      color: #ffffff;
+.sidebar-navigation .nav-link i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  font-size: 0.95rem;
+}
 
-      &:hover {
-        background-color: var(--bs-primary);
-        color: #ffffff;
-      }
-    }
-  }
+.sidebar-navigation .nav-link:hover {
+  background-color: var(--app-surface-hover);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+.sidebar-navigation .nav-link.active {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
+}
+
+.sidebar-navigation .nav-link.active:hover {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #ffffff;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--app-border);
+  border-radius: 999px;
 }
