@@ -1,9 +1,7 @@
 <header class="app-header">
   <div class="header-inner d-flex align-items-center justify-content-between h-100">
     <div class="header-breadcrumb d-flex align-items-center gap-2 text-nowrap">
-      <span class="fw-semibold">
-        Finora<span class="header-brand-app"> App</span>
-      </span>
+      <span class="fw-semibold"> Finora<span class="header-brand-app"> App</span> </span>
 
       <i class="bi bi-chevron-right small header-breadcrumb-separator" aria-hidden="true"></i>
 
@@ -13,11 +11,7 @@
     </div>
 
     <div class="header-actions d-flex align-items-center justify-content-end flex-grow-1">
-      <div
-        #searchWrapper
-        class="header-search"
-        [class.is-mobile-open]="isMobileSearchOpen()"
-      >
+      <div #searchWrapper class="header-search" [class.is-mobile-open]="isMobileSearchOpen()">
         @if (isMobileSearchOpen()) {
           <button
             type="button"
@@ -103,10 +97,7 @@
               </div>
             } @else if (isLoadingSearch()) {
               <div class="search-state" role="status">
-                <div
-                  class="spinner-border spinner-border-sm text-primary"
-                  aria-hidden="true"
-                ></div>
+                <div class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></div>
                 <span>Buscando movimientos...</span>
               </div>
             } @else if (searchError()) {
@@ -190,20 +181,14 @@
               </div>
 
               @if (matchingSearchTransactions().length > 6 && !showAllSearchResults()) {
-                <button
-                  type="button"
-                  class="search-show-all"
-                  (click)="expandSearchResults()"
-                >
+                <button type="button" class="search-show-all" (click)="expandSearchResults()">
                   Ver todos los resultados
                   <i class="bi bi-chevron-down" aria-hidden="true"></i>
                 </button>
               }
 
               @if (showAllSearchResults()) {
-                <div class="search-dropdown-footer">
-                  Mostrando todas las coincidencias
-                </div>
+                <div class="search-dropdown-footer">Mostrando todas las coincidencias</div>
               }
             }
           </div>

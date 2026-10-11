@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
+import { environment } from '../../../../environments/environment';
 import { NotificationService } from './notification.service';
 
 describe('NotificationService', () => {
@@ -14,7 +15,6 @@ describe('NotificationService', () => {
     });
 
     service = TestBed.inject(NotificationService);
-
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -32,7 +32,7 @@ describe('NotificationService', () => {
     });
 
     const request = httpTestingController.expectOne(
-      'http://localhost:3000/notifications/notification-1',
+      `${environment.apiUrl}/notifications/notification-1`,
     );
 
     expect(request.request.method).toBe('PATCH');

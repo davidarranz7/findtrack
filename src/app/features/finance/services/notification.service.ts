@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { Notification } from '../models/notification';
 import { BudgetAnalysisService } from './budget-analysis.service';
 import { BudgetService } from './budget.service';
@@ -21,8 +22,7 @@ export class NotificationService {
   private readonly transactionService = inject(TransactionService);
   private readonly preferencesService = inject(PreferencesService);
   private readonly budgetAnalysisService = inject(BudgetAnalysisService);
-
-  private readonly apiUrl = 'http://localhost:3000/notifications';
+  private readonly apiUrl = `${environment.apiUrl}/notifications`;
 
   private readonly currencyFormatter = new Intl.NumberFormat('es-ES', {
     style: 'currency',

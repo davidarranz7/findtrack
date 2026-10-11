@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { Category } from '../models';
 
 type CreateCategoryPayload = Omit<Category, 'id'>;
-
 type UpdateCategoryPayload = Pick<Category, 'name' | 'icon' | 'color'>;
 
 @Injectable({
@@ -13,8 +13,7 @@ type UpdateCategoryPayload = Pick<Category, 'name' | 'icon' | 'color'>;
 })
 export class CategoryService {
   private readonly http = inject(HttpClient);
-
-  private readonly apiUrl = 'http://localhost:3000/categories';
+  private readonly apiUrl = `${environment.apiUrl}/categories`;
 
   getCategories(userId: string): Observable<Category[]> {
     return this.http.get<Category[]>(this.apiUrl, {

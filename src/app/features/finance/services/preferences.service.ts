@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, switchMap } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { UserPreferences } from '../settings/user-preferences';
 
 type CreateUserPreferencesPayload = Omit<UserPreferences, 'id'>;
@@ -12,8 +13,7 @@ type UpdateUserPreferencesPayload = Partial<Omit<UserPreferences, 'id' | 'userId
 })
 export class PreferencesService {
   private readonly http = inject(HttpClient);
-
-  private readonly apiUrl = 'http://localhost:3000/preferences';
+  private readonly apiUrl = `${environment.apiUrl}/preferences`;
 
   getPreferences(userId: string): Observable<UserPreferences | null> {
     return this.http

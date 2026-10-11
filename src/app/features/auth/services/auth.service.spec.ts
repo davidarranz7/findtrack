@@ -2,11 +2,14 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
+import { environment } from '../../../../environments/environment';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
   let httpTesting: HttpTestingController;
+
+  const usersUrl = `${environment.apiUrl}/users`;
 
   beforeEach(() => {
     sessionStorage.clear();
@@ -81,13 +84,13 @@ describe('AuthService', () => {
         result = user;
       });
 
-    const usersRequest = httpTesting.expectOne('http://localhost:3000/users');
+    const usersRequest = httpTesting.expectOne(usersUrl);
 
     expect(usersRequest.request.method).toBe('GET');
 
     usersRequest.flush([]);
 
-    const registerRequest = httpTesting.expectOne('http://localhost:3000/users');
+    const registerRequest = httpTesting.expectOne(usersUrl);
 
     expect(registerRequest.request.method).toBe('POST');
 
@@ -126,7 +129,7 @@ describe('AuthService', () => {
         },
       });
 
-    const usersRequest = httpTesting.expectOne('http://localhost:3000/users');
+    const usersRequest = httpTesting.expectOne(usersUrl);
 
     expect(usersRequest.request.method).toBe('GET');
 
@@ -157,7 +160,7 @@ describe('AuthService', () => {
         },
       });
 
-    const usersRequest = httpTesting.expectOne('http://localhost:3000/users');
+    const usersRequest = httpTesting.expectOne(usersUrl);
 
     expect(usersRequest.request.method).toBe('GET');
 
@@ -186,7 +189,7 @@ describe('AuthService', () => {
       result = user;
     });
 
-    const request = httpTesting.expectOne('http://localhost:3000/users');
+    const request = httpTesting.expectOne(usersUrl);
 
     expect(request.request.method).toBe('GET');
 
@@ -222,7 +225,7 @@ describe('AuthService', () => {
       result = user;
     });
 
-    const request = httpTesting.expectOne('http://localhost:3000/users');
+    const request = httpTesting.expectOne(usersUrl);
 
     expect(request.request.method).toBe('GET');
 
@@ -254,7 +257,7 @@ describe('AuthService', () => {
       },
     });
 
-    const request = httpTesting.expectOne('http://localhost:3000/users');
+    const request = httpTesting.expectOne(usersUrl);
 
     expect(request.request.method).toBe('GET');
 
@@ -268,7 +271,6 @@ describe('AuthService', () => {
     ]);
 
     expect(receivedError?.message).toBe('INVALID_CREDENTIALS');
-
     expect(service.currentUser()).toBeNull();
     expect(service.isAuthenticated()).toBe(false);
   });

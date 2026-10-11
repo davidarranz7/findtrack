@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { Transaction } from '../models';
 
 type CreateTransactionPayload = Omit<Transaction, 'id'>;
-
 type UpdateTransactionPayload = Partial<CreateTransactionPayload>;
 
 @Injectable({
@@ -13,8 +13,7 @@ type UpdateTransactionPayload = Partial<CreateTransactionPayload>;
 })
 export class TransactionService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/transactions';
-
+  private readonly apiUrl = `${environment.apiUrl}/transactions`;
   private readonly transactionsChangedSubject = new Subject<void>();
 
   readonly transactionsChanged$ = this.transactionsChangedSubject.asObservable();

@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
+import { environment } from '../../../../environments/environment';
 import { TransactionService } from './transaction.service';
 
 describe('TransactionService', () => {
@@ -28,7 +29,7 @@ describe('TransactionService', () => {
   it('should request transactions for the provided user', () => {
     service.getTransactions('user-1').subscribe();
 
-    const request = httpTesting.expectOne('http://localhost:3000/transactions?userId=user-1');
+    const request = httpTesting.expectOne(`${environment.apiUrl}/transactions?userId=user-1`);
 
     expect(request.request.method).toBe('GET');
 

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { map, Observable, switchMap, tap, throwError } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { User } from '../models/user';
 
 type AuthenticatedUser = Omit<User, 'password'>;
@@ -16,7 +17,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly platformId = inject(PLATFORM_ID);
 
-  private readonly apiUrl = 'http://localhost:3000/users';
+  private readonly apiUrl = `${environment.apiUrl}/users`;
 
   private readonly sessionStorageKey = 'finora-auth-session';
   private readonly rememberedAccountStorageKey = 'finora-remembered-account';
@@ -24,7 +25,6 @@ export class AuthService {
   private readonly currentUserState = signal<AuthenticatedUser | null>(
     this.restoreCurrentSession(),
   );
-
   private readonly rememberedAccountState = signal<AuthenticatedUser | null>(
     this.restoreRememberedAccount(),
   );

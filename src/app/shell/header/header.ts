@@ -235,9 +235,7 @@ export class Header {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
 
-      this.activeSearchIndex.update((index) =>
-        index < results.length - 1 ? index + 1 : 0,
-      );
+      this.activeSearchIndex.update((index) => (index < results.length - 1 ? index + 1 : 0));
 
       return;
     }
@@ -245,9 +243,7 @@ export class Header {
     if (event.key === 'ArrowUp') {
       event.preventDefault();
 
-      this.activeSearchIndex.update((index) =>
-        index > 0 ? index - 1 : results.length - 1,
-      );
+      this.activeSearchIndex.update((index) => (index > 0 ? index - 1 : results.length - 1));
 
       return;
     }

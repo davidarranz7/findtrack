@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { Budget } from '../models';
 
 type CreateBudgetPayload = Omit<Budget, 'id'>;
-
 type UpdateBudgetPayload = Pick<Budget, 'amount'>;
 
 @Injectable({
@@ -13,7 +13,7 @@ type UpdateBudgetPayload = Pick<Budget, 'amount'>;
 })
 export class BudgetService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/budgets';
+  private readonly apiUrl = `${environment.apiUrl}/budgets`;
 
   getBudgets(userId: string, month: string): Observable<Budget[]> {
     return this.http.get<Budget[]>(this.apiUrl, {
