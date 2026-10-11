@@ -1,6 +1,15 @@
 <aside class="sidebar d-flex flex-column h-100">
   <div class="sidebar-brand">
     <app-brand />
+
+    <button
+      type="button"
+      class="sidebar-close"
+      aria-label="Cerrar menú de navegación"
+      (click)="requestClose()"
+    >
+      <i class="bi bi-x-lg" aria-hidden="true"></i>
+    </button>
   </div>
 
   <nav class="sidebar-navigation flex-grow-1" aria-label="Navegación principal">
@@ -11,6 +20,7 @@
             class="nav-link d-flex align-items-center gap-2"
             [routerLink]="item.route"
             routerLinkActive="active"
+            (click)="requestClose()"
           >
             <i class="bi" [class]="item.icon" aria-hidden="true"></i>
 

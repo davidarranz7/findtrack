@@ -1,17 +1,56 @@
 <header class="app-header">
-  <div class="d-flex align-items-center justify-content-between gap-4 h-100 px-4">
+  <div class="header-inner d-flex align-items-center justify-content-between h-100">
     <div class="header-breadcrumb d-flex align-items-center gap-2 text-nowrap">
-      <span class="fw-semibold">Finora App</span>
+      <span class="fw-semibold">
+        Finora<span class="header-brand-app"> App</span>
+      </span>
 
-      <i class="bi bi-chevron-right small" aria-hidden="true"></i>
+      <i class="bi bi-chevron-right small header-breadcrumb-separator" aria-hidden="true"></i>
 
       <span class="header-current-section small">
         {{ currentSection() }}
       </span>
     </div>
 
-    <div class="header-actions d-flex align-items-center justify-content-end gap-3 flex-grow-1">
-      <div #searchWrapper class="header-search">
+    <div class="header-actions d-flex align-items-center justify-content-end flex-grow-1">
+      <div
+        #searchWrapper
+        class="header-search"
+        [class.is-mobile-open]="isMobileSearchOpen()"
+      >
+        @if (isMobileSearchOpen()) {
+          <button
+            type="button"
+            class="mobile-search-backdrop"
+            aria-label="Cerrar búsqueda"
+            (click)="closeSearch()"
+          ></button>
+
+          <div class="mobile-search-heading">
+            <strong>Buscar transacciones</strong>
+
+            <button
+              type="button"
+              class="mobile-search-close"
+              aria-label="Cerrar búsqueda"
+              (click)="closeSearch()"
+            >
+              <i class="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
+          </div>
+        }
+
+        <button
+          type="button"
+          class="header-action-button mobile-search-trigger"
+          [attr.aria-label]="isMobileSearchOpen() ? 'Cerrar búsqueda' : 'Abrir búsqueda'"
+          [attr.aria-expanded]="isMobileSearchOpen()"
+          aria-controls="global-search-input"
+          (click)="toggleMobileSearch()"
+        >
+          <i class="bi bi-search" aria-hidden="true"></i>
+        </button>
+
         <div class="input-group input-group-sm">
           <span class="input-group-text border-end-0">
             <i class="bi bi-search" aria-hidden="true"></i>
@@ -19,9 +58,10 @@
 
           <input
             #globalSearchInput
+            id="global-search-input"
             type="search"
             class="form-control border-start-0"
-            placeholder="Buscar..."
+            placeholder="Buscar transacciones..."
             aria-label="Buscar transacciones en Finora"
             aria-autocomplete="list"
             aria-haspopup="listbox"
@@ -63,7 +103,10 @@
               </div>
             } @else if (isLoadingSearch()) {
               <div class="search-state" role="status">
-                <div class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></div>
+                <div
+                  class="spinner-border spinner-border-sm text-primary"
+                  aria-hidden="true"
+                ></div>
                 <span>Buscando movimientos...</span>
               </div>
             } @else if (searchError()) {
@@ -147,15 +190,20 @@
               </div>
 
               @if (matchingSearchTransactions().length > 6 && !showAllSearchResults()) {
-                <button type="button" class="search-show-all" (click)="expandSearchResults()">
+                <button
+                  type="button"
+                  class="search-show-all"
+                  (click)="expandSearchResults()"
+                >
                   Ver todos los resultados
-
                   <i class="bi bi-chevron-down" aria-hidden="true"></i>
                 </button>
               }
 
               @if (showAllSearchResults()) {
-                <div class="search-dropdown-footer">Mostrando todas las coincidencias</div>
+                <div class="search-dropdown-footer">
+                  Mostrando todas las coincidencias
+                </div>
               }
             }
           </div>
@@ -164,7 +212,7 @@
 
       <button
         type="button"
-        class="header-action-button d-flex align-items-center justify-content-center"
+        class="header-action-button"
         [disabled]="isSavingTheme()"
         [attr.aria-busy]="isSavingTheme()"
         [attr.aria-label]="isDark() ? 'Activar modo claro' : 'Activar modo oscuro'"
@@ -177,7 +225,7 @@
       <div #notificationWrapper class="notification-wrapper">
         <button
           type="button"
-          class="header-action-button notification-trigger d-flex align-items-center justify-content-center"
+          class="header-action-button notification-trigger"
           aria-label="Notificaciones"
           [attr.aria-expanded]="isNotificationPanelOpen()"
           (click)="toggleNotificationPanel()"
@@ -205,7 +253,7 @@
 
       <button
         type="button"
-        class="header-action-button d-flex align-items-center justify-content-center"
+        class="header-action-button header-profile-button"
         aria-label="Configuración de usuario"
         title="Configuración"
         (click)="openSettings()"
@@ -215,7 +263,7 @@
 
       <button
         type="button"
-        class="header-action-button d-flex align-items-center justify-content-center"
+        class="header-action-button"
         aria-label="Cerrar sesión"
         title="Cerrar sesión"
         (click)="logout()"

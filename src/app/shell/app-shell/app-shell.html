@@ -1,5 +1,30 @@
 <div class="app-shell d-flex">
-  <app-sidebar />
+  <button
+    #menuButton
+    type="button"
+    class="mobile-menu-button"
+    aria-controls="finora-sidebar"
+    [attr.aria-expanded]="isMobileMenuOpen()"
+    [attr.aria-label]="isMobileMenuOpen() ? 'Cerrar menú' : 'Abrir menú de navegación'"
+    (click)="toggleMobileMenu()"
+  >
+    <i class="bi bi-list" aria-hidden="true"></i>
+  </button>
+
+  @if (isMobileMenuOpen()) {
+    <button
+      type="button"
+      class="mobile-sidebar-backdrop"
+      aria-label="Cerrar menú de navegación"
+      (click)="closeMobileMenu()"
+    ></button>
+  }
+
+  <app-sidebar
+    id="finora-sidebar"
+    [class.is-open]="isMobileMenuOpen()"
+    (closeRequested)="closeMobileMenu()"
+  />
 
   <div class="app-content d-flex flex-column flex-grow-1">
     <app-header />

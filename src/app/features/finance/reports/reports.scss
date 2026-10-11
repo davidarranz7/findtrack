@@ -654,6 +654,7 @@
 @media (max-width: 1199.98px) {
   .reports-header-actions {
     min-width: 0;
+    flex-shrink: 1;
     flex-wrap: wrap;
   }
 
@@ -682,24 +683,44 @@
 }
 
 @media (max-width: 767.98px) {
-  .reports-header-actions,
+  .reports-header-actions {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .reports-analysis-filters {
+    width: 100%;
+    min-width: 0;
     align-items: stretch;
     flex-direction: column;
   }
 
   .report-filter,
-  .report-filter-year {
+  .report-filter-year,
+  .reports-analysis-filters .report-filter {
+    width: 100%;
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+
+  .report-comparison-control {
     width: 100%;
     min-width: 0;
   }
 
   .report-export-actions {
+    display: flex;
     width: 100%;
+    min-width: 0;
   }
 
   .report-export-actions .btn {
-    flex: 1;
+    min-width: 0;
+    flex: 1 1 0;
   }
 
   .reports-clear-filters {

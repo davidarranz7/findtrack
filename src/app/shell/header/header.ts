@@ -44,6 +44,7 @@ export class Header {
 
   private readonly notificationWrapper = viewChild<ElementRef<HTMLElement>>('notificationWrapper');
   private readonly searchWrapper = viewChild<ElementRef<HTMLElement>>('searchWrapper');
+  private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('globalSearchInput');
 
   private readonly currencyFormatter = new Intl.NumberFormat('es-ES', {
     style: 'currency',
@@ -71,6 +72,7 @@ export class Header {
 
   protected readonly searchQuery = signal('');
   protected readonly isSearchOpen = signal(false);
+  protected readonly isMobileSearchOpen = signal(false);
   protected readonly isLoadingSearch = signal(false);
   protected readonly searchError = signal<string | null>(null);
   protected readonly searchTransactions = signal<Transaction[]>([]);
@@ -174,8 +176,25 @@ export class Header {
     }
   }
 
+  protected toggleMobileSearch(): void {
+    if (this.isMobileSearchOpen()) {
+      this.closeSearch();
+      return;
+    }
+
+    this.isMobileSearchOpen.set(true);
+    this.openSearch();
+
+    setTimeout(() => {
+      if (this.isMobileSearchOpen()) {
+        this.searchInput()?.nativeElement.focus();
+      }
+    });
+  }
+
   protected closeSearch(clearQuery = false): void {
     this.isSearchOpen.set(false);
+    this.isMobileSearchOpen.set(false);
     this.activeSearchIndex.set(-1);
     this.showAllSearchResults.set(false);
 
@@ -198,6 +217,7 @@ export class Header {
     this.searchQuery.set('');
     this.activeSearchIndex.set(-1);
     this.showAllSearchResults.set(false);
+    this.searchInput()?.nativeElement.focus();
   }
 
   protected expandSearchResults(): void {
@@ -215,7 +235,9 @@ export class Header {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
 
-      this.activeSearchIndex.update((index) => (index < results.length - 1 ? index + 1 : 0));
+      this.activeSearchIndex.update((index) =>
+        index < results.length - 1 ? index + 1 : 0,
+      );
 
       return;
     }
@@ -223,7 +245,9 @@ export class Header {
     if (event.key === 'ArrowUp') {
       event.preventDefault();
 
-      this.activeSearchIndex.update((index) => (index > 0 ? index - 1 : results.length - 1));
+      this.activeSearchIndex.update((index) =>
+        index > 0 ? index - 1 : results.length - 1,
+      );
 
       return;
     }

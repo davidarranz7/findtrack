@@ -1,5 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  HostListener,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 
 import { AuthService } from '../../features/auth/services/auth.service';
 import { PreferencesService } from '../../features/finance/services/preferences.service';
@@ -19,8 +32,14 @@ export class AppShell {
   private readonly authService = inject(AuthService);
   private readonly preferencesService = inject(PreferencesService);
   private readonly themeService = inject(ThemeService);
+  private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
+
+  private readonly menuButton = viewChild<ElementRef<HTMLButtonElement>>('menuButton');
 
   private readonly userId = computed(() => this.authService.currentUser()?.id ?? null);
+
+  protected readonly isMobileMenuOpen = signal(false);
 
   constructor() {
     effect((onCleanup) => {
@@ -44,5 +63,49 @@ export class AppShell {
 
       onCleanup(() => subscription.unsubscribe());
     });
+
+    effect((onCleanup) => {
+      if (!this.isMobileMenuOpen()) {
+        return;
+      }
+
+      const body = this.document.body;
+
+      if (!body) {
+        return;
+      }
+
+      const previousOverflow = body.style.overflow;
+      body.style.overflow = 'hidden';
+
+      onCleanup(() => {
+        body.style.overflow = previousOverflow;
+      });
+    });
+
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.closeMobileMenu());
+  }
+
+  @HostListener('document:keydown.escape')
+  protected handleEscapeKey(): void {
+    if (!this.isMobileMenuOpen()) {
+      return;
+    }
+
+    this.closeMobileMenu();
+    this.menuButton()?.nativeElement.focus();
+  }
+
+  protected toggleMobileMenu(): void {
+    this.isMobileMenuOpen.update((isOpen) => !isOpen);
+  }
+
+  protected closeMobileMenu(): void {
+    this.isMobileMenuOpen.set(false);
   }
 }

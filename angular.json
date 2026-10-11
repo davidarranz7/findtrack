@@ -62,6 +62,11 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "allowedHosts": [
+              "skiagraphically-submedial-germaine.ngrok-free.dev"
+            ]
+          },
           "configurations": {
             "production": {
               "buildTarget": "fintrack:build:production"

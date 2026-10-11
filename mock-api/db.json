@@ -597,7 +597,7 @@
       "currency": "EUR",
       "locale": "es-ES",
       "dateFormat": "DD/MM/YYYY",
-      "theme": "light",
+      "theme": "dark",
       "budgetWarningEnabled": true,
       "budgetExceededEnabled": true,
       "savingsGoalEnabled": true,

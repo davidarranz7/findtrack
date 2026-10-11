@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { AppBrand } from '../../shared/app-brand/app-brand';
@@ -17,6 +17,8 @@ interface NavigationItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar {
+  readonly closeRequested = output<void>();
+
   protected readonly navigationItems: NavigationItem[] = [
     {
       label: 'Resumen',
@@ -49,4 +51,8 @@ export class Sidebar {
       route: '/settings',
     },
   ];
+
+  protected requestClose(): void {
+    this.closeRequested.emit();
+  }
 }
