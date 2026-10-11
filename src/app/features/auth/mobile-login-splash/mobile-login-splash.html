@@ -1,20 +1,19 @@
 <div
-  class="mobile-login-splash"
+  #splashRoot
+  class="mobile-splash"
   role="status"
   aria-live="polite"
-  aria-label="Sesión iniciada. Entrando en Finora."
+  aria-label="Abriendo Finora"
 >
-  <div class="mobile-login-splash__glow" aria-hidden="true"></div>
-
-  <div class="mobile-login-splash__content">
-    <div class="mobile-login-splash__brand">
-      <app-brand />
+  <div class="splash-content">
+    <div class="splash-logo">
+      <img src="/images/logo.png" alt="" width="88" height="88" />
     </div>
 
-    <p class="mobile-login-splash__message">Tu dinero, más claro.</p>
-
-    <div class="mobile-login-splash__progress" aria-hidden="true">
-      <span></span>
+    <div class="splash-name-mask">
+      <h1 class="splash-name">Finora</h1>
     </div>
+
+    <div class="splash-accent" aria-hidden="true"></div>
   </div>
 </div>

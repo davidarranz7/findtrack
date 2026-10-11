@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -23,10 +22,7 @@ export class Login {
   private readonly authService = inject(AuthService);
   private readonly splashService = inject(MobileLoginSplashService);
   private readonly router = inject(Router);
-  private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-
-  private readonly mobileMediaQuery = '(max-width: 767.98px)';
 
   protected readonly rememberedAccount = this.authService.rememberedAccount;
 
@@ -114,48 +110,24 @@ export class Login {
   }
 
   private completeLogin(): void {
-    const showSplash = this.shouldShowMobileSplash();
-
-    if (showSplash) {
-      this.splashService.start();
-    }
+    this.splashService.start();
 
     void this.router
       .navigate(['/overview'])
       .then((navigated) => {
-        if (navigated) {
-          return;
+        if (!navigated) {
+          this.handleNavigationError();
         }
-
-        this.handleNavigationError(showSplash);
       })
       .catch(() => {
-        this.handleNavigationError(showSplash);
+        this.handleNavigationError();
       });
   }
 
-  private handleNavigationError(showSplash: boolean): void {
-    if (showSplash) {
-      this.splashService.finish();
-    }
+  private handleNavigationError(): void {
+    this.splashService.finish();
 
     this.isSubmitting.set(false);
     this.loginError.set('No se ha podido abrir el resumen. Inténtalo de nuevo.');
-  }
-
-  private shouldShowMobileSplash(): boolean {
-    const browserWindow = this.document.defaultView;
-
-    if (!browserWindow) {
-      return false;
-    }
-
-    const isMobile = browserWindow.matchMedia(this.mobileMediaQuery).matches;
-
-    const prefersReducedMotion = browserWindow.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
-
-    return isMobile && !prefersReducedMotion;
   }
 }
