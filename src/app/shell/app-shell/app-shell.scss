@@ -26,6 +26,13 @@ app-sidebar {
   flex: 1 1 auto;
 }
 
+app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-shrink: 0;
+}
+
 .app-main {
   min-width: 0;
   flex: 1 1 auto;
