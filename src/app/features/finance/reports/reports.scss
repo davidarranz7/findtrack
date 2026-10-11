@@ -773,3 +773,15 @@
     gap: 0.25rem;
   }
 }
+
+// La distribución necesita crecer según el número de categorías.
+// Solo se aplica a móvil y tablet, sin alterar escritorio ni PDF.
+@media (max-width: 991.98px) {
+  .reports-page:not(.is-exporting) .report-chart-distribution {
+    height: auto;
+  }
+
+  .reports-page:not(.is-exporting) .report-chart-distribution app-expense-distribution-chart {
+    height: auto;
+  }
+}

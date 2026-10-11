@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { finalize, forkJoin, timer } from 'rxjs';
 
 import { AppBrand } from '../../../shared/app-brand/app-brand';
 import { AuthBackground } from '../auth-background/auth-background';
 import { AuthService } from '../services/auth.service';
+import { MobileLoginSplashService } from '../services/mobile-login-splash.service';
 
 type LoginView = 'remembered-account' | 'remembered-password' | 'credentials';
 
@@ -19,7 +21,12 @@ type LoginView = 'remembered-account' | 'remembered-password' | 'credentials';
 export class Login {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly splashService = inject(MobileLoginSplashService);
   private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly mobileMediaQuery = '(max-width: 767.98px)';
 
   protected readonly rememberedAccount = this.authService.rememberedAccount;
 
@@ -72,6 +79,10 @@ export class Login {
   }
 
   protected onSubmit(): void {
+    if (this.isSubmitting()) {
+      return;
+    }
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -82,16 +93,16 @@ export class Login {
     this.isSubmitting.set(true);
     this.loginError.set(null);
 
-    forkJoin({
-      user: this.authService.login(identifier, password, rememberMe),
-      minimumDelay: timer(1200),
-    })
-      .pipe(finalize(() => this.isSubmitting.set(false)))
+    this.authService
+      .login(identifier, password, rememberMe)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          void this.router.navigate(['/overview']);
+          this.completeLogin();
         },
         error: (error: Error) => {
+          this.isSubmitting.set(false);
+
           if (error.message === 'INVALID_CREDENTIALS') {
             this.loginError.set('Usuario, correo electrónico o contraseña incorrectos.');
             return;
@@ -100,5 +111,51 @@ export class Login {
           this.loginError.set('No se ha podido iniciar sesión. Inténtalo de nuevo.');
         },
       });
+  }
+
+  private completeLogin(): void {
+    const showSplash = this.shouldShowMobileSplash();
+
+    if (showSplash) {
+      this.splashService.start();
+    }
+
+    void this.router
+      .navigate(['/overview'])
+      .then((navigated) => {
+        if (navigated) {
+          return;
+        }
+
+        this.handleNavigationError(showSplash);
+      })
+      .catch(() => {
+        this.handleNavigationError(showSplash);
+      });
+  }
+
+  private handleNavigationError(showSplash: boolean): void {
+    if (showSplash) {
+      this.splashService.finish();
+    }
+
+    this.isSubmitting.set(false);
+    this.loginError.set('No se ha podido abrir el resumen. Inténtalo de nuevo.');
+  }
+
+  private shouldShowMobileSplash(): boolean {
+    const browserWindow = this.document.defaultView;
+
+    if (!browserWindow) {
+      return false;
+    }
+
+    const isMobile = browserWindow.matchMedia(this.mobileMediaQuery).matches;
+
+    const prefersReducedMotion = browserWindow.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    return isMobile && !prefersReducedMotion;
   }
 }

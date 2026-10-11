@@ -5,7 +5,9 @@
     class="mobile-menu-button"
     aria-controls="finora-sidebar"
     [attr.aria-expanded]="isMobileMenuOpen()"
-    [attr.aria-label]="isMobileMenuOpen() ? 'Cerrar menú' : 'Abrir menú de navegación'"
+    [attr.aria-label]="
+      isMobileMenuOpen() ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'
+    "
     (click)="toggleMobileMenu()"
   >
     <i class="bi bi-list" aria-hidden="true"></i>
@@ -36,3 +38,7 @@
 </div>
 
 <app-toast />
+
+@if (mobileLoginSplashService.isActive()) {
+  <app-mobile-login-splash (finished)="finishMobileLoginSplash()" />
+}

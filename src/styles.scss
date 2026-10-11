@@ -158,6 +158,25 @@
 }
 
 @media (max-width: 767.98px) {
+  html,
+  body {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /*
+   * Safari en iPhone puede ampliar automáticamente la página
+   * cuando el campo enfocado tiene menos de 16px.
+   *
+   * Se aplica también a .form-control-sm, al buscador global
+   * y a los formularios de las distintas secciones.
+   */
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
   .app-page-header {
     align-items: flex-start;
     flex-direction: column;

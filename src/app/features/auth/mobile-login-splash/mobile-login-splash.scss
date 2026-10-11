@@ -1,0 +1,201 @@
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.mobile-login-splash {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  overflow: hidden;
+  isolation: isolate;
+
+  background:
+    radial-gradient(ellipse at 50% 60%, rgba(37, 99, 235, 0.25) 0%, transparent 58%),
+    linear-gradient(160deg, #0f172a 0%, #111d39 55%, #0b1220 100%);
+
+  animation:
+    splash-enter 220ms ease-out both,
+    splash-exit 350ms ease-in 1350ms forwards;
+}
+
+.mobile-login-splash__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+
+  width: min(90vw, 500px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.22) 0%,
+    rgba(37, 99, 235, 0.08) 40%,
+    transparent 70%
+  );
+
+  transform: translate(-50%, -50%);
+  animation: splash-glow 1700ms ease-in-out both;
+}
+
+.mobile-login-splash__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: min(100%, 340px);
+  text-align: center;
+
+  animation: splash-content-enter 650ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.mobile-login-splash__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  max-width: 100%;
+  min-height: 110px;
+  padding: 1.5rem 2rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 1.5rem;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.2),
+    0 0 45px rgba(59, 130, 246, 0.12);
+}
+
+.mobile-login-splash__brand app-brand {
+  display: block;
+  max-width: 100%;
+}
+
+.mobile-login-splash__message {
+  margin: 1.5rem 0 0;
+
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+
+  animation: splash-message-enter 450ms ease-out 300ms both;
+}
+
+.mobile-login-splash__progress {
+  position: relative;
+
+  width: 112px;
+  height: 3px;
+  margin-top: 1.5rem;
+
+  overflow: hidden;
+  border-radius: 999px;
+
+  background: rgba(148, 163, 184, 0.22);
+
+  animation: splash-message-enter 450ms ease-out 400ms both;
+}
+
+.mobile-login-splash__progress span {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+
+  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 55%, #bfdbfe 100%);
+
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.5);
+
+  transform: scaleX(0);
+  transform-origin: left;
+
+  animation: splash-progress 1100ms ease-in-out 350ms forwards;
+}
+
+@keyframes splash-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes splash-exit {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes splash-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.92);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes splash-message-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes splash-progress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes splash-glow {
+  0% {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(0.75);
+  }
+
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
