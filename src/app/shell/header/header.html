@@ -11,17 +11,155 @@
     </div>
 
     <div class="header-actions d-flex align-items-center justify-content-end gap-3 flex-grow-1">
-      <div class="header-search input-group input-group-sm">
-        <span class="input-group-text border-end-0">
-          <i class="bi bi-search" aria-hidden="true"></i>
-        </span>
+      <div #searchWrapper class="header-search">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text border-end-0">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </span>
 
-        <input
-          type="search"
-          class="form-control border-start-0"
-          placeholder="Buscar..."
-          aria-label="Buscar en Finora"
-        />
+          <input
+            #globalSearchInput
+            type="search"
+            class="form-control border-start-0"
+            placeholder="Buscar..."
+            aria-label="Buscar transacciones en Finora"
+            aria-autocomplete="list"
+            aria-haspopup="listbox"
+            [attr.aria-expanded]="isSearchOpen()"
+            [attr.aria-controls]="
+              isSearchOpen() && searchQuery().trim() ? 'global-search-list' : null
+            "
+            [attr.aria-activedescendant]="
+              isSearchOpen() && visibleSearchResults().length > 0 && activeSearchIndex() >= 0
+                ? 'global-search-result-' + activeSearchIndex()
+                : null
+            "
+            [value]="searchQuery()"
+            (focus)="openSearch()"
+            (input)="updateSearchQuery(globalSearchInput.value)"
+            (keydown)="handleSearchKeydown($event)"
+          />
+
+          @if (searchQuery()) {
+            <button
+              type="button"
+              class="search-clear-button"
+              aria-label="Limpiar búsqueda"
+              title="Limpiar búsqueda"
+              (click)="clearSearch()"
+            >
+              <i class="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
+          }
+        </div>
+
+        @if (isSearchOpen()) {
+          <div class="search-dropdown" role="region" aria-label="Resultados de búsqueda">
+            @if (!searchQuery().trim()) {
+              <div class="search-empty">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <strong>Buscar transacciones</strong>
+                <span>Escribe una descripción o una nota para encontrar tus movimientos.</span>
+              </div>
+            } @else if (isLoadingSearch()) {
+              <div class="search-state" role="status">
+                <div class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></div>
+                <span>Buscando movimientos...</span>
+              </div>
+            } @else if (searchError()) {
+              <div class="search-empty" role="alert">
+                <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                <strong>No se ha podido realizar la búsqueda</strong>
+                <span>{{ searchError() }}</span>
+
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="loadSearchData()"
+                >
+                  Reintentar
+                </button>
+              </div>
+            } @else if (matchingSearchTransactions().length === 0) {
+              <div class="search-empty">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <strong>Sin resultados</strong>
+                <span>No hemos encontrado transacciones que coincidan con tu búsqueda.</span>
+              </div>
+            } @else {
+              <div class="search-dropdown-header">
+                <strong>Transacciones</strong>
+
+                <span>
+                  {{ matchingSearchTransactions().length }}
+                  {{ matchingSearchTransactions().length === 1 ? 'resultado' : 'resultados' }}
+                </span>
+              </div>
+
+              <div id="global-search-list" class="search-results" role="listbox">
+                @for (
+                  transaction of visibleSearchResults();
+                  track transaction.id;
+                  let index = $index
+                ) {
+                  <button
+                    type="button"
+                    class="search-result"
+                    role="option"
+                    id="global-search-result-{{ index }}"
+                    [class.is-active]="activeSearchIndex() === index"
+                    [attr.aria-selected]="activeSearchIndex() === index"
+                    (click)="openSearchResult(transaction)"
+                  >
+                    <span
+                      class="search-result-icon"
+                      [class.search-result-icon-income]="transaction.type === 'income'"
+                      [class.search-result-icon-expense]="transaction.type === 'expense'"
+                    >
+                      @if (transaction.type === 'income') {
+                        <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+                      } @else {
+                        <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                      }
+                    </span>
+
+                    <span class="search-result-info">
+                      <strong class="search-result-title">
+                        {{ transaction.description }}
+                      </strong>
+
+                      <span class="search-result-meta">
+                        {{ getSearchCategoryName(transaction.categoryId) }}
+                        ·
+                        {{ formatSearchDate(transaction.date) }}
+                      </span>
+                    </span>
+
+                    <strong
+                      class="search-result-amount"
+                      [class.text-success]="transaction.type === 'income'"
+                      [class.text-danger]="transaction.type === 'expense'"
+                    >
+                      {{ formatSearchAmount(transaction) }}
+                    </strong>
+                  </button>
+                }
+              </div>
+
+              @if (matchingSearchTransactions().length > 6 && !showAllSearchResults()) {
+                <button type="button" class="search-show-all" (click)="expandSearchResults()">
+                  Ver todos los resultados
+
+                  <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                </button>
+              }
+
+              @if (showAllSearchResults()) {
+                <div class="search-dropdown-footer">Mostrando todas las coincidencias</div>
+              }
+            }
+          </div>
+        }
       </div>
 
       <button

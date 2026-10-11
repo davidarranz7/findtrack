@@ -7,6 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog';
@@ -29,6 +30,7 @@ type PaymentMethodFilter = 'all' | PaymentMethod;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Transactions {
+  private readonly route = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
   private readonly transactionService = inject(TransactionService);
   private readonly categoryService = inject(CategoryService);
@@ -209,7 +211,6 @@ export class Transactions {
   });
 
   protected readonly hasPreviousPage = computed(() => this.currentPage() > 1);
-
   protected readonly hasNextPage = computed(() => this.currentPage() < this.totalPages());
 
   protected readonly hasActiveFilters = computed(
@@ -221,6 +222,26 @@ export class Transactions {
   );
 
   constructor() {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const search = params.get('search');
+      const month = params.get('month');
+
+      if (search === null && month === null) {
+        return;
+      }
+
+      this.searchTerm.set(search ?? '');
+
+      if (month && /^\d{4}-(0[1-9]|1[0-2])$/.test(month)) {
+        this.selectedMonth.set(month);
+      }
+
+      this.selectedType.set('all');
+      this.selectedCategoryId.set('all');
+      this.selectedPaymentMethod.set('all');
+      this.currentPage.set(1);
+    });
+
     this.loadTransactions();
     this.loadCategories();
   }
