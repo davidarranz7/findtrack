@@ -1,0 +1,21 @@
+<header class="app-page-header">
+  <div class="app-page-heading">
+    @if (eyebrow()) {
+      <span class="app-page-eyebrow">{{ eyebrow() }}</span>
+    }
+
+    <h1 class="app-page-title">{{ title() }}</h1>
+
+    <div class="app-page-description-row">
+      @if (description()) {
+        <p class="app-page-description">{{ description() }}</p>
+      }
+
+      <ng-content select="[pageHeaderMeta]" />
+    </div>
+  </div>
+
+  <div class="app-page-actions">
+    <ng-content select="[pageHeaderActions]" />
+  </div>
+</header>

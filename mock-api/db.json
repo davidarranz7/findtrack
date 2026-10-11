@@ -23,6 +23,12 @@
       "email": "segundo@gmail.com",
       "password": "Piedra123.",
       "id": "aqhXpvZtCOk"
+    },
+    {
+      "username": "david",
+      "email": "david@gmail.com",
+      "password": "abc123.A",
+      "id": "cbA1QlTWcqY"
     }
   ],
   "transactions": [
@@ -385,27 +391,6 @@
       "categoryId": "category-health",
       "amount": 80,
       "month": "2026-09"
-    },
-    {
-      "userId": "user-1",
-      "categoryId": "category-food",
-      "amount": 100,
-      "month": "2026-10",
-      "id": "OTD2c40V9Uk"
-    },
-    {
-      "userId": "user-1",
-      "categoryId": "category-leisure",
-      "amount": 100,
-      "month": "2026-10",
-      "id": "xaMExJUfn50"
-    },
-    {
-      "userId": "user-1",
-      "categoryId": "category-health",
-      "amount": 100,
-      "month": "2026-10",
-      "id": "q0Nkv9jBFU4"
     }
   ],
   "categories": [
@@ -612,7 +597,7 @@
       "currency": "EUR",
       "locale": "es-ES",
       "dateFormat": "DD/MM/YYYY",
-      "theme": "dark",
+      "theme": "light",
       "budgetWarningEnabled": true,
       "budgetExceededEnabled": true,
       "savingsGoalEnabled": true,
@@ -639,6 +624,39 @@
       "budgetExceededEnabled": true,
       "savingsGoalEnabled": true,
       "id": "7OYp_JRcCCE"
+    },
+    {
+      "userId": "cbA1QlTWcqY",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "dateFormat": "DD/MM/YYYY",
+      "theme": "light",
+      "budgetWarningEnabled": true,
+      "budgetExceededEnabled": true,
+      "savingsGoalEnabled": true,
+      "id": "Mxtf3piJgbs"
+    },
+    {
+      "userId": "cbA1QlTWcqY",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "dateFormat": "DD/MM/YYYY",
+      "theme": "light",
+      "budgetWarningEnabled": true,
+      "budgetExceededEnabled": true,
+      "savingsGoalEnabled": true,
+      "id": "1Cvx6F1NwKM"
+    },
+    {
+      "userId": "cbA1QlTWcqY",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "dateFormat": "DD/MM/YYYY",
+      "theme": "light",
+      "budgetWarningEnabled": true,
+      "budgetExceededEnabled": true,
+      "savingsGoalEnabled": true,
+      "id": "3bSWEmvGJBU"
     }
   ],
   "notifications": [
@@ -650,7 +668,7 @@
       "createdAt": "2026-10-08T23:04:15.439Z",
       "isRead": true,
       "eventKey": "budget-exceeded:OTD2c40V9Uk:2026-10",
-      "budgetId": "OTD2c40V9Uk",
+      "budgetId": null,
       "categoryId": "category-food",
       "id": "4uw4sXhzHHk"
     },
@@ -662,7 +680,7 @@
       "createdAt": "2026-10-08T23:18:16.958Z",
       "isRead": false,
       "eventKey": "budget-warning:xaMExJUfn50:2026-10",
-      "budgetId": "xaMExJUfn50",
+      "budgetId": null,
       "categoryId": "category-leisure",
       "id": "wZjKxxHM4cE"
     },
@@ -674,7 +692,7 @@
       "createdAt": "2026-10-08T23:24:11.423Z",
       "isRead": false,
       "eventKey": "budget-warning:q0Nkv9jBFU4:2026-10",
-      "budgetId": "q0Nkv9jBFU4",
+      "budgetId": null,
       "categoryId": "category-health",
       "id": "TtJAAluKatg"
     },
@@ -686,7 +704,7 @@
       "createdAt": "2026-10-08T23:30:58.322Z",
       "isRead": false,
       "eventKey": "budget-exceeded:xaMExJUfn50:2026-10",
-      "budgetId": "xaMExJUfn50",
+      "budgetId": null,
       "categoryId": "category-leisure",
       "id": "PdxsmT68oGA"
     }

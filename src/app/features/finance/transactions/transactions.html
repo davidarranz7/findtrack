@@ -1,28 +1,18 @@
 <section class="transactions">
-  <header class="transactions-header">
-    <div>
-      <div class="transactions-heading">
-        <div>
-          <h1 class="transactions-title">Transacciones</h1>
+  <app-page-header
+    eyebrow="GESTIÓN FINANCIERA"
+    title="Transacciones"
+    description="Gestiona todos tus ingresos y gastos"
+  >
+    @if (!isLoading() && !loadError()) {
+      <span class="transactions-count" pageHeaderMeta>
+        Total: {{ totalTransactions() }} movimientos registrados
+      </span>
+    }
 
-          <div class="transactions-subtitle-row">
-            <p class="transactions-subtitle mb-0">Gestiona todos tus ingresos y gastos</p>
-
-            @if (!isLoading() && !loadError()) {
-              <span class="transactions-count">
-                Total: {{ totalTransactions() }}
-                movimientos registrados
-              </span>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="transactions-actions">
+    <div class="transactions-actions" pageHeaderActions>
       <button type="button" class="btn btn-outline-secondary export-button" disabled>
         <i class="bi bi-download" aria-hidden="true"></i>
-
         Exportar CSV
       </button>
 
@@ -32,30 +22,26 @@
         (click)="openTransactionForm()"
       >
         <i class="bi bi-plus-lg" aria-hidden="true"></i>
-
         Nueva transacción
       </button>
     </div>
-  </header>
+  </app-page-header>
 
   @if (loadError()) {
     <div class="alert alert-danger d-flex align-items-center gap-2 mb-0" role="alert">
       <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-
-      <span>
-        {{ loadError() }}
-      </span>
+      <span>{{ loadError() }}</span>
     </div>
   }
 
   <section class="transactions-summary" aria-label="Resumen de transacciones">
     <article class="transaction-summary-card">
       <div>
-        <span class="transaction-summary-label"> Ingresos del mes </span>
+        <span class="transaction-summary-label">Ingresos del mes</span>
 
         @if (isLoading()) {
           <div class="spinner-border spinner-border-sm text-success mt-2" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </div>
         } @else {
           <p class="transaction-summary-value text-success mb-0">
@@ -75,11 +61,11 @@
 
     <article class="transaction-summary-card">
       <div>
-        <span class="transaction-summary-label"> Gastos del mes </span>
+        <span class="transaction-summary-label">Gastos del mes</span>
 
         @if (isLoading()) {
           <div class="spinner-border spinner-border-sm text-danger mt-2" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </div>
         } @else {
           <p class="transaction-summary-value text-danger mb-0">
@@ -99,11 +85,11 @@
 
     <article class="transaction-summary-card">
       <div>
-        <span class="transaction-summary-label"> Balance operativo </span>
+        <span class="transaction-summary-label">Balance operativo</span>
 
         @if (isLoading()) {
           <div class="spinner-border spinner-border-sm text-primary mt-2" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </div>
         } @else {
           <p
@@ -115,7 +101,7 @@
           </p>
         }
 
-        <span class="transaction-summary-period"> Ingresos menos gastos </span>
+        <span class="transaction-summary-period">Ingresos menos gastos</span>
       </div>
 
       <div class="transaction-summary-icon transaction-summary-icon-balance">
@@ -159,7 +145,6 @@
           (click)="selectType('all')"
         >
           Todos
-
           <span class="filter-count">
             {{ totalTransactionsInSelectedMonth() }}
           </span>
@@ -172,7 +157,6 @@
           (click)="selectType('income')"
         >
           Ingresos
-
           <span class="filter-count">
             {{ incomeCount() }}
           </span>
@@ -185,7 +169,6 @@
           (click)="selectType('expense')"
         >
           Gastos
-
           <span class="filter-count">
             {{ expenseCount() }}
           </span>
@@ -224,11 +207,8 @@
           (change)="selectPaymentMethod(paymentSelect.value)"
         >
           <option value="all">Todos los métodos</option>
-
           <option value="cash">Efectivo</option>
-
           <option value="card">Tarjeta</option>
-
           <option value="bankTransfer">Transferencia</option>
         </select>
       </div>
@@ -236,7 +216,6 @@
       <div class="filters-result">
         <span>
           {{ filteredTransactions().length }}
-
           @if (filteredTransactions().length === 1) {
             resultado
           } @else {
@@ -252,7 +231,6 @@
         (click)="clearFilters()"
       >
         <i class="bi bi-x-circle" aria-hidden="true"></i>
-
         Limpiar filtros
       </button>
     </div>
@@ -260,7 +238,6 @@
     @if (categoryLoadError()) {
       <div class="filters-error" role="alert">
         <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-
         {{ categoryLoadError() }}
       </div>
     }
@@ -280,7 +257,6 @@
       @if (!isLoading() && !loadError()) {
         <span class="transactions-table-count">
           {{ filteredTransactions().length }}
-
           @if (filteredTransactions().length === 1) {
             movimiento
           } @else {
@@ -293,7 +269,7 @@
     @if (isLoading()) {
       <div class="transactions-placeholder">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden"> Cargando transacciones... </span>
+          <span class="visually-hidden">Cargando transacciones...</span>
         </div>
 
         <p class="transactions-placeholder-text mt-3 mb-0">Cargando tus movimientos...</p>
@@ -326,17 +302,11 @@
           <thead>
             <tr>
               <th scope="col">Fecha</th>
-
               <th scope="col">Descripción</th>
-
               <th scope="col">Tipo</th>
-
               <th scope="col">Categoría</th>
-
               <th scope="col">Método de pago</th>
-
               <th scope="col" class="text-end">Importe</th>
-
               <th scope="col" class="text-end">Acciones</th>
             </tr>
           </thead>
@@ -458,20 +428,14 @@
       <footer class="transactions-pagination" aria-label="Paginación de transacciones">
         <div class="pagination-summary">
           Mostrando
-
-          <strong> {{ firstVisibleTransaction() }}-{{ lastVisibleTransaction() }} </strong>
-
+          <strong>{{ firstVisibleTransaction() }}-{{ lastVisibleTransaction() }}</strong>
           de
-
-          <strong>
-            {{ filteredTransactions().length }}
-          </strong>
-
+          <strong>{{ filteredTransactions().length }}</strong>
           movimientos
         </div>
 
         <div class="pagination-controls">
-          <label for="pageSize" class="page-size-label"> Filas por página </label>
+          <label for="pageSize" class="page-size-label">Filas por página</label>
 
           <select
             #pageSizeSelect
@@ -496,8 +460,7 @@
               (click)="previousPage()"
             >
               <i class="bi bi-chevron-left" aria-hidden="true"></i>
-
-              <span class="pagination-direction-text"> Anterior </span>
+              <span class="pagination-direction-text">Anterior</span>
             </button>
 
             <div class="pagination-pages">
@@ -522,8 +485,7 @@
               [disabled]="!hasNextPage()"
               (click)="nextPage()"
             >
-              <span class="pagination-direction-text"> Siguiente </span>
-
+              <span class="pagination-direction-text">Siguiente</span>
               <i class="bi bi-chevron-right" aria-hidden="true"></i>
             </button>
           </div>
@@ -596,7 +558,6 @@
 
     <div class="delete-confirmation-warning">
       <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
-
       <p class="mb-0">¿Seguro que quieres eliminar esta transacción?</p>
     </div>
   </app-confirm-dialog>

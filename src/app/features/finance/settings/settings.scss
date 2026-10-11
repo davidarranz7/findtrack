@@ -8,37 +8,6 @@
   gap: 1.5rem;
 }
 
-.settings-page-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.5rem;
-}
-
-.settings-heading {
-  min-width: 0;
-
-  h1 {
-    margin: 0.2rem 0 0.35rem;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--bs-emphasis-color);
-  }
-
-  p {
-    margin: 0;
-    color: var(--bs-secondary-color);
-  }
-}
-
-.settings-eyebrow {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--bs-primary);
-}
-
 .settings-header-actions {
   display: flex;
   align-items: center;
@@ -635,19 +604,6 @@
 }
 
 @media (max-width: 991.98px) {
-  .settings-page-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .settings-header-actions {
-    width: 100%;
-
-    .btn {
-      flex: 1;
-    }
-  }
-
   .profile-layout {
     grid-template-columns: 1fr;
     gap: 1.2rem;
@@ -664,19 +620,14 @@
     gap: 1rem;
   }
 
-  .settings-heading {
-    h1 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      font-size: 0.85rem;
-    }
-  }
-
   .settings-header-actions {
+    width: 100%;
     align-items: stretch;
     flex-direction: column;
+
+    .btn {
+      flex: 1;
+    }
   }
 
   .settings-card-header {

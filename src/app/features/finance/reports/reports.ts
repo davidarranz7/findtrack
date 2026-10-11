@@ -13,6 +13,7 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { finalize, forkJoin } from 'rxjs';
 
+import { PageHeader } from '../../../shared/ui/page-header/page-header';
 import { ToastService } from '../../../shared/ui/toast/toast.service';
 import { AuthService } from '../../auth/services/auth.service';
 import {
@@ -54,7 +55,7 @@ interface SavingsComparison {
 
 @Component({
   selector: 'app-reports',
-  imports: [IncomeExpenseChart, ExpenseDistributionChart, BalanceEvolutionChart],
+  imports: [PageHeader, IncomeExpenseChart, ExpenseDistributionChart, BalanceEvolutionChart],
   templateUrl: './reports.html',
   styleUrl: './reports.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -168,7 +169,6 @@ export class Reports {
     }
 
     const [year, month] = months[0].key.split('-').map(Number);
-
     const previousPeriodEnd = new Date(year, month - 2, 1);
 
     return this.getMonthsEndingAt(previousPeriodEnd, this.selectedPeriod());
@@ -415,7 +415,6 @@ export class Reports {
 
     for (const transaction of expenses) {
       const currentAmount = amountsByCategory.get(transaction.categoryId) ?? 0;
-
       amountsByCategory.set(transaction.categoryId, currentAmount + transaction.amount);
     }
 
@@ -613,7 +612,6 @@ export class Reports {
     });
 
     const url = URL.createObjectURL(blob);
-
     const link = this.document.createElement('a');
 
     link.href = url;
@@ -638,12 +636,10 @@ export class Reports {
 
     if (!reportElement) {
       this.toastService.error('No se ha podido preparar el informe PDF.');
-
       return;
     }
 
     this.isExportingPdf.set(true);
-
     reportElement.classList.add('is-exporting');
 
     try {
@@ -673,15 +669,12 @@ export class Reports {
       const margin = 10;
 
       const pageWidth = pdf.internal.pageSize.getWidth();
-
       const pageHeight = pdf.internal.pageSize.getHeight();
 
       const printableWidth = pageWidth - margin * 2;
-
       const printableHeight = pageHeight - margin * 2;
 
       const pixelsPerMillimeter = canvas.width / printableWidth;
-
       const pageHeightInPixels = Math.floor(printableHeight * pixelsPerMillimeter);
 
       let currentOffset = 0;
@@ -693,7 +686,6 @@ export class Reports {
         const pageCanvas = this.document.createElement('canvas');
 
         pageCanvas.width = canvas.width;
-
         pageCanvas.height = sliceHeight;
 
         const context = pageCanvas.getContext('2d');
@@ -732,7 +724,6 @@ export class Reports {
         );
 
         currentOffset += sliceHeight;
-
         pageIndex++;
       }
 
@@ -743,7 +734,6 @@ export class Reports {
       this.toastService.error('No se ha podido generar el informe PDF.');
     } finally {
       reportElement.classList.remove('is-exporting');
-
       this.isExportingPdf.set(false);
     }
   }
@@ -753,9 +743,7 @@ export class Reports {
 
     if (!userId) {
       this.isLoading.set(false);
-
       this.loadError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
@@ -773,7 +761,6 @@ export class Reports {
       .subscribe({
         next: ({ transactions, categories }) => {
           this.transactions.set(transactions);
-
           this.categories.set(categories);
         },
         error: () => {
@@ -784,7 +771,6 @@ export class Reports {
 
   private applyReportFilters(transactions: Transaction[]): Transaction[] {
     const categoryId = this.selectedCategoryId();
-
     const paymentMethod = this.selectedPaymentMethod();
 
     return transactions.filter((transaction) => {
@@ -836,7 +822,6 @@ export class Reports {
 
   private getReportMonths(year: number, count: ReportPeriod): ReportMonth[] {
     const isCurrentYear = year === this.currentDate.getFullYear();
-
     const endMonth = isCurrentYear ? this.currentDate.getMonth() : 11;
 
     return this.getMonthsEndingAt(new Date(year, endMonth, 1), count);
@@ -849,11 +834,9 @@ export class Reports {
 
     return Array.from({ length: count }, (_, index) => {
       const monthsAgo = count - 1 - index;
-
       const date = new Date(referenceDate.getFullYear(), referenceDate.getMonth() - monthsAgo, 1);
 
       const month = monthFormatter.format(date).replace('.', '');
-
       const formattedMonth = month.charAt(0).toUpperCase() + month.slice(1);
 
       return {
@@ -869,11 +852,9 @@ export class Reports {
     }
 
     const firstMonth = months[0];
-
     const lastMonth = months[months.length - 1];
 
     const firstYear = firstMonth.key.slice(0, 4);
-
     const lastYear = lastMonth.key.slice(0, 4);
 
     if (months.length === 1) {
@@ -920,7 +901,6 @@ export class Reports {
     const months = this.reportMonths();
 
     const start = months[0]?.key ?? 'inicio';
-
     const end = months[months.length - 1]?.key ?? 'fin';
 
     return `finora-informe-${start}-${end}.${extension}`;

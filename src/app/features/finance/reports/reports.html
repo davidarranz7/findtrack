@@ -1,16 +1,12 @@
 <section class="reports-page">
-  <header class="reports-header">
-    <div class="reports-heading">
-      <span class="reports-eyebrow"> ANÁLISIS FINANCIERO </span>
-
-      <h1>Informes y Estadísticas</h1>
-
-      <p>Analiza la evolución de tus ingresos, gastos y hábitos financieros.</p>
-    </div>
-
-    <div class="reports-header-actions no-export">
+  <app-page-header
+    eyebrow="ANÁLISIS FINANCIERO"
+    title="Informes y Estadísticas"
+    description="Analiza la evolución de tus ingresos, gastos y hábitos financieros."
+  >
+    <div class="reports-header-actions no-export" pageHeaderActions>
       <div class="report-filter">
-        <label for="report-period"> Periodo </label>
+        <label for="report-period">Periodo</label>
 
         <select id="report-period" class="form-select" (change)="changePeriod($event)">
           @for (option of periodOptions; track option.value) {
@@ -22,7 +18,7 @@
       </div>
 
       <div class="report-filter report-filter-year">
-        <label for="report-year"> Año </label>
+        <label for="report-year">Año</label>
 
         <select id="report-year" class="form-select" (change)="changeYear($event)">
           @for (year of availableYears(); track year) {
@@ -41,7 +37,6 @@
           (click)="exportReportCsv()"
         >
           <i class="bi bi-filetype-csv" aria-hidden="true"></i>
-
           CSV
         </button>
 
@@ -53,17 +48,15 @@
         >
           @if (isExportingPdf()) {
             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-
             Generando...
           } @else {
             <i class="bi bi-file-earmark-pdf" aria-hidden="true"></i>
-
             Exportar PDF
           }
         </button>
       </div>
     </div>
-  </header>
+  </app-page-header>
 
   <section class="report-export-context">
     <div>
@@ -97,12 +90,11 @@
   @if (isLoading()) {
     <div class="reports-state" aria-live="polite">
       <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden"> Cargando informes... </span>
+        <span class="visually-hidden">Cargando informes...</span>
       </div>
 
       <div>
-        <strong> Cargando tus informes </strong>
-
+        <strong>Cargando tus informes</strong>
         <p class="mb-0">Estamos preparando tus datos financieros.</p>
       </div>
     </div>
@@ -111,8 +103,7 @@
       <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
 
       <div>
-        <strong> No hemos podido cargar tus informes. </strong>
-
+        <strong>No hemos podido cargar tus informes.</strong>
         <p class="mb-0">
           {{ loadError() }}
         </p>
@@ -121,7 +112,7 @@
   } @else {
     <section class="reports-analysis-filters no-export">
       <div class="report-filter">
-        <label for="report-category"> Categoría </label>
+        <label for="report-category">Categoría</label>
 
         <select id="report-category" class="form-select" (change)="changeCategory($event)">
           <option value="all" [selected]="selectedCategoryId() === 'all'">
@@ -141,7 +132,7 @@
       </div>
 
       <div class="report-filter">
-        <label for="report-payment-method"> Método de pago </label>
+        <label for="report-payment-method">Método de pago</label>
 
         <select
           id="report-payment-method"
@@ -157,7 +148,7 @@
       </div>
 
       <div class="report-comparison-control">
-        <span class="report-control-label"> Comparación </span>
+        <span class="report-control-label">Comparación</span>
 
         <div class="form-check form-switch mb-0">
           <input
@@ -179,7 +170,6 @@
           (click)="clearAnalysisFilters()"
         >
           <i class="bi bi-x-circle me-1" aria-hidden="true"></i>
-
           Limpiar filtros
         </button>
       }
@@ -200,7 +190,6 @@
       @if (activeFilterCount() > 0) {
         <span class="reports-context-badge">
           {{ activeFilterCount() }}
-
           {{ activeFilterCount() === 1 ? 'filtro activo' : 'filtros activos' }}
         </span>
       }
@@ -216,7 +205,7 @@
     <section class="reports-kpis" aria-label="Resumen financiero">
       <article class="report-kpi">
         <div class="report-kpi-header">
-          <span> Ingresos totales </span>
+          <span>Ingresos totales</span>
 
           <div class="report-kpi-icon report-kpi-icon-income">
             <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
@@ -245,13 +234,13 @@
             {{ formatMoneyComparison(incomeComparison()) }}
           </span>
         } @else {
-          <span class="report-kpi-caption"> Durante el periodo seleccionado </span>
+          <span class="report-kpi-caption">Durante el periodo seleccionado</span>
         }
       </article>
 
       <article class="report-kpi">
         <div class="report-kpi-header">
-          <span> Gastos totales </span>
+          <span>Gastos totales</span>
 
           <div class="report-kpi-icon report-kpi-icon-expense">
             <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
@@ -280,13 +269,13 @@
             {{ formatMoneyComparison(expenseComparison()) }}
           </span>
         } @else {
-          <span class="report-kpi-caption"> Durante el periodo seleccionado </span>
+          <span class="report-kpi-caption">Durante el periodo seleccionado</span>
         }
       </article>
 
       <article class="report-kpi">
         <div class="report-kpi-header">
-          <span> Balance neto </span>
+          <span>Balance neto</span>
 
           <div class="report-kpi-icon report-kpi-icon-balance">
             <i class="bi bi-wallet2" aria-hidden="true"></i>
@@ -319,13 +308,13 @@
             {{ formatMoneyComparison(balanceComparison()) }}
           </span>
         } @else {
-          <span class="report-kpi-caption"> Ingresos menos gastos </span>
+          <span class="report-kpi-caption">Ingresos menos gastos</span>
         }
       </article>
 
       <article class="report-kpi">
         <div class="report-kpi-header">
-          <span> Tasa de ahorro </span>
+          <span>Tasa de ahorro</span>
 
           <div class="report-kpi-icon report-kpi-icon-savings">
             <i class="bi bi-piggy-bank" aria-hidden="true"></i>
@@ -373,9 +362,9 @@
           </span>
         } @else {
           @if (savingsRate() === null) {
-            <span class="report-kpi-caption"> Sin ingresos en este periodo </span>
+            <span class="report-kpi-caption">Sin ingresos en este periodo</span>
           } @else {
-            <span class="report-kpi-caption"> Porcentaje de ingresos conservado </span>
+            <span class="report-kpi-caption">Porcentaje de ingresos conservado</span>
           }
         }
       </article>
@@ -386,23 +375,19 @@
         <article class="report-card">
           <header class="report-card-header">
             <div>
-              <span class="report-card-eyebrow"> EVOLUCIÓN </span>
-
+              <span class="report-card-eyebrow">EVOLUCIÓN</span>
               <h2>Ingresos vs Gastos</h2>
-
               <p>Compara cómo han evolucionado tus ingresos y gastos.</p>
             </div>
 
             <div class="report-chart-legend">
               <span>
                 <i class="legend-dot legend-dot-income"></i>
-
                 Ingresos
               </span>
 
               <span>
                 <i class="legend-dot legend-dot-expense"></i>
-
                 Gastos
               </span>
             </div>
@@ -416,10 +401,8 @@
         <article class="report-card">
           <header class="report-card-header">
             <div>
-              <span class="report-card-eyebrow"> DISTRIBUCIÓN </span>
-
+              <span class="report-card-eyebrow">DISTRIBUCIÓN</span>
               <h2>Gastos por categoría</h2>
-
               <p>Descubre dónde se concentra la mayor parte de tus gastos.</p>
             </div>
           </header>
@@ -434,10 +417,8 @@
           } @else {
             <div class="report-empty report-empty-small">
               <i class="bi bi-pie-chart" aria-hidden="true"></i>
-
-              <strong> Sin gastos en este periodo </strong>
-
-              <span> Cuando registres gastos aparecerá aquí su distribución. </span>
+              <strong>Sin gastos en este periodo</strong>
+              <span>Cuando registres gastos aparecerá aquí su distribución.</span>
             </div>
           }
         </article>
@@ -446,10 +427,8 @@
       <section class="report-card report-balance-section">
         <header class="report-card-header">
           <div>
-            <span class="report-card-eyebrow"> BALANCE </span>
-
+            <span class="report-card-eyebrow">BALANCE</span>
             <h2>Evolución del balance</h2>
-
             <p>Observa cómo se acumula la diferencia entre ingresos y gastos.</p>
           </div>
 
@@ -457,8 +436,7 @@
             class="report-balance-current"
             [class.report-balance-current-negative]="netBalance() < 0"
           >
-            <span> Balance del periodo </span>
-
+            <span>Balance del periodo</span>
             <strong>
               {{ formattedBalance() }}
             </strong>
@@ -474,10 +452,8 @@
         <article class="report-card">
           <header class="report-card-header">
             <div>
-              <span class="report-card-eyebrow"> RANKING </span>
-
+              <span class="report-card-eyebrow">RANKING</span>
               <h2>Principales categorías de gasto</h2>
-
               <p>Las categorías que más peso tienen en tus gastos.</p>
             </div>
           </header>
@@ -536,8 +512,7 @@
           } @else {
             <div class="report-empty report-empty-small">
               <i class="bi bi-bar-chart" aria-hidden="true"></i>
-
-              <strong> No hay categorías que analizar </strong>
+              <strong>No hay categorías que analizar</strong>
             </div>
           }
         </article>
@@ -545,10 +520,8 @@
         <article class="report-card">
           <header class="report-card-header">
             <div>
-              <span class="report-card-eyebrow"> RESUMEN </span>
-
+              <span class="report-card-eyebrow">RESUMEN</span>
               <h2>Resumen del periodo</h2>
-
               <p>Una visión rápida de tu actividad financiera.</p>
             </div>
           </header>
@@ -560,8 +533,7 @@
               </div>
 
               <div>
-                <span> Movimientos analizados </span>
-
+                <span>Movimientos analizados</span>
                 <strong>
                   {{ filteredTransactions().length }}
                 </strong>
@@ -574,8 +546,7 @@
               </div>
 
               <div>
-                <span> Gasto medio mensual </span>
-
+                <span>Gasto medio mensual</span>
                 <strong>
                   {{ formattedAverageMonthlyExpenses() }}
                 </strong>
@@ -588,8 +559,7 @@
               </div>
 
               <div>
-                <span> Mayor categoría de gasto </span>
-
+                <span>Mayor categoría de gasto</span>
                 <strong>
                   {{ topExpenseCategory()?.categoryName ?? 'Sin datos' }}
                 </strong>
@@ -602,7 +572,7 @@
               </div>
 
               <div>
-                <span> Mes con mayor gasto </span>
+                <span>Mes con mayor gasto</span>
 
                 <strong>
                   @if (highestExpenseMonth()) {
@@ -622,7 +592,7 @@
               </div>
 
               <div>
-                <span> Resultado del periodo </span>
+                <span>Resultado del periodo</span>
 
                 <strong
                   [class.balance-positive]="netBalance() >= 0"
@@ -664,7 +634,8 @@
 
           <p>
             No tienes movimientos registrados en
-            <strong> {{ reportRangeLabel() }} </strong>. Prueba con otro periodo o año.
+            <strong>{{ reportRangeLabel() }}</strong
+            >. Prueba con otro periodo o año.
           </p>
         }
       </section>

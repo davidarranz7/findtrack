@@ -18,6 +18,7 @@ import {
 import { Router } from '@angular/router';
 import { catchError, EMPTY, finalize, map, of, switchMap, tap, timer } from 'rxjs';
 
+import { PageHeader } from '../../../shared/ui/page-header/page-header';
 import { ToastService } from '../../../shared/ui/toast/toast.service';
 import { AuthService } from '../../auth/services/auth.service';
 import { passwordStrengthValidator } from '../../auth/validators/password.validator';
@@ -37,7 +38,7 @@ const passwordsMatchValidator: ValidatorFn = (
 
 @Component({
   selector: 'app-settings',
-  imports: [ReactiveFormsModule],
+  imports: [PageHeader, ReactiveFormsModule],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

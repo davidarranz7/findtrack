@@ -1,28 +1,20 @@
 <section class="categories-page">
-  <header class="categories-header">
-    <div>
-      <p class="categories-eyebrow mb-1">AJUSTES FINANCIEROS · ORGANIZACIÓN</p>
-
-      <h1 class="categories-title mb-1">Categorías</h1>
-
-      <p class="categories-description mb-0">
-        Organiza tus movimientos de la forma que mejor se adapte a ti.
-      </p>
-    </div>
-
-    <div class="categories-header-actions">
+  <app-page-header
+    eyebrow="AJUSTES FINANCIEROS · ORGANIZACIÓN"
+    title="Categorías"
+    description="Organiza tus movimientos de la forma que mejor se adapte a ti."
+  >
+    <div class="categories-page-header-actions" pageHeaderActions>
       <button type="button" class="btn btn-primary" (click)="openCategoryForm()">
         <i class="bi bi-plus-circle me-2" aria-hidden="true"></i>
-
         Nueva categoría
       </button>
     </div>
-  </header>
+  </app-page-header>
 
   @if (loadError()) {
     <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
       <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-
       <span>
         {{ loadError() }}
       </span>
@@ -36,7 +28,7 @@
 
         @if (isLoading()) {
           <div class="spinner-border spinner-border-sm text-primary" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </div>
         } @else {
           <strong class="summary-value">
@@ -58,7 +50,7 @@
 
         @if (isLoading()) {
           <div class="spinner-border spinner-border-sm text-success" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </div>
         } @else {
           <strong class="summary-value">
@@ -80,7 +72,7 @@
 
         @if (isLoading()) {
           <div class="spinner-border spinner-border-sm text-warning" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </div>
         } @else {
           <strong class="summary-value">
@@ -109,7 +101,6 @@
 
       <span class="categories-count">
         {{ totalCategories() }}
-
         @if (totalCategories() === 1) {
           categoría
         } @else {
@@ -121,7 +112,7 @@
     @if (isLoadingCategories()) {
       <div class="categories-loading">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden"> Cargando categorías... </span>
+          <span class="visually-hidden">Cargando categorías...</span>
         </div>
       </div>
     } @else if (categories().length === 0) {
@@ -158,7 +149,6 @@
 
                 <p class="category-usage mb-0">
                   {{ getTransactionCount(category.id) }}
-
                   @if (getTransactionCount(category.id) === 1) {
                     transacción
                   } @else {
@@ -298,7 +288,6 @@
 
           <p class="text-body-secondary small mb-0">
             {{ affectedTransactions().length }}
-
             @if (affectedTransactions().length === 1) {
               transacción asociada
             } @else {
@@ -317,10 +306,8 @@
           Esta transacción no se eliminará. Pasará a
           <strong>Sin categoría</strong>.
         } @else {
-          Las
-          {{ affectedTransactions().length }}
-          transacciones asociadas no se eliminarán. Pasarán a
-          <strong>Sin categoría</strong>.
+          Las {{ affectedTransactions().length }} transacciones asociadas no se eliminarán. Pasarán
+          a <strong>Sin categoría</strong>.
         }
       </div>
     } @else {
@@ -332,7 +319,6 @@
     @if (deleteError()) {
       <div class="alert alert-danger small mb-0" role="alert" aria-live="assertive">
         <i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>
-
         {{ deleteError() }}
       </div>
     }

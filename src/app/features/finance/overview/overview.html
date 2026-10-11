@@ -1,12 +1,10 @@
 <section class="overview">
-  <header class="overview-header">
-    <div>
-      <h1 class="overview-title">Buenos días, {{ userName() }}</h1>
-
-      <p class="overview-subtitle mb-0">Resumen financiero de {{ currentMonthLabel }}</p>
-    </div>
-
-    <div class="overview-header-actions">
+  <app-page-header
+    eyebrow="VISIÓN GENERAL"
+    [title]="'Buenos días, ' + userName()"
+    [description]="'Resumen financiero de ' + currentMonthLabel"
+  >
+    <div class="overview-header-actions" pageHeaderActions>
       <div class="month-selector" aria-label="Seleccionar mes">
         <button
           type="button"
@@ -19,7 +17,6 @@
 
         <span class="d-flex align-items-center gap-2">
           <i class="bi bi-calendar3" aria-hidden="true"></i>
-
           {{ currentMonthLabel }}
         </span>
 
@@ -40,11 +37,10 @@
         (click)="openTransactionForm()"
       >
         <i class="bi bi-plus-lg" aria-hidden="true"></i>
-
         Nueva transacción
       </button>
     </div>
-  </header>
+  </app-page-header>
 
   @if (!isLoadingBudgets() && budgetProgress().length > 0) {
     @if (budgetAlert(); as alert) {
@@ -68,7 +64,6 @@
         <div class="flex-grow-1">
           @if (alert.status === 'safe') {
             <p class="budget-alert-title mb-1">Tus presupuestos están bajo control</p>
-
             <p class="budget-alert-text mb-0">
               Ningún presupuesto ha alcanzado todavía el 80 % de su límite.
             </p>
@@ -76,7 +71,6 @@
 
           @if (alert.status === 'warning' && alert.budget; as budget) {
             <p class="budget-alert-title mb-1">{{ budget.categoryName }} cerca del límite</p>
-
             <p class="budget-alert-text mb-0">
               Has gastado
               {{ formatCurrency(budget.spent) }}
@@ -89,7 +83,6 @@
 
           @if (alert.status === 'exceeded' && alert.budget; as budget) {
             <p class="budget-alert-title mb-1">{{ budget.categoryName }} · presupuesto superado</p>
-
             <p class="budget-alert-text mb-0">
               Has gastado
               {{ formatCurrency(budget.spent) }}
@@ -106,17 +99,14 @@
   @if (loadError()) {
     <div class="alert alert-danger d-flex align-items-center gap-2 mb-0" role="alert">
       <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-
-      <span>
-        {{ loadError() }}
-      </span>
+      <span>{{ loadError() }}</span>
     </div>
   }
 
   <section class="summary-grid" aria-label="Resumen financiero">
     <article class="summary-card">
       <div class="summary-card-header">
-        <span class="summary-label"> Balance disponible </span>
+        <span class="summary-label">Balance disponible</span>
 
         <span class="summary-icon summary-icon-balance">
           <i class="bi bi-wallet2" aria-hidden="true"></i>
@@ -125,7 +115,7 @@
 
       @if (isLoading()) {
         <div class="spinner-border spinner-border-sm text-primary my-2" role="status">
-          <span class="visually-hidden"> Cargando... </span>
+          <span class="visually-hidden">Cargando...</span>
         </div>
       } @else {
         <p class="summary-value mb-1">
@@ -138,7 +128,7 @@
 
     <article class="summary-card">
       <div class="summary-card-header">
-        <span class="summary-label"> Ingresos totales </span>
+        <span class="summary-label">Ingresos totales</span>
 
         <span class="summary-icon summary-icon-income">
           <i class="bi bi-arrow-down" aria-hidden="true"></i>
@@ -147,7 +137,7 @@
 
       @if (isLoading()) {
         <div class="spinner-border spinner-border-sm text-success my-2" role="status">
-          <span class="visually-hidden"> Cargando... </span>
+          <span class="visually-hidden">Cargando...</span>
         </div>
       } @else {
         <p class="summary-value mb-1">
@@ -160,7 +150,7 @@
 
     <article class="summary-card">
       <div class="summary-card-header">
-        <span class="summary-label"> Gastos totales </span>
+        <span class="summary-label">Gastos totales</span>
 
         <span class="summary-icon summary-icon-expense">
           <i class="bi bi-arrow-up" aria-hidden="true"></i>
@@ -169,7 +159,7 @@
 
       @if (isLoading()) {
         <div class="spinner-border spinner-border-sm text-danger my-2" role="status">
-          <span class="visually-hidden"> Cargando... </span>
+          <span class="visually-hidden">Cargando...</span>
         </div>
       } @else {
         <p class="summary-value mb-1">
@@ -182,7 +172,7 @@
 
     <article class="summary-card">
       <div class="summary-card-header">
-        <span class="summary-label"> Ahorro del mes </span>
+        <span class="summary-label">Ahorro del mes</span>
 
         <span class="summary-icon summary-icon-saving">
           <i class="bi bi-piggy-bank" aria-hidden="true"></i>
@@ -191,7 +181,7 @@
 
       @if (isLoading()) {
         <div class="spinner-border spinner-border-sm text-primary my-2" role="status">
-          <span class="visually-hidden"> Cargando... </span>
+          <span class="visually-hidden">Cargando...</span>
         </div>
       } @else {
         <p class="summary-value mb-1">
@@ -208,20 +198,17 @@
       <header class="card-heading">
         <div>
           <h2 class="card-title">Ingresos vs Gastos</h2>
-
           <p class="card-subtitle mb-0">Evolución de los últimos 6 meses</p>
         </div>
 
         <div class="chart-legend">
           <span>
             <span class="legend-dot legend-income"></span>
-
             Ingresos
           </span>
 
           <span>
             <span class="legend-dot legend-expense"></span>
-
             Gastos
           </span>
         </div>
@@ -230,7 +217,7 @@
       @if (isLoading()) {
         <div class="chart-placeholder">
           <span class="spinner-border spinner-border-sm text-primary" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </span>
 
           <p class="chart-placeholder-text mb-0">Cargando histórico...</p>
@@ -241,7 +228,6 @@
 
           <div>
             <p class="chart-placeholder-title mb-1">Todavía no hay datos para mostrar</p>
-
             <p class="chart-placeholder-text mb-0">
               Aquí aparecerá la evolución mensual de ingresos y gastos.
             </p>
@@ -256,7 +242,6 @@
       <header class="card-heading">
         <div>
           <h2 class="card-title">Distribución de Gastos</h2>
-
           <p class="card-subtitle mb-0">
             Desglose por categoría de
             {{ currentMonthLabel }}
@@ -267,7 +252,7 @@
       @if (isLoading()) {
         <div class="chart-placeholder">
           <span class="spinner-border spinner-border-sm text-primary" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </span>
 
           <p class="chart-placeholder-text mb-0">Cargando distribución...</p>
@@ -278,7 +263,6 @@
 
           <div>
             <p class="chart-placeholder-title mb-1">Sin distribución disponible</p>
-
             <p class="chart-placeholder-text mb-0">
               Los gastos se agruparán automáticamente por categoría.
             </p>
@@ -298,7 +282,6 @@
       <header class="card-heading">
         <div>
           <h2 class="card-title">Presupuestos del Mes</h2>
-
           <p class="card-subtitle mb-0">
             Límites y consumo de
             {{ currentMonthLabel }}
@@ -318,10 +301,9 @@
       @if (isLoadingBudgets()) {
         <div class="transactions-loading">
           <span class="spinner-border spinner-border-sm text-primary" role="status">
-            <span class="visually-hidden"> Cargando... </span>
+            <span class="visually-hidden">Cargando...</span>
           </span>
-
-          <span> Cargando presupuestos... </span>
+          <span>Cargando presupuestos...</span>
         </div>
       } @else if (budgetLoadError()) {
         <div class="alert alert-danger mt-3 mb-0" role="alert">
@@ -409,7 +391,6 @@
       <header class="card-heading">
         <div>
           <h2 class="card-title">Últimas Transacciones</h2>
-
           <p class="card-subtitle mb-0">Movimientos registrados recientemente</p>
         </div>
 
@@ -419,8 +400,7 @@
       @if (isLoading()) {
         <div class="transactions-loading">
           <span class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></span>
-
-          <span> Cargando movimientos... </span>
+          <span>Cargando movimientos...</span>
         </div>
       } @else if (latestTransactions().length === 0) {
         <div class="empty-state">
@@ -429,7 +409,6 @@
           </div>
 
           <p class="empty-state-title mb-1">Sin transacciones disponibles</p>
-
           <p class="empty-state-text mb-0">Tus últimos movimientos aparecerán en esta sección.</p>
         </div>
       } @else {
@@ -455,15 +434,9 @@
                 </p>
 
                 <div class="transaction-meta">
-                  <span>
-                    {{ formatTransactionDate(transaction.date) }}
-                  </span>
-
+                  <span>{{ formatTransactionDate(transaction.date) }}</span>
                   <span aria-hidden="true"> · </span>
-
-                  <span>
-                    {{ getCategoryName(transaction.categoryId) }}
-                  </span>
+                  <span>{{ getCategoryName(transaction.categoryId) }}</span>
                 </div>
               </div>
 

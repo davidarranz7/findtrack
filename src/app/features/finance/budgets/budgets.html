@@ -1,16 +1,11 @@
 <section class="budgets-page">
-  <header class="budgets-header">
-    <div>
-      <p class="budgets-eyebrow mb-1">PLANIFICACIÓN FINANCIERA · CONTROL MENSUAL</p>
-
-      <h1 class="budgets-title mb-1">Presupuestos</h1>
-
-      <p class="budgets-description mb-0">
-        Define límites mensuales y controla cuánto estás gastando en cada categoría.
-      </p>
-    </div>
-
-    <div class="budgets-header-actions">
+  <app-page-header
+    class="budgets-header"
+    eyebrow="PLANIFICACIÓN FINANCIERA"
+    title="Presupuestos"
+    description="Define límites mensuales y controla cuánto estás gastando en cada categoría."
+  >
+    <div class="budgets-header-actions" pageHeaderActions>
       <div class="budget-month-selector">
         <i class="bi bi-calendar3" aria-hidden="true"></i>
 
@@ -30,11 +25,10 @@
         (click)="openCreateBudgetForm()"
       >
         <i class="bi bi-plus-circle me-2" aria-hidden="true"></i>
-
         Nuevo presupuesto
       </button>
     </div>
-  </header>
+  </app-page-header>
 
   @if (loadError()) {
     <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
@@ -281,19 +275,16 @@
               @if (item.status === 'normal') {
                 <span class="budget-status budget-status-normal">
                   <i class="bi bi-check-circle" aria-hidden="true"></i>
-
                   En control
                 </span>
               } @else if (item.status === 'warning') {
                 <span class="budget-status budget-status-warning">
                   <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
-
                   Cerca del límite
                 </span>
               } @else {
                 <span class="budget-status budget-status-exceeded">
                   <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-
                   Superado
                 </span>
               }

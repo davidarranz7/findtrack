@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../auth/services/auth.service';
+import { PageHeader } from '../../../shared/ui/page-header/page-header';
 import {
   ExpenseDistributionChart,
   type ExpenseDistributionItem,
@@ -27,7 +28,7 @@ import { TransactionForm } from '../transactions/transaction-form/transaction-fo
 
 @Component({
   selector: 'app-overview',
-  imports: [TransactionForm, ExpenseDistributionChart, IncomeExpenseChart],
+  imports: [PageHeader, TransactionForm, ExpenseDistributionChart, IncomeExpenseChart],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,19 +68,13 @@ export class Overview {
   protected readonly currentUser = this.authService.currentUser;
 
   protected readonly transactions = signal<Transaction[]>([]);
-
   protected readonly categories = signal<Category[]>([]);
-
   protected readonly budgets = signal<Budget[]>([]);
 
   protected readonly isLoading = signal(true);
-
   protected readonly isLoadingBudgets = signal(true);
-
   protected readonly loadError = signal<string | null>(null);
-
   protected readonly budgetLoadError = signal<string | null>(null);
-
   protected readonly isTransactionFormOpen = signal(false);
 
   protected readonly userName = computed(() => this.currentUser()?.username ?? 'Usuario');
@@ -328,9 +323,7 @@ export class Overview {
 
     if (!userId) {
       this.isLoading.set(false);
-
       this.loadError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
@@ -372,9 +365,7 @@ export class Overview {
 
     if (!userId) {
       this.isLoadingBudgets.set(false);
-
       this.budgetLoadError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
@@ -393,7 +384,6 @@ export class Overview {
         },
         error: () => {
           this.budgets.set([]);
-
           this.budgetLoadError.set('No se han podido cargar tus presupuestos.');
         },
       });
@@ -442,9 +432,7 @@ export class Overview {
 
   private getTodayDate(): string {
     const year = this.currentDate.getFullYear();
-
     const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
-
     const day = String(this.currentDate.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;

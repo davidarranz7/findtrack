@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, forkJoin, map, of, switchMap } from 'rxjs';
 
 import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog';
+import { PageHeader } from '../../../shared/ui/page-header/page-header';
 import { ToastService } from '../../../shared/ui/toast/toast.service';
 import { AuthService } from '../../auth/services/auth.service';
 import { Budget, Category, Transaction } from '../models';
@@ -20,7 +21,7 @@ import { CategoryForm, CategoryFormValue } from './category-form/category-form';
 
 @Component({
   selector: 'app-categories',
-  imports: [CategoryForm, ConfirmDialog],
+  imports: [PageHeader, CategoryForm, ConfirmDialog],
   templateUrl: './categories.html',
   styleUrl: './categories.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

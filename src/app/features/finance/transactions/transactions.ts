@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 
 import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog';
+import { PageHeader } from '../../../shared/ui/page-header/page-header';
 import { ToastService } from '../../../shared/ui/toast/toast.service';
 import { AuthService } from '../../auth/services/auth.service';
 import { Category, PaymentMethod, Transaction, TransactionType } from '../models';
@@ -22,7 +23,7 @@ type PaymentMethodFilter = 'all' | PaymentMethod;
 
 @Component({
   selector: 'app-transactions',
-  imports: [TransactionForm, ConfirmDialog],
+  imports: [PageHeader, TransactionForm, ConfirmDialog],
   templateUrl: './transactions.html',
   styleUrl: './transactions.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -174,7 +175,6 @@ export class Transactions {
 
   protected readonly paginatedTransactions = computed(() => {
     const startIndex = (this.currentPage() - 1) * this.pageSize();
-
     const endIndex = startIndex + this.pageSize();
 
     return this.filteredTransactions().slice(startIndex, endIndex);
@@ -197,9 +197,7 @@ export class Transactions {
     const currentPage = this.currentPage();
 
     const startPage = Math.max(1, currentPage - 2);
-
     const endPage = Math.min(totalPages, startPage + 4);
-
     const adjustedStartPage = Math.max(1, endPage - 4);
 
     return Array.from(
@@ -244,7 +242,6 @@ export class Transactions {
 
   protected handleTransactionCreated(transaction: Transaction): void {
     this.transactions.update((transactions) => [transaction, ...transactions]);
-
     this.currentPage.set(1);
     this.closeTransactionForm();
   }
@@ -281,7 +278,6 @@ export class Transactions {
     }
 
     this.deletingTransactionId.set(transaction.id);
-
     this.deleteError.set(null);
 
     this.transactionService
@@ -301,7 +297,6 @@ export class Transactions {
           }
 
           this.transactionToDelete.set(null);
-
           this.toastService.success('Transacción eliminada correctamente.');
         },
         error: () => {
@@ -322,13 +317,11 @@ export class Transactions {
 
   protected selectCategory(categoryId: string): void {
     this.selectedCategoryId.set(categoryId);
-
     this.currentPage.set(1);
   }
 
   protected selectPaymentMethod(paymentMethod: string): void {
     this.selectedPaymentMethod.set(paymentMethod as PaymentMethodFilter);
-
     this.currentPage.set(1);
   }
 
@@ -425,9 +418,7 @@ export class Transactions {
 
     if (!userId) {
       this.isLoading.set(false);
-
       this.loadError.set('No se ha podido identificar al usuario actual.');
-
       return;
     }
 
@@ -452,9 +443,7 @@ export class Transactions {
 
     if (!userId) {
       this.isLoadingCategories.set(false);
-
       this.categoryLoadError.set('No se han podido cargar las categorías.');
-
       return;
     }
 

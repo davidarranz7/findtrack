@@ -1,12 +1,10 @@
 <section class="settings-page">
-  <header class="settings-page-header">
-    <div class="settings-heading">
-      <span class="settings-eyebrow">CONFIGURACIÓN DE CUENTA</span>
-      <h1>Configuración</h1>
-      <p>Gestiona tu cuenta, preferencias y alertas.</p>
-    </div>
-
-    <div class="settings-header-actions">
+  <app-page-header
+    eyebrow="CONFIGURACIÓN DE CUENTA"
+    title="Configuración"
+    description="Gestiona tu cuenta, preferencias y alertas."
+  >
+    <div class="settings-header-actions" pageHeaderActions>
       <button
         type="button"
         class="btn btn-outline-secondary"
@@ -39,7 +37,7 @@
         }
       </button>
     </div>
-  </header>
+  </app-page-header>
 
   @if (isLoadingPreferences()) {
     <section class="settings-state" aria-live="polite">
@@ -67,7 +65,6 @@
           <div class="settings-card-icon">
             <i class="bi bi-person-circle" aria-hidden="true"></i>
           </div>
-
           <div>
             <h2>Perfil de usuario</h2>
             <p>Información personal y credenciales básicas de acceso.</p>
@@ -96,7 +93,7 @@
           <div class="profile-fields">
             <div class="settings-field">
               <div class="settings-label-row">
-                <label class="form-label" for="settings-username"> Nombre de usuario </label>
+                <label class="form-label" for="settings-username">Nombre de usuario</label>
                 <span class="settings-field-required">Obligatorio</span>
               </div>
 
@@ -146,7 +143,7 @@
 
             <div class="settings-field">
               <div class="settings-label-row">
-                <label class="form-label" for="settings-email"> Correo electrónico </label>
+                <label class="form-label" for="settings-email">Correo electrónico</label>
                 <span class="settings-field-verified">Verificado</span>
               </div>
 
@@ -271,7 +268,7 @@
                 </div>
 
                 <div class="settings-field">
-                  <label class="form-label" for="settings-new-password"> Nueva contraseña </label>
+                  <label class="form-label" for="settings-new-password">Nueva contraseña</label>
 
                   <div class="input-group">
                     <input
@@ -503,7 +500,7 @@
         <div class="settings-card-body">
           <div class="preferences-list">
             <div class="settings-field">
-              <label class="form-label" for="settings-currency"> Moneda principal </label>
+              <label class="form-label" for="settings-currency">Moneda principal</label>
 
               <select id="settings-currency" class="form-select" formControlName="currency">
                 @for (option of currencyOptions; track option.value) {
@@ -515,7 +512,7 @@
             </div>
 
             <div class="settings-field">
-              <label class="form-label" for="settings-language"> Idioma del entorno </label>
+              <label class="form-label" for="settings-language">Idioma del entorno</label>
 
               <select id="settings-language" class="form-select" formControlName="locale">
                 @for (option of localeOptions; track option.value) {
@@ -579,6 +576,7 @@
                   role="switch"
                   formControlName="budgetWarningEnabled"
                 />
+
                 <label class="visually-hidden" for="budget-warning-enabled">
                   Avisar cuando un presupuesto alcance el 80%
                 </label>
@@ -605,6 +603,7 @@
                   role="switch"
                   formControlName="budgetExceededEnabled"
                 />
+
                 <label class="visually-hidden" for="budget-exceeded-enabled">
                   Avisar cuando se supere un presupuesto
                 </label>
@@ -631,6 +630,7 @@
                   role="switch"
                   formControlName="savingsGoalEnabled"
                 />
+
                 <label class="visually-hidden" for="savings-goal-enabled">
                   Avisar al alcanzar una meta de ahorro
                 </label>

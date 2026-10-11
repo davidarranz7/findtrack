@@ -9,8 +9,9 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 
-import { AuthService } from '../../auth/services/auth.service';
 import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog';
+import { PageHeader } from '../../../shared/ui/page-header/page-header';
+import { AuthService } from '../../auth/services/auth.service';
 import { Budget, Category, Transaction } from '../models';
 import { BudgetService } from '../services/budget.service';
 import { CategoryService } from '../services/category.service';
@@ -31,7 +32,7 @@ interface BudgetItem {
 
 @Component({
   selector: 'app-budgets',
-  imports: [BudgetForm, ConfirmDialog],
+  imports: [PageHeader, BudgetForm, ConfirmDialog],
   templateUrl: './budgets.html',
   styleUrl: './budgets.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +43,6 @@ export class Budgets {
   private readonly categoryService = inject(CategoryService);
   private readonly transactionService = inject(TransactionService);
   private readonly destroyRef = inject(DestroyRef);
-
   private readonly currentDate = new Date();
 
   private readonly currencyFormatter = new Intl.NumberFormat('es-ES', {
@@ -163,7 +163,6 @@ export class Budgets {
       this.isLoadingBudgets.set(false);
       this.isLoadingCategories.set(false);
       this.isLoadingTransactions.set(false);
-
       this.budgetLoadError.set('No se ha podido identificar al usuario actual.');
 
       return;
@@ -233,6 +232,7 @@ export class Budgets {
 
     if (budget) {
       this.updateBudget(budget, formValue.amount);
+
       return;
     }
 
@@ -377,7 +377,6 @@ export class Budgets {
         },
         error: () => {
           this.budgets.set([]);
-
           this.budgetLoadError.set('No se han podido cargar tus presupuestos.');
         },
       });
@@ -399,7 +398,6 @@ export class Budgets {
         },
         error: () => {
           this.categories.set([]);
-
           this.categoryLoadError.set('No se han podido cargar tus categorías.');
         },
       });
@@ -421,7 +419,6 @@ export class Budgets {
         },
         error: () => {
           this.transactions.set([]);
-
           this.transactionLoadError.set('No se han podido cargar tus transacciones.');
         },
       });
@@ -448,6 +445,7 @@ export class Budgets {
 
   private getMonthLabel(month: string): string {
     const [year, monthNumber] = month.split('-').map(Number);
+
     const date = new Date(year, monthNumber - 1, 1);
 
     const label = new Intl.DateTimeFormat('es-ES', {
