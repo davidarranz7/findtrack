@@ -164,7 +164,7 @@ export class FinoraData {
       sessionStorage.setItem('finora-auth-session', JSON.stringify({ id, username, email }));
     }, user);
     await page.goto(path);
-    await expect(page).toHaveURL(new RegExp(`${path.replace('/', '\\/')}(?:[/?#]|$)`));
+    await expect(page).toHaveURL(new URL(path, E2E_APP_URL).href);
   }
 
   async checkProxyIsolated() {

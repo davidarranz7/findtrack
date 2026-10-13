@@ -10,7 +10,13 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { finalize } from 'rxjs';
 
 import { ToastService } from '../../../../shared/ui/toast/toast.service';
@@ -18,6 +24,19 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { Category, PaymentMethod, Transaction, TransactionType } from '../../models';
 import { CategoryService } from '../../services/category.service';
 import { TransactionService } from '../../services/transaction.service';
+
+const notBlankValidator = (control: AbstractControl): ValidationErrors | null =>
+  typeof control.value === 'string' && !control.value.trim() ? { required: true } : null;
+
+const moneyPrecisionValidator = (control: AbstractControl): ValidationErrors | null => {
+  const value = control.value;
+  if (value === null || value === '') return null;
+  return typeof value === 'number' &&
+    Number.isFinite(value) &&
+    Math.abs(value * 100 - Math.round(value * 100)) < 1e-7
+    ? null
+    : { monetaryPrecision: true };
+};
 
 @Component({
   selector: 'app-transaction-form',
@@ -47,8 +66,12 @@ export class TransactionForm {
 
   protected readonly transactionForm = this.formBuilder.nonNullable.group({
     type: ['expense' as TransactionType, Validators.required],
-    amount: [0, [Validators.required, Validators.min(0.01)]],
-    description: ['', [Validators.required, Validators.maxLength(120)]],
+    amount: this.formBuilder.control<number | null>(null, [
+      Validators.required,
+      Validators.min(0.01),
+      moneyPrecisionValidator,
+    ]),
+    description: ['', [Validators.required, Validators.maxLength(120), notBlankValidator]],
     categoryId: ['', Validators.required],
     date: [this.getTodayDate(), Validators.required],
     paymentMethod: ['card' as PaymentMethod, Validators.required],
@@ -104,6 +127,11 @@ export class TransactionForm {
   }
 
   protected onSubmit(): void {
+    // Evita peticiones duplicadas si el usuario pulsa Guardar varias veces.
+    if (this.isSubmitting()) {
+      return;
+    }
+
     if (this.transactionForm.invalid) {
       this.transactionForm.markAllAsTouched();
       return;
@@ -120,12 +148,24 @@ export class TransactionForm {
     const { type, amount, description, categoryId, date, paymentMethod, notes } =
       this.transactionForm.getRawValue();
 
+    if (amount === null || !Number.isFinite(amount) || !description.trim()) {
+      this.transactionForm.markAllAsTouched();
+      return;
+    }
+
+    const selectedCategory = this.categories().find((category) => category.id === categoryId);
+    if (!selectedCategory) {
+      this.submitError.set('Selecciona una categoría válida.');
+      return;
+    }
+
     const payload = {
       userId: currentUser.id,
       type,
       amount,
       description: description.trim(),
       categoryId,
+      categoryNameSnapshot: selectedCategory.name,
       date,
       paymentMethod,
       notes: notes.trim(),

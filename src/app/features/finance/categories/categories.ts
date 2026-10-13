@@ -208,6 +208,7 @@ export class Categories {
             affectedTransactions.map((transaction) =>
               this.transactionService.updateTransaction(transaction.id, {
                 categoryId: null,
+                categoryNameSnapshot: category.name,
               }),
             ),
           );

@@ -51,7 +51,7 @@ export class BudgetAnalysisService {
 
         let status: BudgetStatus = 'safe';
 
-        if (percentage >= 100) {
+        if (percentage > 100) {
           status = 'exceeded';
         } else if (percentage >= 80) {
           status = 'warning';

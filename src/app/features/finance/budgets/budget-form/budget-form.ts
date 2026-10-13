@@ -7,7 +7,13 @@ import {
   input,
   output,
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 
 import { Budget, Category } from '../../models';
 
@@ -15,6 +21,16 @@ export interface BudgetFormValue {
   categoryId: string;
   amount: number;
 }
+
+const moneyPrecisionValidator = (control: AbstractControl): ValidationErrors | null => {
+  const value = control.value;
+  if (value === null || value === '') return null;
+  return typeof value === 'number' &&
+    Number.isFinite(value) &&
+    Math.abs(value * 100 - Math.round(value * 100)) < 1e-7
+    ? null
+    : { monetaryPrecision: true };
+};
 
 @Component({
   selector: 'app-budget-form',
@@ -66,7 +82,11 @@ export class BudgetForm {
 
   protected readonly budgetForm = this.formBuilder.nonNullable.group({
     categoryId: ['', Validators.required],
-    amount: [0, [Validators.required, Validators.min(0.01)]],
+    amount: this.formBuilder.control<number | null>(null, [
+      Validators.required,
+      Validators.min(0.01),
+      moneyPrecisionValidator,
+    ]),
   });
 
   constructor() {
@@ -93,7 +113,7 @@ export class BudgetForm {
   public reset(): void {
     this.budgetForm.reset({
       categoryId: '',
-      amount: 0,
+      amount: null,
     });
 
     this.budgetForm.controls.categoryId.enable({
@@ -122,7 +142,7 @@ export class BudgetForm {
 
     const formValue = this.budgetForm.getRawValue();
 
-    if (!Number.isFinite(formValue.amount) || formValue.amount <= 0) {
+    if (formValue.amount === null || !Number.isFinite(formValue.amount) || formValue.amount <= 0) {
       this.budgetForm.controls.amount.setErrors({
         min: true,
       });

@@ -6,6 +6,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 
@@ -28,7 +29,7 @@ import { TransactionForm } from '../transactions/transaction-form/transaction-fo
 
 @Component({
   selector: 'app-overview',
-  imports: [PageHeader, TransactionForm, ExpenseDistributionChart, IncomeExpenseChart],
+  imports: [PageHeader, RouterLink, TransactionForm, ExpenseDistributionChart, IncomeExpenseChart],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -278,14 +279,14 @@ export class Overview {
     this.closeTransactionForm();
   }
 
-  protected getCategoryName(categoryId: string | null): string {
-    if (!categoryId) {
-      return 'Sin categoría';
+  protected getCategoryName(categoryId: string | null, snapshot?: string | null): string {
+    const category = this.categories().find((item) => item.id === categoryId);
+
+    if (category) {
+      return category.name;
     }
 
-    return (
-      this.categories().find((category) => category.id === categoryId)?.name ?? 'Sin categoría'
-    );
+    return snapshot?.trim() ? `${snapshot} (eliminada)` : 'Sin categoría';
   }
 
   protected formatTransactionAmount(transaction: Transaction): string {

@@ -46,7 +46,7 @@ for (const count of [1, 2, 5, 15]) {
     await expect(confirmation).toContainText(
       `${count} ${count === 1 ? 'transacción asociada' : 'transacciones asociadas'}`,
     );
-    await expect(confirmation).toContainText('Sin categoría');
+    await expect(confirmation).toContainText(`${category.name} (eliminada)`);
     await confirmation.getByRole('button', { name: 'Eliminar categoría' }).click();
     await expect(categoryCard(page, category.name)).toHaveCount(0);
     const actual = await data.list<TestTransaction>('transactions', user.id);
@@ -55,6 +55,7 @@ for (const count of [1, 2, 5, 15]) {
       expect(actual.find((entry) => entry.id === original.id)).toEqual({
         ...original,
         categoryId: null,
+        categoryNameSnapshot: category.name,
       });
     }
     expect(await data.list<TestCategory>('categories', user.id)).toHaveLength(0);
@@ -62,7 +63,7 @@ for (const count of [1, 2, 5, 15]) {
       await page.goto(`/transactions?month=${original.date.slice(0, 7)}`);
       const row = transactionRow(page, original.description);
       await expect(row).toBeVisible();
-      await expect(row).toContainText('Sin categoría');
+      await expect(row).toContainText(`${category.name} (eliminada)`);
     }
   });
 }
@@ -91,7 +92,9 @@ for (const offset of [-18, -12, -6, -1, 0]) {
     expect(after.find((entry) => entry.id === old.id)?.categoryId).toBeNull();
     expect(after.find((entry) => entry.id === other.id)?.categoryId).toBe(retained.id);
     await page.goto(`/transactions?month=${monthShift(offset)}`);
-    await expect(transactionRow(page, 'Movimiento antiguo')).toContainText('Sin categoría');
+    await expect(transactionRow(page, 'Movimiento antiguo')).toContainText(
+      `${erased.name} (eliminada)`,
+    );
     await expect(transactionRow(page, 'Movimiento conservado')).toContainText(retained.name);
   });
 }
@@ -160,10 +163,6 @@ test('contrato futuro: conservar el nombre histórico de una categoría eliminad
   page,
   data,
 }) => {
-  test.fail(
-    true,
-    'Funcionalidad solicitada pendiente: Transaction solo guarda categoryId; al borrar una categoría pasa a null, sin snapshot del nombre histórico.',
-  );
   const user = await data.createUser();
   const category = await data.category(user, { name: 'Nombre histórico de 2024' });
   const old = await data.transaction(user, {

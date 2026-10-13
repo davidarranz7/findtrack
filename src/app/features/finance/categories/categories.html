@@ -303,11 +303,11 @@
         <i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>
 
         @if (affectedTransactions().length === 1) {
-          Esta transacción no se eliminará. Pasará a
-          <strong>Sin categoría</strong>.
+          Esta transacción no se eliminará. Se conservará su categoría histórica
+          <strong>{{ category.name }} (eliminada)</strong>.
         } @else {
-          Las {{ affectedTransactions().length }} transacciones asociadas no se eliminarán. Pasarán
-          a <strong>Sin categoría</strong>.
+          Las {{ affectedTransactions().length }} transacciones asociadas no se eliminarán.
+          Mostrarán <strong>{{ category.name }} (eliminada)</strong> en su historial.
         }
       </div>
     } @else {

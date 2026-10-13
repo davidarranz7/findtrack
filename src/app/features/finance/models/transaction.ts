@@ -9,6 +9,8 @@ export interface Transaction {
   amount: number;
   description: string;
   categoryId: string | null;
+  /** Conserva el nombre histórico cuando se elimina una categoría. */
+  categoryNameSnapshot?: string | null;
   date: string;
   paymentMethod: PaymentMethod;
   notes: string;

@@ -387,14 +387,17 @@
       }
     </article>
 
-    <article class="overview-card">
+    <article class="overview-card overview-card-transactions">
       <header class="card-heading">
         <div>
           <h2 class="card-title">Últimas Transacciones</h2>
           <p class="card-subtitle mb-0">Movimientos registrados recientemente</p>
         </div>
 
-        <button type="button" class="view-all-button" disabled>Ver todas</button>
+        <a routerLink="/transactions" class="view-all-button">
+          Ver todas
+          <i class="bi bi-arrow-right" aria-hidden="true"></i>
+        </a>
       </header>
 
       @if (isLoading()) {
@@ -436,7 +439,9 @@
                 <div class="transaction-meta">
                   <span>{{ formatTransactionDate(transaction.date) }}</span>
                   <span aria-hidden="true"> · </span>
-                  <span>{{ getCategoryName(transaction.categoryId) }}</span>
+                  <span>{{
+                    getCategoryName(transaction.categoryId, transaction.categoryNameSnapshot)
+                  }}</span>
                 </div>
               </div>
 

@@ -2,6 +2,10 @@
   <canvas
     #chartCanvas
     role="img"
-    aria-label="Evolución acumulada del balance durante el periodo seleccionado"
+    [attr.aria-label]="
+      series().length > 0
+        ? 'Evolución del balance total y por categorías seleccionadas'
+        : 'Evolución acumulada del balance durante el periodo seleccionado'
+    "
   ></canvas>
 </div>

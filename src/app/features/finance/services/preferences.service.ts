@@ -1,11 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { finalize, map, Observable, of, shareReplay, switchMap } from 'rxjs';
+import {
+  defer,
+  finalize,
+  firstValueFrom,
+  from,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  switchMap,
+} from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { UserPreferences } from '../settings/user-preferences';
 
 type CreateUserPreferencesPayload = Omit<UserPreferences, 'id'>;
+
 type UpdateUserPreferencesPayload = Partial<Omit<UserPreferences, 'id' | 'userId'>>;
 
 @Injectable({
@@ -20,9 +31,7 @@ export class PreferencesService {
   getPreferences(userId: string): Observable<UserPreferences | null> {
     return this.http
       .get<UserPreferences[]>(this.apiUrl, {
-        params: {
-          userId,
-        },
+        params: { userId },
       })
       .pipe(map((preferences) => preferences.at(0) ?? null));
   }
@@ -34,17 +43,13 @@ export class PreferencesService {
       return pendingRequest;
     }
 
-    const request$ = this.getPreferences(userId).pipe(
-      switchMap((preferences) => {
-        if (preferences) {
-          return of(preferences);
-        }
+    const request$: Observable<UserPreferences> = defer(() => {
+      if (typeof navigator !== 'undefined' && 'locks' in navigator) {
+        return from(this.getOrCreateWithLock(userId));
+      }
 
-        return this.createPreferences({
-          userId,
-          ...this.getDefaultPreferences(),
-        });
-      }),
+      return this.fetchOrCreatePreferences(userId);
+    }).pipe(
       finalize(() => {
         this.pendingPreferences.delete(userId);
       }),
@@ -57,6 +62,28 @@ export class PreferencesService {
     this.pendingPreferences.set(userId, request$);
 
     return request$;
+  }
+
+  private async getOrCreateWithLock(userId: string): Promise<UserPreferences> {
+    return navigator.locks.request(
+      `finora:preferences:${userId}`,
+      async (): Promise<UserPreferences> => {
+        return firstValueFrom(this.fetchOrCreatePreferences(userId));
+      },
+    );
+  }
+
+  private fetchOrCreatePreferences(userId: string): Observable<UserPreferences> {
+    return this.getPreferences(userId).pipe(
+      switchMap((preferences) =>
+        preferences
+          ? of(preferences)
+          : this.createPreferences({
+              userId,
+              ...this.getDefaultPreferences(),
+            }),
+      ),
+    );
   }
 
   updatePreferences(

@@ -58,7 +58,7 @@ describe('BudgetAnalysisService', () => {
     expect(budget.percentage).toBe(80);
   });
 
-  it('should mark a budget as exceeded at 100 percent', () => {
+  it('should mark a budget as warning at 100 percent', () => {
     const transactions: Transaction[] = [
       {
         id: 'transaction-1',
@@ -75,7 +75,7 @@ describe('BudgetAnalysisService', () => {
 
     const [budget] = service.getBudgetProgress(budgets, transactions, categories, '2026-10');
 
-    expect(budget.status).toBe('exceeded');
+    expect(budget.status).toBe('warning');
 
     expect(budget.percentage).toBe(100);
   });

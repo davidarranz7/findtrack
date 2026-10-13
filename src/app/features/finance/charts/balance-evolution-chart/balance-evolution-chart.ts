@@ -13,6 +13,7 @@ import {
 import {
   CategoryScale,
   Chart,
+  type ChartDataset,
   Filler,
   LineController,
   LineElement,
@@ -39,6 +40,13 @@ export interface BalanceEvolutionChartItem {
   balance: number;
 }
 
+export interface BalanceEvolutionChartSeries {
+  id: string;
+  label: string;
+  color: string;
+  balances: number[];
+}
+
 @Component({
   selector: 'app-balance-evolution-chart',
   imports: [],
@@ -61,6 +69,7 @@ export class BalanceEvolutionChart {
   private chart: Chart<'line', number[], string> | null = null;
 
   readonly items = input.required<BalanceEvolutionChartItem[]>();
+  readonly series = input<BalanceEvolutionChartSeries[]>([]);
 
   constructor() {
     effect(() => {
@@ -70,6 +79,7 @@ export class BalanceEvolutionChart {
 
       const canvas = this.chartCanvas()?.nativeElement;
       const items = this.items();
+      const series = this.series();
       const isDark = this.themeService.isDark();
 
       if (!canvas || items.length === 0) {
@@ -77,7 +87,7 @@ export class BalanceEvolutionChart {
         return;
       }
 
-      this.renderChart(canvas, items, isDark);
+      this.renderChart(canvas, items, series, isDark);
     });
 
     this.destroyRef.onDestroy(() => {
@@ -88,32 +98,49 @@ export class BalanceEvolutionChart {
   private renderChart(
     canvas: HTMLCanvasElement,
     items: BalanceEvolutionChartItem[],
+    series: BalanceEvolutionChartSeries[],
     isDark: boolean,
   ): void {
     this.destroyChart();
 
     const theme = getChartTheme(canvas, isDark);
 
-    this.chart = new Chart(canvas, {
+    const datasets: ChartDataset<'line', number[]>[] = [
+      {
+        label: 'Balance acumulado total',
+        data: items.map((item) => item.balance),
+        borderColor: theme.primary,
+        backgroundColor: theme.areaFill,
+        pointBackgroundColor: theme.surface,
+        pointBorderColor: theme.primary,
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: series.length > 0 ? 3 : 2,
+        fill: series.length === 0,
+        tension: 0.35,
+      },
+      ...series.map((item): ChartDataset<'line', number[]> => ({
+        label: item.label,
+        data: item.balances,
+        borderColor: item.color,
+        backgroundColor: item.color,
+        pointBackgroundColor: theme.surface,
+        pointBorderColor: item.color,
+        pointBorderWidth: 2,
+        pointRadius: 3,
+        pointHoverRadius: 6,
+        borderWidth: 2,
+        fill: false,
+        tension: 0.35,
+      })),
+    ];
+
+    this.chart = new Chart<'line', number[], string>(canvas, {
       type: 'line',
       data: {
         labels: items.map((item) => item.label),
-        datasets: [
-          {
-            label: 'Balance acumulado',
-            data: items.map((item) => item.balance),
-            borderColor: theme.primary,
-            backgroundColor: theme.areaFill,
-            pointBackgroundColor: theme.surface,
-            pointBorderColor: theme.primary,
-            pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            borderWidth: 2,
-            fill: true,
-            tension: 0.35,
-          },
-        ],
+        datasets,
       },
       options: {
         responsive: true,
@@ -157,7 +184,8 @@ export class BalanceEvolutionChart {
           tooltip: {
             ...getChartTooltipStyle(theme),
             callbacks: {
-              label: (context) => `Balance: ${this.currencyFormatter.format(Number(context.raw))}`,
+              label: (context) =>
+                `${context.dataset.label ?? 'Balance'}: ${this.currencyFormatter.format(Number(context.raw))}`,
             },
           },
         },

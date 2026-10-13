@@ -21,9 +21,10 @@ import { catchError, EMPTY, finalize, forkJoin, switchMap, tap, timer } from 'rx
 import { AppBrand } from '../../../shared/app-brand/app-brand';
 import { AuthBackground } from '../auth-background/auth-background';
 import { AuthService } from '../services/auth.service';
-import { passwordStrengthValidator } from '../validators/password.validator';
 
 type AvailabilityStatus = 'idle' | 'checking' | 'available' | 'unavailable' | 'error';
+
+const USERNAME_PATTERN = /^[a-z0-9._]+$/;
 
 const passwordsMatchValidator: ValidatorFn = (
   control: AbstractControl,
@@ -54,7 +55,6 @@ export class Register {
   protected readonly submitError = signal<string | null>(null);
 
   protected readonly usernameAvailability = signal<AvailabilityStatus>('idle');
-
   protected readonly emailAvailability = signal<AvailabilityStatus>('idle');
 
   protected readonly isCheckingAvailability = computed(
@@ -63,9 +63,12 @@ export class Register {
 
   protected readonly registerForm = this.formBuilder.nonNullable.group(
     {
-      username: ['', [Validators.required, Validators.minLength(4)]],
+      username: [
+        '',
+        [Validators.required, Validators.minLength(4), Validators.pattern(USERNAME_PATTERN)],
+      ],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8), passwordStrengthValidator]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
     },
     {
@@ -152,12 +155,12 @@ export class Register {
   }
 
   protected onSubmit(): void {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
+    if (this.isSubmitting() || this.isCheckingAvailability()) {
       return;
     }
 
-    if (this.isCheckingAvailability()) {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
       return;
     }
 
@@ -174,7 +177,10 @@ export class Register {
       }),
       minimumDelay: timer(1800),
     })
-      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .pipe(
+        finalize(() => this.isSubmitting.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
         next: () => {
           void this.router.navigate(['/login']);
@@ -219,19 +225,19 @@ export class Register {
           this.removeControlError(usernameControl, 'usernameTaken');
         }),
         switchMap((username) => {
-          const normalizedUsername = username.trim();
-
           if (
-            normalizedUsername.length < 4 ||
+            username.length < 4 ||
+            !USERNAME_PATTERN.test(username) ||
             usernameControl.hasError('required') ||
-            usernameControl.hasError('minlength')
+            usernameControl.hasError('minlength') ||
+            usernameControl.hasError('pattern')
           ) {
             return EMPTY;
           }
 
           return timer(1000).pipe(
             tap(() => this.usernameAvailability.set('checking')),
-            switchMap(() => this.authService.checkUsernameAvailability(normalizedUsername)),
+            switchMap(() => this.authService.checkUsernameAvailability(username)),
             catchError(() => {
               this.usernameAvailability.set('error');
               return EMPTY;

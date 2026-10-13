@@ -103,7 +103,7 @@ test('eliminar categoría sin movimientos la borra', async ({ page, data }) => {
   expect(await data.list<TestCategory>('categories', user.id)).toHaveLength(0);
 });
 
-test('@smoke eliminar categoría en uso conserva movimientos como Sin categoría', async ({
+test('@smoke eliminar categoría en uso conserva movimientos y su nombre histórico', async ({
   page,
   data,
 }) => {
@@ -124,7 +124,7 @@ test('@smoke eliminar categoría en uso conserva movimientos como Sin categoría
     .click();
   const confirm = page.getByRole('dialog', { name: 'Eliminar categoría' });
   await expect(confirm).toContainText('2 transacciones asociadas');
-  await expect(confirm).toContainText('Sin categoría');
+  await expect(confirm).toContainText(`${item.name} (eliminada)`);
   await confirm.getByRole('button', { name: 'Eliminar categoría' }).click();
   await expect(categoryCard(page, item.name)).toHaveCount(0);
   const movements = await data.list<TestTransaction>('transactions', user.id);
@@ -133,7 +133,7 @@ test('@smoke eliminar categoría en uso conserva movimientos como Sin categoría
   expect(movements.every((t) => t.categoryId === null)).toBeTruthy();
   await page.goto('/transactions');
   await expect(
-    page.locator('.transaction-category').filter({ hasText: 'Sin categoría' }),
+    page.locator('.transaction-category').filter({ hasText: `${item.name} (eliminada)` }),
   ).toHaveCount(2);
 });
 

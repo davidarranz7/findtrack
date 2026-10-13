@@ -18,7 +18,7 @@ test('no permite guardar transacción vacía', async ({ page, data }) => {
   const { user } = await setupTransactions(data, page);
   const dialog = await openTransactionForm(page);
   await dialog.getByRole('button', { name: 'Guardar transacción' }).click();
-  await expect(dialog.getByText('Debe ser mayor que 0 €')).toBeVisible();
+  await expect(dialog.getByText('Introduce un importe.')).toBeVisible();
   await expect(dialog.getByText('Introduce un concepto para la transacción.')).toBeVisible();
   await expect(dialog.getByText('Selecciona una categoría.')).toBeVisible();
   expect(await data.list<TestTransaction>('transactions', user.id)).toHaveLength(0);

@@ -8,6 +8,12 @@
   min-width: 0;
 }
 
+/* Separa el encabezado del resumen, como en Presupuestos. */
+.categories-page > app-page-header {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
 .categories-page-header-actions {
   display: flex;
   flex-wrap: wrap;

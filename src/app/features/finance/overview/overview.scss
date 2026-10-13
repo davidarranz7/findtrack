@@ -304,12 +304,29 @@
 }
 
 .view-all-button {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 0.35rem;
   padding: 0;
   border: 0;
   background: transparent;
   color: var(--app-primary);
   font-size: 0.75rem;
   font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--app-primary);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--app-primary);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
 }
 
 .transactions-loading {
@@ -404,6 +421,21 @@
   margin-top: 0.45rem;
   font-size: 0.7rem;
   color: var(--app-text-secondary);
+}
+
+// Últimas transacciones: ocupar el espacio disponible.
+.overview-card-transactions {
+  display: flex;
+  flex-direction: column;
+
+  .recent-transactions {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .recent-transaction {
+    flex: 1;
+  }
 }
 
 .recent-transactions {
@@ -524,6 +556,10 @@
 
   .details-grid {
     grid-template-columns: 1fr;
+  }
+
+  .overview-card-transactions .recent-transaction {
+    flex: initial;
   }
 }
 

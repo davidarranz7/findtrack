@@ -364,7 +364,7 @@
 
                 <td>
                   <span class="transaction-category">
-                    {{ getCategoryName(transaction.categoryId) }}
+                    {{ getCategoryName(transaction.categoryId, transaction.categoryNameSnapshot) }}
                   </span>
                 </td>
 
@@ -543,7 +543,7 @@
         <span class="delete-transaction-details">
           {{ formatTransactionDate(transaction.date) }}
           ·
-          {{ getCategoryName(transaction.categoryId) }}
+          {{ getCategoryName(transaction.categoryId, transaction.categoryNameSnapshot) }}
         </span>
       </div>
 

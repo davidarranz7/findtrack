@@ -38,7 +38,7 @@ test('impide presupuesto sin categoría ni importe', async ({ page, data }) => {
   const dialog = await newBudget(page);
   await dialog.getByRole('button', { name: 'Crear presupuesto' }).click();
   await expect(dialog.getByText('Selecciona una categoría.')).toBeVisible();
-  await expect(dialog.getByText('El importe debe ser mayor que 0 €.')).toBeVisible();
+  await expect(dialog.getByText('Introduce un importe.')).toBeVisible();
   expect(await data.list<TestBudget>('budgets', user.id)).toHaveLength(0);
 });
 

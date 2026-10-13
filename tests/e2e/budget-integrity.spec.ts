@@ -7,7 +7,7 @@ for (const [name, spent, expectedClass] of [
   ['79,99 por ciento', 79.99, 'budget-card'],
   ['80 por ciento', 80, 'budget-card-warning'],
   ['99,99 por ciento', 99.99, 'budget-card-warning'],
-  ['100 por ciento', 100, 'budget-card-exceeded'],
+  ['100 por ciento', 100, 'budget-card-warning'],
   ['100,01 por ciento', 100.01, 'budget-card-exceeded'],
   ['250 por ciento', 250, 'budget-card-exceeded'],
 ] as const) {

@@ -158,7 +158,10 @@ export class Transactions {
           return true;
         }
 
-        const categoryName = this.getCategoryName(transaction.categoryId).toLowerCase();
+        const categoryName = this.getCategoryName(
+          transaction.categoryId,
+          transaction.categoryNameSnapshot,
+        ).toLowerCase();
 
         return (
           transaction.description.toLowerCase().includes(search) ||
@@ -392,14 +395,10 @@ export class Transactions {
     this.currentPage.update((page) => page + 1);
   }
 
-  protected getCategoryName(categoryId: string | null): string {
-    if (!categoryId) {
-      return 'Sin categoría';
-    }
-
-    return (
-      this.categories().find((category) => category.id === categoryId)?.name ?? 'Sin categoría'
-    );
+  protected getCategoryName(categoryId: string | null, snapshot?: string | null): string {
+    const category = this.categories().find((item) => item.id === categoryId);
+    if (category) return category.name;
+    return snapshot?.trim() ? `${snapshot} (eliminada)` : 'Sin categoría';
   }
 
   protected getPaymentMethodLabel(paymentMethod: PaymentMethod): string {

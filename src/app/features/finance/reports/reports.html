@@ -115,6 +115,11 @@
         <label for="report-category">Categoría</label>
 
         <select id="report-category" class="form-select" (change)="changeCategory($event)">
+          @if (selectedCategoryId() === 'multiple') {
+            <option value="multiple" selected disabled>
+              {{ selectedCategoryIds().length }} categorías seleccionadas
+            </option>
+          }
           <option value="all" [selected]="selectedCategoryId() === 'all'">
             Todas las categorías
           </option>
@@ -428,8 +433,20 @@
         <header class="report-card-header">
           <div>
             <span class="report-card-eyebrow">BALANCE</span>
-            <h2>Evolución del balance</h2>
-            <p>Observa cómo se acumula la diferencia entre ingresos y gastos.</p>
+            <h2>
+              {{
+                balanceCategorySeries().length > 0
+                  ? 'Evolución del balance por categoría'
+                  : 'Evolución del balance'
+              }}
+            </h2>
+            <p>
+              @if (balanceCategorySeries().length > 0) {
+                Compara el balance acumulado total y el de cada categoría seleccionada.
+              } @else {
+                Observa cómo se acumula la diferencia entre ingresos y gastos.
+              }
+            </p>
           </div>
 
           <div
@@ -444,7 +461,10 @@
         </header>
 
         <div class="report-balance-chart">
-          <app-balance-evolution-chart [items]="balanceEvolution()" />
+          <app-balance-evolution-chart
+            [items]="balanceEvolution()"
+            [series]="balanceCategorySeries()"
+          />
         </div>
       </section>
 
@@ -456,6 +476,16 @@
               <h2>Principales categorías de gasto</h2>
               <p>Las categorías que más peso tienen en tus gastos.</p>
             </div>
+            @if (selectedCategoryIds().length > 0) {
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm top-categories-clear no-export"
+                (click)="clearRankingCategorySelection()"
+              >
+                <i class="bi bi-x-circle" aria-hidden="true"></i>
+                Limpiar selección
+              </button>
+            }
           </header>
 
           @if (topExpenseCategories().length > 0) {
@@ -465,7 +495,10 @@
                 track category.categoryId;
                 let position = $index
               ) {
-                <div class="top-category">
+                <div
+                  class="top-category"
+                  [class.top-category-selected]="isCategorySelected(category.categoryId)"
+                >
                   <span class="top-category-position">
                     {{ position + 1 }}
                   </span>
@@ -500,9 +533,15 @@
                       <button
                         type="button"
                         class="top-category-filter no-export"
-                        (click)="filterByCategory(category.categoryId)"
+                        [attr.aria-pressed]="isCategorySelected(category.categoryId)"
+                        (click)="toggleRankingCategory(category.categoryId)"
                       >
-                        Filtrar
+                        @if (isCategorySelected(category.categoryId)) {
+                          <i class="bi bi-check-circle" aria-hidden="true"></i>
+                          Quitar filtro
+                        } @else {
+                          Filtrar
+                        }
                       </button>
                     </div>
                   </div>
@@ -561,7 +600,7 @@
               <div>
                 <span>Mayor categoría de gasto</span>
                 <strong>
-                  {{ topExpenseCategory()?.categoryName ?? 'Sin datos' }}
+                  {{ topExpenseCategory().categoryName }}
                 </strong>
               </div>
             </div>

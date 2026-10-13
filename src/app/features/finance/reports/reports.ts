@@ -19,6 +19,7 @@ import { AuthService } from '../../auth/services/auth.service';
 import {
   BalanceEvolutionChart,
   type BalanceEvolutionChartItem,
+  type BalanceEvolutionChartSeries,
 } from '../charts/balance-evolution-chart/balance-evolution-chart';
 import {
   ExpenseDistributionChart,
@@ -85,7 +86,12 @@ export class Reports {
 
   protected readonly selectedPeriod = signal<ReportPeriod>(6);
   protected readonly selectedYear = signal(this.currentDate.getFullYear());
-  protected readonly selectedCategoryId = signal('all');
+  // Lista vacía significa que se incluyen todas las categorías.
+  protected readonly selectedCategoryIds = signal<string[]>([]);
+  protected readonly selectedCategoryId = computed(() => {
+    const selected = this.selectedCategoryIds();
+    return selected.length === 0 ? 'all' : selected.length === 1 ? selected[0] : 'multiple';
+  });
   protected readonly selectedPaymentMethod = signal<PaymentMethodFilter>('all');
   protected readonly comparisonEnabled = signal(false);
 
@@ -205,7 +211,7 @@ export class Reports {
   protected readonly activeFilterCount = computed(() => {
     let count = 0;
 
-    if (this.selectedCategoryId() !== 'all') {
+    if (this.selectedCategoryIds().length > 0) {
       count++;
     }
 
@@ -217,19 +223,23 @@ export class Reports {
   });
 
   protected readonly selectedCategoryLabel = computed(() => {
-    const categoryId = this.selectedCategoryId();
+    const selected = this.selectedCategoryIds();
 
-    if (categoryId === 'all') {
+    if (selected.length === 0) {
       return 'Todas las categorías';
     }
 
-    if (categoryId === 'uncategorized') {
-      return 'Sin categoría';
-    }
+    return selected
+      .map((categoryId) => {
+        if (categoryId === 'uncategorized') {
+          return 'Sin categoría';
+        }
 
-    return (
-      this.categories().find((category) => category.id === categoryId)?.name ?? 'Sin categoría'
-    );
+        return (
+          this.categories().find((category) => category.id === categoryId)?.name ?? 'Sin categoría'
+        );
+      })
+      .join(', ');
   });
 
   protected readonly selectedPaymentMethodLabel = computed(
@@ -332,7 +342,7 @@ export class Reports {
       return '—';
     }
 
-    return `${savingsRate.toFixed(1)} %`;
+    return `${new Intl.NumberFormat('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(savingsRate)} %`;
   });
 
   protected readonly averageMonthlyExpenses = computed(() => {
@@ -400,43 +410,23 @@ export class Reports {
     return highest.expense > 0 ? highest : null;
   });
 
-  protected readonly expenseDistribution = computed<ExpenseDistributionItem[]>(() => {
-    const expenses = this.filteredTransactions().filter(
-      (transaction) => transaction.type === 'expense',
-    );
+  // Los gráficos obedecen a todos los filtros activos.
+  protected readonly expenseDistribution = computed<ExpenseDistributionItem[]>(() =>
+    this.getExpenseDistribution(this.filteredTransactions()),
+  );
 
-    const totalExpenses = this.totalExpenses();
+  // El ranking debe seguir visible cuando se filtra una categoría, para poder añadir otra.
+  // Respeta el periodo y el método de pago, pero no la selección de categorías.
+  private readonly rankingExpenseDistribution = computed<ExpenseDistributionItem[]>(() =>
+    this.getExpenseDistribution(this.applyPaymentMethodFilter(this.currentPeriodTransactions())),
+  );
 
-    if (expenses.length === 0 || totalExpenses === 0) {
-      return [];
-    }
+  protected readonly topExpenseCategories = computed(() =>
+    this.rankingExpenseDistribution().slice(0, 5),
+  );
 
-    const amountsByCategory = new Map<string | null, number>();
-
-    for (const transaction of expenses) {
-      const currentAmount = amountsByCategory.get(transaction.categoryId) ?? 0;
-      amountsByCategory.set(transaction.categoryId, currentAmount + transaction.amount);
-    }
-
-    return Array.from(amountsByCategory.entries(), ([categoryId, amount]) => {
-      const category =
-        categoryId === null
-          ? undefined
-          : this.categories().find((currentCategory) => currentCategory.id === categoryId);
-
-      return {
-        categoryId: categoryId ?? 'uncategorized',
-        categoryName: category?.name ?? 'Sin categoría',
-        amount,
-        percentage: (amount / totalExpenses) * 100,
-        color: category?.color ?? '#6c757d',
-      };
-    }).sort((firstCategory, secondCategory) => secondCategory.amount - firstCategory.amount);
-  });
-
-  protected readonly topExpenseCategories = computed(() => this.expenseDistribution().slice(0, 5));
-
-  protected readonly topExpenseCategory = computed(() => this.topExpenseCategories()[0] ?? null);
+  // El resumen del informe sí debe reflejar la categoría más importante de la selección.
+  protected readonly topExpenseCategory = computed(() => this.expenseDistribution()[0] ?? null);
 
   protected readonly balanceEvolution = computed<BalanceEvolutionChartItem[]>(() => {
     let accumulatedBalance = 0;
@@ -478,6 +468,51 @@ export class Reports {
     });
   });
 
+  // Mostrar el balance total por sí solo cuando no hay comparación de categorías.
+  // Con dos o más categorías, cada serie mantiene su propio acumulado mensual.
+  protected readonly balanceCategorySeries = computed<BalanceEvolutionChartSeries[]>(() => {
+    const selectedIds = this.selectedCategoryIds();
+
+    if (selectedIds.length < 2) {
+      return [];
+    }
+
+    const months = this.reportMonths();
+    const transactions = this.filteredTransactions();
+
+    return selectedIds.map((categoryId) => {
+      const category = this.categories().find((item) => item.id === categoryId);
+      const categoryTransactions = transactions.filter(
+        (transaction) => (transaction.categoryId ?? 'uncategorized') === categoryId,
+      );
+      const totalsByMonth = new Map<string, number>();
+
+      for (const transaction of categoryTransactions) {
+        const monthKey = transaction.date.slice(0, 7);
+        const signedAmount =
+          transaction.type === 'income' ? transaction.amount : -transaction.amount;
+        totalsByMonth.set(monthKey, (totalsByMonth.get(monthKey) ?? 0) + signedAmount);
+      }
+
+      let accumulatedBalance = 0;
+      const balances = months.map((month) => {
+        accumulatedBalance += totalsByMonth.get(month.key) ?? 0;
+        return accumulatedBalance;
+      });
+
+      return {
+        id: categoryId,
+        label:
+          categoryId === 'uncategorized'
+            ? 'Sin categoría'
+            : (category?.name ??
+              this.getCategoryName(categoryId, categoryTransactions[0]?.categoryNameSnapshot)),
+        color: category?.color ?? '#6c757d',
+        balances,
+      };
+    });
+  });
+
   protected readonly hasReportData = computed(() => this.filteredTransactions().length > 0);
 
   protected readonly reportRangeLabel = computed(() => this.formatRangeLabel(this.reportMonths()));
@@ -509,7 +544,12 @@ export class Reports {
   }
 
   protected changeCategory(event: Event): void {
-    this.selectedCategoryId.set((event.target as HTMLSelectElement).value);
+    const categoryId = (event.target as HTMLSelectElement).value;
+
+    // El selector superior sigue siendo de selección única. El ranking admite varias.
+    if (categoryId !== 'multiple') {
+      this.selectedCategoryIds.set(categoryId === 'all' ? [] : [categoryId]);
+    }
   }
 
   protected changePaymentMethod(event: Event): void {
@@ -532,12 +572,24 @@ export class Reports {
   }
 
   protected clearAnalysisFilters(): void {
-    this.selectedCategoryId.set('all');
+    this.selectedCategoryIds.set([]);
     this.selectedPaymentMethod.set('all');
   }
 
-  protected filterByCategory(categoryId: string): void {
-    this.selectedCategoryId.set(categoryId);
+  protected clearRankingCategorySelection(): void {
+    this.selectedCategoryIds.set([]);
+  }
+
+  protected isCategorySelected(categoryId: string): boolean {
+    return this.selectedCategoryIds().includes(categoryId);
+  }
+
+  protected toggleRankingCategory(categoryId: string): void {
+    this.selectedCategoryIds.update((selected) =>
+      selected.includes(categoryId)
+        ? selected.filter((id) => id !== categoryId)
+        : [...selected, categoryId],
+    );
   }
 
   protected formatCurrency(amount: number): string {
@@ -596,7 +648,7 @@ export class Reports {
         transaction.date,
         transaction.description,
         transaction.type === 'income' ? 'Ingreso' : 'Gasto',
-        this.getCategoryName(transaction.categoryId),
+        this.getCategoryName(transaction.categoryId, transaction.categoryNameSnapshot),
         this.getPaymentMethodLabel(transaction.paymentMethod),
         transaction.amount.toFixed(2).replace('.', ','),
         transaction.notes ?? '',
@@ -770,20 +822,51 @@ export class Reports {
   }
 
   private applyReportFilters(transactions: Transaction[]): Transaction[] {
-    const categoryId = this.selectedCategoryId();
+    const selectedIds = this.selectedCategoryIds();
+
+    return this.applyPaymentMethodFilter(transactions).filter(
+      (transaction) =>
+        selectedIds.length === 0 || selectedIds.includes(transaction.categoryId ?? 'uncategorized'),
+    );
+  }
+
+  private applyPaymentMethodFilter(transactions: Transaction[]): Transaction[] {
     const paymentMethod = this.selectedPaymentMethod();
 
-    return transactions.filter((transaction) => {
-      const matchesCategory =
-        categoryId === 'all' ||
-        (categoryId === 'uncategorized' && transaction.categoryId === null) ||
-        transaction.categoryId === categoryId;
+    return paymentMethod === 'all'
+      ? transactions
+      : transactions.filter((transaction) => transaction.paymentMethod === paymentMethod);
+  }
 
-      const matchesPaymentMethod =
-        paymentMethod === 'all' || transaction.paymentMethod === paymentMethod;
+  private getExpenseDistribution(transactions: Transaction[]): ExpenseDistributionItem[] {
+    const expenses = transactions.filter((transaction) => transaction.type === 'expense');
+    const totalExpenses = this.getTransactionTotal(expenses, 'expense');
 
-      return matchesCategory && matchesPaymentMethod;
-    });
+    if (totalExpenses === 0) {
+      return [];
+    }
+
+    const amountsByCategory = new Map<string | null, number>();
+
+    for (const transaction of expenses) {
+      const currentAmount = amountsByCategory.get(transaction.categoryId) ?? 0;
+      amountsByCategory.set(transaction.categoryId, currentAmount + transaction.amount);
+    }
+
+    return Array.from(amountsByCategory.entries(), ([categoryId, amount]) => {
+      const category =
+        categoryId === null
+          ? undefined
+          : this.categories().find((currentCategory) => currentCategory.id === categoryId);
+
+      return {
+        categoryId: categoryId ?? 'uncategorized',
+        categoryName: category?.name ?? 'Sin categoría',
+        amount,
+        percentage: (amount / totalExpenses) * 100,
+        color: category?.color ?? '#6c757d',
+      };
+    }).sort((firstCategory, secondCategory) => secondCategory.amount - firstCategory.amount);
   }
 
   private getTransactionTotal(transactions: Transaction[], type: Transaction['type']): number {
@@ -872,14 +955,10 @@ export class Reports {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
   }
 
-  private getCategoryName(categoryId: string | null): string {
-    if (!categoryId) {
-      return 'Sin categoría';
-    }
-
-    return (
-      this.categories().find((category) => category.id === categoryId)?.name ?? 'Sin categoría'
-    );
+  private getCategoryName(categoryId: string | null, snapshot?: string | null): string {
+    const category = this.categories().find((item) => item.id === categoryId);
+    if (category) return category.name;
+    return snapshot?.trim() ? `${snapshot} (eliminada)` : 'Sin categoría';
   }
 
   private getPaymentMethodLabel(paymentMethod: Transaction['paymentMethod']): string {

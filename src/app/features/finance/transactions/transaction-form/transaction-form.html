@@ -67,6 +67,17 @@
         <label for="amount" class="amount-label"> Importe (€) * </label>
 
         @if (
+          transactionForm.controls.amount.touched &&
+          transactionForm.controls.amount.hasError('required')
+        ) {
+          <span class="amount-error" role="alert">
+            <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+
+            Introduce un importe.
+          </span>
+        }
+
+        @if (
           transactionForm.controls.amount.touched && transactionForm.controls.amount.hasError('min')
         ) {
           <span class="amount-error">
@@ -95,6 +106,14 @@
 
         <span class="amount-currency"> € </span>
       </div>
+      @if (
+        transactionForm.controls.amount.touched &&
+        transactionForm.controls.amount.hasError('monetaryPrecision')
+      ) {
+        <small class="field-error"
+          >Introduce un importe válido con dos decimales como máximo.</small
+        >
+      }
     </div>
 
     <div class="form-field">

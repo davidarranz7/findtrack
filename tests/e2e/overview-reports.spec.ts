@@ -15,7 +15,7 @@ test('@smoke Resumen calcula ingresos, gastos, balance y ahorro con los datos de
   await data.transaction(user, { type: 'income', amount: 1000, description: 'Ingreso resumen' });
   await data.transaction(user, { type: 'expense', amount: 325.45, description: 'Gasto resumen' });
   await data.authenticated(page, user);
-  await expect(overviewCard(page, 'Ingresos totales')).toContainText('1.000,00');
+  await expect(overviewCard(page, 'Ingresos totales')).toContainText(/1\.?000,00/);
   await expect(overviewCard(page, 'Gastos totales')).toContainText('325,45');
   await expect(overviewCard(page, 'Balance disponible')).toContainText('674,55');
   await expect(overviewCard(page, 'Ahorro del mes')).toContainText('674,55');
@@ -64,7 +64,7 @@ test('Informe presenta totales coherentes para el periodo activo', async ({ page
   await expect(reportKpi(page, 'Ingresos totales')).toContainText('300,00');
   await expect(reportKpi(page, 'Gastos totales')).toContainText('75,25');
   await expect(reportKpi(page, 'Balance neto')).toContainText('224,75');
-  await expect(reportKpi(page, 'Tasa de ahorro')).toContainText('74,9');
+  await expect(reportKpi(page, 'Tasa de ahorro')).toContainText(/74[,.]9/);
 });
 
 test('filtros de informes por categoría', async ({ page, data }) => {

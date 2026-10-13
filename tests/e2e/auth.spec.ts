@@ -127,14 +127,62 @@ test('registro válido crea la cuenta y vuelve al login', async ({ page, data })
   if (registered) data.trackUser(registered.id);
 });
 
-test('registro rechaza contraseña débil', async ({ page }) => {
+for (const password of ['abcdefgh', 'Abcdefgh', 'Abc12345!']) {
+  test(`registro permite contraseña con al menos ocho caracteres aunque sea débil: ${password}`, async ({
+    page,
+    data,
+  }) => {
+    const username = `weak${Date.now()}${Math.random().toString(36).slice(2, 7)}`;
+    await page.goto('/register');
+    await page.locator('#username').fill(username);
+    await page.locator('#email').fill(`${username}@example.test`);
+    await page.locator('#password').fill(password);
+    await page.locator('#confirmPassword').fill(password);
+    await expect(
+      page.getByRole('progressbar', { name: 'Seguridad de la contraseña' }),
+    ).toBeVisible();
+    await page.getByRole('button', { name: 'Crear cuenta' }).click();
+    await expect(page).toHaveURL(/\/login(?:[/?#]|$)/, { timeout: 15_000 });
+    const response = await page.request.get('http://127.0.0.1:3001/users');
+    const users = (await response.json()) as { id: string; username: string; password: string }[];
+    const created = users.find((user) => user.username === username);
+    expect(created).toBeDefined();
+    expect(created?.password).toBe(password);
+    if (created) data.trackUser(created.id);
+  });
+}
+
+test('registro rechaza contraseña corta sin crear usuario', async ({ page }) => {
+  const username = `short${Date.now()}`;
   await page.goto('/register');
-  await page.locator('#username').fill('e2euser1234');
-  await page.locator('#email').fill('e2euser1234@example.test');
+  await page.locator('#username').fill(username);
+  await page.locator('#email').fill(`${username}@example.test`);
   await page.locator('#password').fill('abc');
   await page.locator('#confirmPassword').fill('abc');
   await page.getByRole('button', { name: 'Crear cuenta' }).click();
+
   await expect(page).toHaveURL(/\/register(?:[/?#]|$)/);
+  await expect(page.getByText('La contraseña debe tener al menos 8 caracteres.')).toBeVisible();
+
+  const response = await page.request.get('http://127.0.0.1:3001/users', {
+    params: { username },
+  });
+  expect(response.ok()).toBeTruthy();
+  const users = (await response.json()) as { username: string }[];
+  expect(users).toHaveLength(0);
+});
+
+test('registro mantiene contraseña obligatoria aunque la fortaleza sea orientativa', async ({
+  page,
+}) => {
+  await page.goto('/register');
+  await page.locator('#username').fill('e2euser1234');
+  await page.locator('#email').fill('e2euser1234@example.test');
+  await page.locator('#password').fill('');
+  await page.locator('#confirmPassword').fill('');
+  await page.getByRole('button', { name: 'Crear cuenta' }).click();
+  await expect(page).toHaveURL(/\/register(?:[/?#]|$)/);
+  await expect(page.getByText('La contraseña es obligatoria.')).toBeVisible();
 });
 
 test('registro rechaza confirmación de contraseña distinta', async ({ page }) => {

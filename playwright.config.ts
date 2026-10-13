@@ -2,10 +2,17 @@ import { defineConfig, devices } from '@playwright/test';
 
 const securityAudit = process.env['FINORA_SECURITY_AUDIT'] === '1';
 const stressSuite = process.env['FINORA_STRESS'] === '1';
+const visualSuite = process.env['FINORA_VISUAL'] === '1';
 
 export default defineConfig({
   testDir: './tests/e2e',
-  testMatch: securityAudit ? '**/*.audit.ts' : stressSuite ? '**/*.stress.ts' : '**/*.spec.ts',
+  testMatch: securityAudit
+    ? '**/*.audit.ts'
+    : stressSuite
+      ? '**/*.stress.ts'
+      : visualSuite
+        ? '**/*.visual.ts'
+        : '**/*.spec.ts',
   fullyParallel: false,
   workers: 1,
   retries: 0,

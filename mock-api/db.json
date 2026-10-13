@@ -3,397 +3,1790 @@
     {
       "id": "user-1",
       "username": "demo",
-      "email": "demo@finora.app",
-      "password": "Demo123!"
-    },
-    {
-      "username": "priemro",
-      "email": "primero@gmail.com",
-      "password": "Piedra123.",
-      "id": "VvJQII-Tx9I"
-    },
-    {
-      "username": "primero",
-      "email": "primero1@gmail.com",
-      "password": "Piedra123.",
-      "id": "rXirHvenoQU"
-    },
-    {
-      "username": "segundo",
-      "email": "segundo@gmail.com",
-      "password": "Piedra123.",
-      "id": "aqhXpvZtCOk"
-    },
-    {
-      "username": "david",
-      "email": "david@gmail.com",
-      "password": "abc123.A",
-      "id": "cbA1QlTWcqY"
+      "email": "demo@finora.test",
+      "password": "FinoraDemo2026!"
     }
   ],
   "transactions": [
     {
-      "id": "transaction-1",
+      "id": "tx-2025-01-nomina",
       "userId": "user-1",
       "type": "income",
-      "amount": 2200,
-      "description": "Nómina septiembre",
-      "categoryId": null,
-      "date": "2026-09-01",
+      "amount": 2250,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-01-01",
       "paymentMethod": "bankTransfer",
-      "notes": ""
+      "notes": "Ingreso recurrente"
     },
     {
-      "id": "transaction-2",
-      "userId": "user-1",
-      "type": "income",
-      "amount": 350,
-      "description": "Proyecto freelance",
-      "categoryId": null,
-      "date": "2026-09-05",
-      "paymentMethod": "bankTransfer",
-      "notes": ""
-    },
-    {
-      "id": "transaction-3",
+      "id": "tx-2025-01-alquiler",
       "userId": "user-1",
       "type": "expense",
-      "amount": 750,
-      "description": "Alquiler",
-      "categoryId": null,
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-01-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-01-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 145.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-01-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-02-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2275,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-02-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-02-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-02-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-02-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 158.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-02-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-03-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2300,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-03-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-03-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-03-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-03-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 171.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-03-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-04-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2250,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-04-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-04-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-04-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-04-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 184.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-04-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-05-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2275,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-05-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-05-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-05-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-05-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 197.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-05-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-06-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2300,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-06-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-06-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-06-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-06-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 145.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-06-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-07-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2250,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-07-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-07-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-07-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-07-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 158.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-07-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-07-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 53,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2025-07-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-07-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 45,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2025-07-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-08-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2275,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-08-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-08-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-08-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-08-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 171.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-08-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-08-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 60,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2025-08-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-08-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 56,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2025-08-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-09-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2300,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-09-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-09-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-09-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-09-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 184.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-09-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-09-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 39,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2025-09-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-09-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 67,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2025-09-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-09-extra",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 280,
+      "description": "Proyecto puntual",
+      "categoryId": "category-extra",
+      "date": "2025-09-08",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-10-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2250,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-10-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-10-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-10-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-10-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 197.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-10-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-10-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 46,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2025-10-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-10-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 78,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2025-10-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-11-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2275,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-11-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-11-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-11-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-11-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 145.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-11-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-11-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 53,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2025-11-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-11-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 89,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2025-11-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-12-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2300,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2025-12-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2025-12-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 730,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2025-12-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-12-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 158.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2025-12-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-12-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 60,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2025-12-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-12-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 100,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2025-12-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2300,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-01-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-01-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-01-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 171.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-01-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 83.2,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-01-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 39,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-01-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 45,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2026-01-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-01-09",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-farmacia",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 36,
+      "description": "Farmacia y salud",
+      "categoryId": "category-health",
+      "date": "2026-01-21",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-compras",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 65,
+      "description": "Ropa y compras",
+      "categoryId": "category-shopping",
+      "date": "2026-01-24",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-01-extra",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 200,
+      "description": "Proyecto puntual",
+      "categoryId": "category-extra",
+      "date": "2026-01-08",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-02-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2325,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-02-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-02-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-02-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-02-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 184.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-02-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-02-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 90.75,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-02-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-02-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 46,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-02-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-02-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 56,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2026-02-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-02-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-02-09",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-03-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2350,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-03-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-03-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-03-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-03-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 197.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-03-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-03-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 97.2,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-03-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-03-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 53,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-03-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-03-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 67,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2026-03-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-03-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-03-09",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-03-farmacia",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 56,
+      "description": "Farmacia y salud",
+      "categoryId": "category-health",
+      "date": "2026-03-21",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-04-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2300,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-04-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-04-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-04-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-04-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 145.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-04-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-04-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 104.75,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-04-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-04-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 60,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-04-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-04-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 78,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2026-04-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-04-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-04-09",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-04-compras",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 128,
+      "description": "Ropa y compras",
+      "categoryId": "category-shopping",
+      "date": "2026-04-24",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-05-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2325,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-05-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-05-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-05-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-05-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 158.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-05-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-05-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 83.2,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-05-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-05-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 39,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-05-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-05-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 89,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2026-05-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-05-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-05-09",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-05-farmacia",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 36,
+      "description": "Farmacia y salud",
+      "categoryId": "category-health",
+      "date": "2026-05-21",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-05-extra",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 240,
+      "description": "Proyecto puntual",
+      "categoryId": "category-extra",
+      "date": "2026-05-08",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-06-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2350,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-06-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-06-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-06-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-06-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 171.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-06-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-06-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 90.75,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-06-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-06-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 46,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-06-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-06-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 100,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2026-06-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-06-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-06-09",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-07-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2300,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-07-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-07-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-07-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-07-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 184.95,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-07-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-07-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 97.2,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-07-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-07-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 53,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-07-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-07-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 45,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2026-07-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-07-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-07-09",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-07-farmacia",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 56,
+      "description": "Farmacia y salud",
+      "categoryId": "category-health",
+      "date": "2026-07-21",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-07-compras",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 107,
+      "description": "Ropa y compras",
+      "categoryId": "category-shopping",
+      "date": "2026-07-24",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-08-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2325,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-08-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-08-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-08-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-08-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 197.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-08-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-08-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 104.75,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-08-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-08-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 60,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-08-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-08-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 56,
+      "description": "Restaurantes y ocio",
+      "categoryId": "category-leisure",
+      "date": "2026-08-18",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-08-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-08-09",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-09-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2350,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-09-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-09-alquiler",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
       "date": "2026-09-02",
       "paymentMethod": "bankTransfer",
       "notes": ""
     },
     {
-      "id": "transaction-4",
+      "id": "tx-2026-09-supermercado",
       "userId": "user-1",
       "type": "expense",
-      "amount": 165.4,
-      "description": "Supermercado",
+      "amount": 145.95,
+      "description": "Compra en supermercado",
       "categoryId": "category-food",
-      "date": "2026-09-08",
+      "date": "2026-09-05",
       "paymentMethod": "card",
       "notes": ""
     },
     {
-      "id": "transaction-5",
+      "id": "tx-2026-09-compra-semanal",
       "userId": "user-1",
       "type": "expense",
-      "amount": 45,
-      "description": "Transporte",
+      "amount": 83.2,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-09-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-09-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 39,
+      "description": "Transporte y combustible",
       "categoryId": "category-transport",
-      "date": "2026-09-12",
+      "date": "2026-09-07",
       "paymentMethod": "card",
       "notes": ""
     },
     {
-      "id": "transaction-6",
+      "id": "tx-2026-09-ocio",
       "userId": "user-1",
       "type": "expense",
-      "amount": 62.5,
-      "description": "Cena",
+      "amount": 67,
+      "description": "Restaurantes y ocio",
       "categoryId": "category-leisure",
       "date": "2026-09-18",
       "paymentMethod": "card",
       "notes": ""
     },
     {
-      "userId": "rXirHvenoQU",
+      "id": "tx-2026-09-suscripciones",
+      "userId": "user-1",
       "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "hqjutSi5Cho"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "gpILTzm2J28"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "KvBocXOggo8"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "CvZg-xcwdTM"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "ckhWuUqodBk"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "V14m-QQVkdY"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "lS5iISkk6cE"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "I5WUDbaPhr4"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "y-1rRnkjMfQ"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "tYwjMQpjfkc"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "-y_ZdlKVQAE"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "K5teOiA74s4"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "8blTAMjXosE"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "6B_bWa179i4"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "compra",
-      "categoryId": "rXirHvenoQU-food",
-      "date": "2026-09-22",
-      "paymentMethod": "cash",
-      "notes": "",
-      "id": "cBphDpA5zeU"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "type": "expense",
-      "amount": 20,
-      "description": "juego",
-      "categoryId": "rXirHvenoQU-leisure",
-      "date": "2026-09-29",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
+      "date": "2026-09-09",
       "paymentMethod": "card",
-      "notes": "",
-      "id": "zS9njw6AryE"
+      "notes": ""
     },
     {
-      "userId": "rXirHvenoQU",
-      "type": "income",
-      "amount": 500,
-      "description": "nomina",
-      "categoryId": "rXirHvenoQU-salary",
-      "date": "2026-09-29",
-      "paymentMethod": "bankTransfer",
-      "notes": "",
-      "id": "KOlOk10NaNs"
-    },
-    {
-      "userId": "user-1",
-      "type": "income",
-      "amount": 8000,
-      "description": "nomina",
-      "categoryId": null,
-      "date": "2026-10-05",
-      "paymentMethod": "bankTransfer",
-      "notes": "",
-      "id": "yGAy90MTpvo"
-    },
-    {
+      "id": "tx-2026-09-farmacia",
       "userId": "user-1",
       "type": "expense",
-      "amount": 100,
-      "description": "viaje a Madrid",
-      "categoryId": null,
-      "date": "2026-10-06",
-      "paymentMethod": "card",
-      "notes": "Viaje en madrid con mis amigos",
-      "id": "dxbuPwnI_9s"
-    },
-    {
-      "userId": "user-1",
-      "type": "expense",
-      "amount": 80,
-      "description": "mercadona",
-      "categoryId": "category-food",
-      "date": "2026-10-09",
-      "paymentMethod": "bankTransfer",
-      "notes": "",
-      "id": "2oaONlvx718"
-    },
-    {
-      "userId": "user-1",
-      "type": "expense",
-      "amount": 30,
-      "description": "mercadona",
-      "categoryId": "category-food",
-      "date": "2026-10-09",
-      "paymentMethod": "card",
-      "notes": "",
-      "id": "WoCplvGuv-g"
-    },
-    {
-      "userId": "user-1",
-      "type": "expense",
-      "amount": 80,
-      "description": "juegos",
-      "categoryId": "category-leisure",
-      "date": "2026-10-09",
-      "paymentMethod": "card",
-      "notes": "",
-      "id": "5vonrJGhu6E"
-    },
-    {
-      "userId": "user-1",
-      "type": "expense",
-      "amount": 80,
-      "description": "medicias",
+      "amount": 36,
+      "description": "Farmacia y salud",
       "categoryId": "category-health",
-      "date": "2026-10-09",
+      "date": "2026-09-21",
       "paymentMethod": "card",
-      "notes": "",
-      "id": "R7MkyNEpfa4"
+      "notes": ""
     },
     {
+      "id": "tx-2026-09-extra",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 280,
+      "description": "Proyecto puntual",
+      "categoryId": "category-extra",
+      "date": "2026-09-08",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-10-nomina",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 2300,
+      "description": "Nómina mensual",
+      "categoryId": "category-salary",
+      "date": "2026-10-01",
+      "paymentMethod": "bankTransfer",
+      "notes": "Ingreso recurrente"
+    },
+    {
+      "id": "tx-2026-10-alquiler",
       "userId": "user-1",
       "type": "expense",
-      "amount": 50,
-      "description": "juegos",
+      "amount": 760,
+      "description": "Alquiler del piso",
+      "categoryId": "category-housing",
+      "date": "2026-10-02",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-10-supermercado",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 158.4,
+      "description": "Compra en supermercado",
+      "categoryId": "category-food",
+      "date": "2026-10-05",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-10-compra-semanal",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 90.75,
+      "description": "Compra semanal",
+      "categoryId": "category-food",
+      "date": "2026-10-10",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-10-transporte",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 46,
+      "description": "Transporte y combustible",
+      "categoryId": "category-transport",
+      "date": "2026-10-07",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-10-ocio",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 78,
+      "description": "Restaurantes y ocio",
       "categoryId": "category-leisure",
+      "date": "2026-10-11",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-10-suscripciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.99,
+      "description": "Suscripciones digitales",
+      "categoryId": "category-subscriptions",
       "date": "2026-10-09",
       "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-10-compras",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 86,
+      "description": "Ropa y compras",
+      "categoryId": "category-shopping",
+      "date": "2026-10-11",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-08-vacaciones",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 560,
+      "description": "Vacaciones de verano",
+      "categoryId": "category-leisure",
+      "date": "2025-08-16",
+      "paymentMethod": "card",
+      "notes": "Viaje de verano"
+    },
+    {
+      "id": "tx-2025-12-paga-extra",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 700,
+      "description": "Paga extraordinaria",
+      "categoryId": "category-extra",
+      "date": "2025-12-20",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2025-12-regalos",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 260,
+      "description": "Regalos de Navidad",
+      "categoryId": "category-shopping",
+      "date": "2025-12-21",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-06-ordenador",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 740,
+      "description": "Equipo informático",
+      "categoryId": "category-shopping",
+      "date": "2026-06-22",
+      "paymentMethod": "card",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-09-clases",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 95,
+      "description": "Curso online",
+      "categoryId": null,
+      "date": "2026-09-15",
+      "paymentMethod": "card",
       "notes": "",
-      "id": "nl4vJmO9pkY"
+      "categoryNameSnapshot": "Formación"
+    },
+    {
+      "id": "tx-2026-10-extra-presentacion",
+      "userId": "user-1",
+      "type": "income",
+      "amount": 350,
+      "description": "Proyecto freelance",
+      "categoryId": "category-extra",
+      "date": "2026-10-08",
+      "paymentMethod": "bankTransfer",
+      "notes": ""
+    },
+    {
+      "id": "tx-2026-10-cafeteria",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 24.5,
+      "description": "Cafetería",
+      "categoryId": null,
+      "date": "2026-10-12",
+      "paymentMethod": "cash",
+      "notes": "Pendiente de clasificar"
+    },
+    {
+      "id": "tx-2026-10-cine",
+      "userId": "user-1",
+      "type": "expense",
+      "amount": 35,
+      "description": "Entradas de cine",
+      "categoryId": "category-leisure",
+      "date": "2026-10-12",
+      "paymentMethod": "card",
+      "notes": ""
     }
   ],
   "budgets": [
     {
-      "id": "budget-1",
+      "id": "budget-2026-03-food",
       "userId": "user-1",
       "categoryId": "category-food",
-      "amount": 300,
-      "month": "2026-09"
+      "amount": 320,
+      "month": "2026-03"
     },
     {
-      "id": "budget-2",
+      "id": "budget-2026-03-leisure",
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 150,
+      "month": "2026-03"
+    },
+    {
+      "id": "budget-2026-03-transport",
       "userId": "user-1",
       "categoryId": "category-transport",
+      "amount": 110,
+      "month": "2026-03"
+    },
+    {
+      "id": "budget-2026-03-health",
+      "userId": "user-1",
+      "categoryId": "category-health",
       "amount": 100,
+      "month": "2026-03"
+    },
+    {
+      "id": "budget-2026-04-food",
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 320,
+      "month": "2026-04"
+    },
+    {
+      "id": "budget-2026-04-leisure",
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 150,
+      "month": "2026-04"
+    },
+    {
+      "id": "budget-2026-04-transport",
+      "userId": "user-1",
+      "categoryId": "category-transport",
+      "amount": 110,
+      "month": "2026-04"
+    },
+    {
+      "id": "budget-2026-04-health",
+      "userId": "user-1",
+      "categoryId": "category-health",
+      "amount": 100,
+      "month": "2026-04"
+    },
+    {
+      "id": "budget-2026-05-food",
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 320,
+      "month": "2026-05"
+    },
+    {
+      "id": "budget-2026-05-leisure",
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 150,
+      "month": "2026-05"
+    },
+    {
+      "id": "budget-2026-05-transport",
+      "userId": "user-1",
+      "categoryId": "category-transport",
+      "amount": 110,
+      "month": "2026-05"
+    },
+    {
+      "id": "budget-2026-05-health",
+      "userId": "user-1",
+      "categoryId": "category-health",
+      "amount": 100,
+      "month": "2026-05"
+    },
+    {
+      "id": "budget-2026-06-food",
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 320,
+      "month": "2026-06"
+    },
+    {
+      "id": "budget-2026-06-leisure",
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 150,
+      "month": "2026-06"
+    },
+    {
+      "id": "budget-2026-06-transport",
+      "userId": "user-1",
+      "categoryId": "category-transport",
+      "amount": 110,
+      "month": "2026-06"
+    },
+    {
+      "id": "budget-2026-06-health",
+      "userId": "user-1",
+      "categoryId": "category-health",
+      "amount": 100,
+      "month": "2026-06"
+    },
+    {
+      "id": "budget-2026-07-food",
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 320,
+      "month": "2026-07"
+    },
+    {
+      "id": "budget-2026-07-leisure",
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 150,
+      "month": "2026-07"
+    },
+    {
+      "id": "budget-2026-07-transport",
+      "userId": "user-1",
+      "categoryId": "category-transport",
+      "amount": 110,
+      "month": "2026-07"
+    },
+    {
+      "id": "budget-2026-07-health",
+      "userId": "user-1",
+      "categoryId": "category-health",
+      "amount": 100,
+      "month": "2026-07"
+    },
+    {
+      "id": "budget-2026-08-food",
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 320,
+      "month": "2026-08"
+    },
+    {
+      "id": "budget-2026-08-leisure",
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 150,
+      "month": "2026-08"
+    },
+    {
+      "id": "budget-2026-08-transport",
+      "userId": "user-1",
+      "categoryId": "category-transport",
+      "amount": 110,
+      "month": "2026-08"
+    },
+    {
+      "id": "budget-2026-08-health",
+      "userId": "user-1",
+      "categoryId": "category-health",
+      "amount": 100,
+      "month": "2026-08"
+    },
+    {
+      "id": "budget-2026-09-food",
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 320,
       "month": "2026-09"
     },
     {
-      "id": "budget-3",
+      "id": "budget-2026-09-leisure",
       "userId": "user-1",
       "categoryId": "category-leisure",
       "amount": 150,
       "month": "2026-09"
     },
     {
-      "id": "budget-4",
+      "id": "budget-2026-09-transport",
+      "userId": "user-1",
+      "categoryId": "category-transport",
+      "amount": 110,
+      "month": "2026-09"
+    },
+    {
+      "id": "budget-2026-09-health",
       "userId": "user-1",
       "categoryId": "category-health",
-      "amount": 80,
+      "amount": 100,
       "month": "2026-09"
+    },
+    {
+      "id": "budget-2026-10-food",
+      "userId": "user-1",
+      "categoryId": "category-food",
+      "amount": 230,
+      "month": "2026-10"
+    },
+    {
+      "id": "budget-2026-10-leisure",
+      "userId": "user-1",
+      "categoryId": "category-leisure",
+      "amount": 130,
+      "month": "2026-10"
+    },
+    {
+      "id": "budget-2026-10-transport",
+      "userId": "user-1",
+      "categoryId": "category-transport",
+      "amount": 110,
+      "month": "2026-10"
+    },
+    {
+      "id": "budget-2026-10-health",
+      "userId": "user-1",
+      "categoryId": "category-health",
+      "amount": 100,
+      "month": "2026-10"
     }
   ],
   "categories": [
+    {
+      "id": "category-salary",
+      "userId": "user-1",
+      "name": "Nómina",
+      "icon": "bi-wallet2",
+      "color": "#198754"
+    },
+    {
+      "id": "category-extra",
+      "userId": "user-1",
+      "name": "Ingresos extra",
+      "icon": "bi-cash-stack",
+      "color": "#0f766e"
+    },
+    {
+      "id": "category-housing",
+      "userId": "user-1",
+      "name": "Vivienda",
+      "icon": "bi-house",
+      "color": "#dc3545"
+    },
     {
       "id": "category-food",
       "userId": "user-1",
@@ -423,176 +1816,23 @@
       "color": "#20c997"
     },
     {
-      "id": "VvJQII-Tx9I-salary",
-      "userId": "VvJQII-Tx9I",
-      "name": "Salario",
-      "icon": "bi-wallet2",
-      "color": "#198754"
-    },
-    {
-      "id": "VvJQII-Tx9I-freelance",
-      "userId": "VvJQII-Tx9I",
-      "name": "Freelance",
-      "icon": "bi-laptop",
+      "id": "category-subscriptions",
+      "userId": "user-1",
+      "name": "Suscripciones",
+      "icon": "bi-play-circle",
       "color": "#0d6efd"
     },
     {
-      "id": "VvJQII-Tx9I-housing",
-      "userId": "VvJQII-Tx9I",
-      "name": "Vivienda",
-      "icon": "bi-house",
-      "color": "#dc3545"
-    },
-    {
-      "id": "VvJQII-Tx9I-food",
-      "userId": "VvJQII-Tx9I",
-      "name": "Alimentación",
-      "icon": "bi-basket",
-      "color": "#fd7e14"
-    },
-    {
-      "id": "VvJQII-Tx9I-transport",
-      "userId": "VvJQII-Tx9I",
-      "name": "Transporte",
-      "icon": "bi-car-front",
-      "color": "#6f42c1"
-    },
-    {
-      "id": "VvJQII-Tx9I-leisure",
-      "userId": "VvJQII-Tx9I",
-      "name": "Ocio",
-      "icon": "bi-controller",
-      "color": "#d63384"
-    },
-    {
-      "id": "VvJQII-Tx9I-health",
-      "userId": "VvJQII-Tx9I",
-      "name": "Salud",
-      "icon": "bi-heart-pulse",
-      "color": "#20c997"
-    },
-    {
-      "id": "VvJQII-Tx9I-other",
-      "userId": "VvJQII-Tx9I",
-      "name": "Otros",
-      "icon": "bi-three-dots",
-      "color": "#6c757d"
-    },
-    {
-      "id": "rXirHvenoQU-salary",
-      "userId": "rXirHvenoQU",
-      "name": "Salario",
-      "icon": "bi-wallet2",
-      "color": "#198754"
-    },
-    {
-      "id": "rXirHvenoQU-freelance",
-      "userId": "rXirHvenoQU",
-      "name": "Freelance",
-      "icon": "bi-laptop",
-      "color": "#0d6efd"
-    },
-    {
-      "id": "rXirHvenoQU-housing",
-      "userId": "rXirHvenoQU",
-      "name": "Vivienda",
-      "icon": "bi-house",
-      "color": "#dc3545"
-    },
-    {
-      "id": "rXirHvenoQU-food",
-      "userId": "rXirHvenoQU",
-      "name": "Alimentación",
-      "icon": "bi-basket",
-      "color": "#fd7e14"
-    },
-    {
-      "id": "rXirHvenoQU-transport",
-      "userId": "rXirHvenoQU",
-      "name": "Transporte",
-      "icon": "bi-car-front",
-      "color": "#6f42c1"
-    },
-    {
-      "id": "rXirHvenoQU-leisure",
-      "userId": "rXirHvenoQU",
-      "name": "Ocio",
-      "icon": "bi-controller",
-      "color": "#d63384"
-    },
-    {
-      "id": "rXirHvenoQU-health",
-      "userId": "rXirHvenoQU",
-      "name": "Salud",
-      "icon": "bi-heart-pulse",
-      "color": "#20c997"
-    },
-    {
-      "id": "rXirHvenoQU-other",
-      "userId": "rXirHvenoQU",
-      "name": "Otros",
-      "icon": "bi-three-dots",
-      "color": "#6c757d"
-    },
-    {
-      "id": "aqhXpvZtCOk-salary",
-      "userId": "aqhXpvZtCOk",
-      "name": "Salario",
-      "icon": "bi-wallet2",
-      "color": "#198754"
-    },
-    {
-      "id": "aqhXpvZtCOk-freelance",
-      "userId": "aqhXpvZtCOk",
-      "name": "Freelance",
-      "icon": "bi-laptop",
-      "color": "#0d6efd"
-    },
-    {
-      "id": "aqhXpvZtCOk-housing",
-      "userId": "aqhXpvZtCOk",
-      "name": "Vivienda",
-      "icon": "bi-house",
-      "color": "#dc3545"
-    },
-    {
-      "id": "aqhXpvZtCOk-food",
-      "userId": "aqhXpvZtCOk",
-      "name": "Alimentación",
-      "icon": "bi-basket",
-      "color": "#fd7e14"
-    },
-    {
-      "id": "aqhXpvZtCOk-transport",
-      "userId": "aqhXpvZtCOk",
-      "name": "Transporte",
-      "icon": "bi-car-front",
-      "color": "#6f42c1"
-    },
-    {
-      "id": "aqhXpvZtCOk-leisure",
-      "userId": "aqhXpvZtCOk",
-      "name": "Ocio",
-      "icon": "bi-controller",
-      "color": "#d63384"
-    },
-    {
-      "id": "aqhXpvZtCOk-health",
-      "userId": "aqhXpvZtCOk",
-      "name": "Salud",
-      "icon": "bi-heart-pulse",
-      "color": "#20c997"
-    },
-    {
-      "id": "aqhXpvZtCOk-other",
-      "userId": "aqhXpvZtCOk",
-      "name": "Otros",
-      "icon": "bi-three-dots",
-      "color": "#6c757d"
+      "id": "category-shopping",
+      "userId": "user-1",
+      "name": "Compras",
+      "icon": "bi-bag",
+      "color": "#e67700"
     }
   ],
   "preferences": [
     {
+      "id": "preferences-demo",
       "userId": "user-1",
       "currency": "EUR",
       "locale": "es-ES",
@@ -600,114 +1840,33 @@
       "theme": "light",
       "budgetWarningEnabled": true,
       "budgetExceededEnabled": true,
-      "savingsGoalEnabled": true,
-      "id": "GldhgHwGl88"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "currency": "EUR",
-      "locale": "es-ES",
-      "dateFormat": "DD/MM/YYYY",
-      "theme": "system",
-      "budgetWarningEnabled": true,
-      "budgetExceededEnabled": true,
-      "savingsGoalEnabled": true,
-      "id": "WM3itJNhAZg"
-    },
-    {
-      "userId": "rXirHvenoQU",
-      "currency": "EUR",
-      "locale": "es-ES",
-      "dateFormat": "DD/MM/YYYY",
-      "theme": "system",
-      "budgetWarningEnabled": true,
-      "budgetExceededEnabled": true,
-      "savingsGoalEnabled": true,
-      "id": "7OYp_JRcCCE"
-    },
-    {
-      "userId": "cbA1QlTWcqY",
-      "currency": "EUR",
-      "locale": "es-ES",
-      "dateFormat": "DD/MM/YYYY",
-      "theme": "light",
-      "budgetWarningEnabled": true,
-      "budgetExceededEnabled": true,
-      "savingsGoalEnabled": true,
-      "id": "Mxtf3piJgbs"
-    },
-    {
-      "userId": "cbA1QlTWcqY",
-      "currency": "EUR",
-      "locale": "es-ES",
-      "dateFormat": "DD/MM/YYYY",
-      "theme": "light",
-      "budgetWarningEnabled": true,
-      "budgetExceededEnabled": true,
-      "savingsGoalEnabled": true,
-      "id": "1Cvx6F1NwKM"
-    },
-    {
-      "userId": "cbA1QlTWcqY",
-      "currency": "EUR",
-      "locale": "es-ES",
-      "dateFormat": "DD/MM/YYYY",
-      "theme": "light",
-      "budgetWarningEnabled": true,
-      "budgetExceededEnabled": true,
-      "savingsGoalEnabled": true,
-      "id": "3bSWEmvGJBU"
+      "savingsGoalEnabled": true
     }
   ],
   "notifications": [
     {
+      "id": "notification-demo-1",
       "userId": "user-1",
       "type": "budgetExceeded",
       "title": "Presupuesto superado",
-      "message": "Has superado el presupuesto de Alimentación en 10.00 €.",
-      "createdAt": "2026-10-08T23:04:15.439Z",
-      "isRead": true,
-      "eventKey": "budget-exceeded:OTD2c40V9Uk:2026-10",
-      "budgetId": null,
-      "categoryId": "category-food",
-      "id": "4uw4sXhzHHk"
+      "message": "Has superado el presupuesto de Alimentación de octubre.",
+      "createdAt": "2026-10-12T10:00:00.000Z",
+      "isRead": false,
+      "eventKey": "budget-exceeded:budget-2026-10-food:2026-10",
+      "budgetId": "budget-2026-10-food",
+      "categoryId": "category-food"
     },
     {
+      "id": "notification-demo-2",
       "userId": "user-1",
       "type": "budgetWarning",
       "title": "Presupuesto próximo al límite",
-      "message": "Has utilizado el 80% de tu presupuesto de Ocio.",
-      "createdAt": "2026-10-08T23:18:16.958Z",
+      "message": "Has alcanzado el 80 % del presupuesto de Ocio de octubre.",
+      "createdAt": "2026-10-12T09:00:00.000Z",
       "isRead": false,
-      "eventKey": "budget-warning:xaMExJUfn50:2026-10",
-      "budgetId": null,
-      "categoryId": "category-leisure",
-      "id": "wZjKxxHM4cE"
-    },
-    {
-      "userId": "user-1",
-      "type": "budgetWarning",
-      "title": "Presupuesto próximo al límite",
-      "message": "Has utilizado el 80% de tu presupuesto de Salud.",
-      "createdAt": "2026-10-08T23:24:11.423Z",
-      "isRead": false,
-      "eventKey": "budget-warning:q0Nkv9jBFU4:2026-10",
-      "budgetId": null,
-      "categoryId": "category-health",
-      "id": "TtJAAluKatg"
-    },
-    {
-      "userId": "user-1",
-      "type": "budgetExceeded",
-      "title": "Presupuesto superado",
-      "message": "Has superado el presupuesto de Ocio en 30,00 €.",
-      "createdAt": "2026-10-08T23:30:58.322Z",
-      "isRead": false,
-      "eventKey": "budget-exceeded:xaMExJUfn50:2026-10",
-      "budgetId": null,
-      "categoryId": "category-leisure",
-      "id": "PdxsmT68oGA"
+      "eventKey": "budget-warning:budget-2026-10-leisure:2026-10",
+      "budgetId": "budget-2026-10-leisure",
+      "categoryId": "category-leisure"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
