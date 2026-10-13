@@ -4,7 +4,7 @@
       "id": "user-1",
       "username": "demo",
       "email": "demo@finora.test",
-      "password": "FinoraDemo2026!"
+      "password": "Demo123.!"
     }
   ],
   "transactions": [
@@ -1837,7 +1837,7 @@
       "currency": "EUR",
       "locale": "es-ES",
       "dateFormat": "DD/MM/YYYY",
-      "theme": "light",
+      "theme": "dark",
       "budgetWarningEnabled": true,
       "budgetExceededEnabled": true,
       "savingsGoalEnabled": true
@@ -1868,5 +1868,6 @@
       "budgetId": "budget-2026-10-leisure",
       "categoryId": "category-leisure"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
