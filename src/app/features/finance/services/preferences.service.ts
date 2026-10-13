@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, switchMap } from 'rxjs';
+import { finalize, map, Observable, of, shareReplay, switchMap } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { UserPreferences } from '../settings/user-preferences';
@@ -15,6 +15,8 @@ export class PreferencesService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/preferences`;
 
+  private readonly pendingPreferences = new Map<string, Observable<UserPreferences>>();
+
   getPreferences(userId: string): Observable<UserPreferences | null> {
     return this.http
       .get<UserPreferences[]>(this.apiUrl, {
@@ -26,10 +28,16 @@ export class PreferencesService {
   }
 
   getOrCreatePreferences(userId: string): Observable<UserPreferences> {
-    return this.getPreferences(userId).pipe(
+    const pendingRequest = this.pendingPreferences.get(userId);
+
+    if (pendingRequest) {
+      return pendingRequest;
+    }
+
+    const request$ = this.getPreferences(userId).pipe(
       switchMap((preferences) => {
         if (preferences) {
-          return [preferences];
+          return of(preferences);
         }
 
         return this.createPreferences({
@@ -37,7 +45,18 @@ export class PreferencesService {
           ...this.getDefaultPreferences(),
         });
       }),
+      finalize(() => {
+        this.pendingPreferences.delete(userId);
+      }),
+      shareReplay({
+        bufferSize: 1,
+        refCount: true,
+      }),
     );
+
+    this.pendingPreferences.set(userId, request$);
+
+    return request$;
   }
 
   updatePreferences(
