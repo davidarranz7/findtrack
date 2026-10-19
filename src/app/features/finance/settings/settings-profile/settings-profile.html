@@ -1,0 +1,132 @@
+<section class="settings-card settings-profile-card">
+  <header class="settings-card-header">
+    <div class="settings-card-heading">
+      <div class="settings-card-icon">
+        <i class="bi bi-person-circle" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <h2>Perfil de usuario</h2>
+        <p>Información personal y credenciales básicas de acceso.</p>
+      </div>
+    </div>
+
+    <span class="settings-status-badge">
+      <span class="settings-status-dot"></span>
+      CUENTA ACTIVA
+    </span>
+  </header>
+
+  <div class="settings-card-body">
+    <div class="profile-layout" [formGroup]="profile.form">
+      <div class="profile-avatar-column">
+        <div class="profile-avatar" aria-hidden="true">
+          {{ profile.userInitial() }}
+        </div>
+
+        <div class="profile-avatar-info">
+          <strong>{{ profile.currentUser()?.username }}</strong>
+          <span>{{ profile.currentUser()?.email }}</span>
+        </div>
+      </div>
+
+      <div class="profile-fields">
+        <div class="settings-field">
+          <div class="settings-label-row">
+            <label class="form-label" for="settings-username"> Nombre de usuario </label>
+            <span class="settings-field-required">Obligatorio</span>
+          </div>
+
+          <div class="position-relative">
+            <input
+              id="settings-username"
+              type="text"
+              class="form-control"
+              formControlName="username"
+              autocomplete="username"
+              [class.is-invalid]="
+                profile.form.controls.username.touched && profile.form.controls.username.invalid
+              "
+              [class.is-valid]="profile.usernameAvailability() === 'available'"
+            />
+
+            @if (profile.usernameAvailability() === 'checking') {
+              <span class="settings-input-status">
+                <span
+                  class="spinner-border spinner-border-sm text-secondary"
+                  aria-hidden="true"
+                ></span>
+              </span>
+            }
+          </div>
+
+          @if (
+            profile.form.controls.username.touched &&
+            profile.form.controls.username.hasError('required')
+          ) {
+            <div class="invalid-feedback d-block">El nombre de usuario es obligatorio.</div>
+          } @else if (
+            profile.form.controls.username.touched &&
+            profile.form.controls.username.hasError('minlength')
+          ) {
+            <div class="invalid-feedback d-block">Debe tener al menos 4 caracteres.</div>
+          } @else if (profile.form.controls.username.hasError('usernameTaken')) {
+            <div class="invalid-feedback d-block">Este nombre de usuario ya está en uso.</div>
+          } @else if (profile.usernameAvailability() === 'available') {
+            <div class="valid-feedback d-block">Nombre de usuario disponible.</div>
+          } @else if (profile.usernameAvailability() === 'error') {
+            <div class="settings-field-warning">No se ha podido comprobar la disponibilidad.</div>
+          }
+        </div>
+
+        <div class="settings-field">
+          <div class="settings-label-row">
+            <label class="form-label" for="settings-email"> Correo electrónico </label>
+            <span class="settings-field-verified">Verificado</span>
+          </div>
+
+          <div class="position-relative">
+            <input
+              id="settings-email"
+              type="email"
+              class="form-control"
+              formControlName="email"
+              autocomplete="email"
+              [class.is-invalid]="
+                profile.form.controls.email.touched && profile.form.controls.email.invalid
+              "
+              [class.is-valid]="profile.emailAvailability() === 'available'"
+            />
+
+            @if (profile.emailAvailability() === 'checking') {
+              <span class="settings-input-status">
+                <span
+                  class="spinner-border spinner-border-sm text-secondary"
+                  aria-hidden="true"
+                ></span>
+              </span>
+            }
+          </div>
+
+          @if (
+            profile.form.controls.email.touched && profile.form.controls.email.hasError('required')
+          ) {
+            <div class="invalid-feedback d-block">El correo electrónico es obligatorio.</div>
+          } @else if (
+            profile.form.controls.email.touched && profile.form.controls.email.hasError('email')
+          ) {
+            <div class="invalid-feedback d-block">Introduce un correo electrónico válido.</div>
+          } @else if (profile.form.controls.email.hasError('emailTaken')) {
+            <div class="invalid-feedback d-block">Este correo electrónico ya está en uso.</div>
+          } @else if (profile.emailAvailability() === 'available') {
+            <div class="valid-feedback d-block">Correo electrónico disponible.</div>
+          } @else if (profile.emailAvailability() === 'error') {
+            <div class="settings-field-warning">No se ha podido comprobar la disponibilidad.</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <app-settings-password />
+  </div>
+</section>
