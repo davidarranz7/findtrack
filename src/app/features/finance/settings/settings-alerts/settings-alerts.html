@@ -1,0 +1,104 @@
+<section class="settings-card settings-alerts-card" [formGroup]="preferences.form">
+  <header class="settings-card-header">
+    <div class="settings-card-heading">
+      <div class="settings-card-icon">
+        <i class="bi bi-bell" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <h2>Alertas y Notificaciones</h2>
+        <p>Reglas automáticas de aviso para tus finanzas.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="settings-card-body">
+    <div class="settings-alerts-list">
+      <article class="settings-alert-item">
+        <div class="settings-alert-content">
+          <div class="settings-alert-icon settings-alert-icon-warning">
+            <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+          </div>
+
+          <div>
+            <strong>Avisar cuando un presupuesto alcance el 80%</strong>
+            <p>Recibe un aviso preventivo antes de agotar tus límites mensuales.</p>
+          </div>
+        </div>
+
+        <div class="form-check form-switch">
+          <input
+            id="budget-warning-enabled"
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            formControlName="budgetWarningEnabled"
+          />
+
+          <label class="visually-hidden" for="budget-warning-enabled">
+            Avisar cuando un presupuesto alcance el 80%
+          </label>
+        </div>
+      </article>
+
+      <article class="settings-alert-item">
+        <div class="settings-alert-content">
+          <div class="settings-alert-icon settings-alert-icon-danger">
+            <i class="bi bi-asterisk" aria-hidden="true"></i>
+          </div>
+
+          <div>
+            <strong>Avisar cuando se supere un presupuesto</strong>
+            <p>Alerta inmediata al registrar un gasto que desborde la categoría.</p>
+          </div>
+        </div>
+
+        <div class="form-check form-switch">
+          <input
+            id="budget-exceeded-enabled"
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            formControlName="budgetExceededEnabled"
+          />
+
+          <label class="visually-hidden" for="budget-exceeded-enabled">
+            Avisar cuando se supere un presupuesto
+          </label>
+        </div>
+      </article>
+
+      <article class="settings-alert-item">
+        <div class="settings-alert-content">
+          <div class="settings-alert-icon settings-alert-icon-success">
+            <i class="bi bi-piggy-bank" aria-hidden="true"></i>
+          </div>
+
+          <div>
+            <strong>Avisar al alcanzar una meta de ahorro</strong>
+            <p>Notificación de felicitación al cumplir el objetivo del mes.</p>
+          </div>
+        </div>
+
+        <div class="form-check form-switch">
+          <input
+            id="savings-goal-enabled"
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            formControlName="savingsGoalEnabled"
+          />
+
+          <label class="visually-hidden" for="savings-goal-enabled">
+            Avisar al alcanzar una meta de ahorro
+          </label>
+        </div>
+      </article>
+    </div>
+
+    <div class="settings-alerts-note">
+      <i class="bi bi-shield-check" aria-hidden="true"></i>
+      <span> Tus preferencias de alertas se guardan de forma independiente para tu cuenta. </span>
+    </div>
+  </div>
+</section>

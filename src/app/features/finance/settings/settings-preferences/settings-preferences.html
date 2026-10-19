@@ -1,0 +1,54 @@
+<section class="settings-card settings-preferences-card" [formGroup]="preferences.form">
+  <header class="settings-card-header">
+    <div class="settings-card-heading">
+      <div class="settings-card-icon">
+        <i class="bi bi-sliders2" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <h2>Preferencias del sistema</h2>
+        <p>Regionalización, moneda y formato de fecha.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="settings-card-body">
+    <div class="preferences-list">
+      <div class="settings-field">
+        <label class="form-label" for="settings-currency"> Moneda principal </label>
+
+        <select id="settings-currency" class="form-select" formControlName="currency">
+          @for (option of preferences.currencyOptions; track option.value) {
+            <option [value]="option.value">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="settings-field">
+        <label class="form-label" for="settings-language"> Idioma del entorno </label>
+
+        <select id="settings-language" class="form-select" formControlName="locale">
+          @for (option of preferences.localeOptions; track option.value) {
+            <option [value]="option.value">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="settings-field">
+        <label class="form-label" for="settings-date-format"> Formato de fecha contable </label>
+
+        <select id="settings-date-format" class="form-select" formControlName="dateFormat">
+          @for (option of preferences.dateFormatOptions; track option.value) {
+            <option [value]="option.value">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
