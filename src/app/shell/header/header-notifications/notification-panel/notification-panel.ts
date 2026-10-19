@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-
-import { Notification, NotificationType } from '../../../features/finance/models/notification';
-
+import { Notification, NotificationType } from '../../../../features/finance/models/notification';
 @Component({
   selector: 'app-notification-panel',
   imports: [],

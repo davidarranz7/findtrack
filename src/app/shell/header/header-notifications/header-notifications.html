@@ -1,0 +1,28 @@
+<div #notificationWrapper class="notification-wrapper">
+  <button
+    type="button"
+    class="header-action-button notification-trigger"
+    aria-label="Notificaciones"
+    [attr.aria-expanded]="isNotificationPanelOpen()"
+    (click)="toggleNotificationPanel()"
+  >
+    <i class="bi bi-bell" aria-hidden="true"></i>
+
+    @if (unreadNotificationCount() > 0) {
+      <span class="notification-badge" aria-label="Notificaciones sin leer">
+        {{ unreadNotificationCount() }}
+      </span>
+    }
+  </button>
+
+  @if (isNotificationPanelOpen()) {
+    <div class="notification-dropdown">
+      <app-notification-panel
+        [notifications]="notifications()"
+        [isLoading]="isLoadingNotifications()"
+        (notificationSelected)="handleNotificationSelected($event)"
+        (markAllAsRead)="markAllNotificationsAsRead()"
+      />
+    </div>
+  }
+</div>

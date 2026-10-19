@@ -258,9 +258,18 @@
   }
 }
 
+/* El panel se adapta al ancho del desplegable móvil */
+
+@media (max-width: 767.98px) {
+  .notification-panel {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
 @media (max-width: 575.98px) {
   .notification-panel {
-    width: calc(100vw - 1rem);
     border-radius: 0.75rem;
   }
 
