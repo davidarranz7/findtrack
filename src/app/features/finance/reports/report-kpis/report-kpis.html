@@ -1,0 +1,171 @@
+<section class="reports-kpis" aria-label="Resumen financiero">
+  <article class="report-kpi">
+    <div class="report-kpi-header">
+      <span>Ingresos totales</span>
+
+      <div class="report-kpi-icon report-kpi-icon-income">
+        <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <strong class="report-kpi-value report-kpi-value-income">
+      {{ analysis.formattedIncome() }}
+    </strong>
+
+    @if (state.comparisonEnabled()) {
+      <span
+        class="report-kpi-comparison"
+        [class.text-success]="analysis.incomeComparison().direction === 'increase'"
+        [class.text-danger]="analysis.incomeComparison().direction === 'decrease'"
+        [class.text-secondary]="analysis.incomeComparison().direction === 'same'"
+      >
+        @if (analysis.incomeComparison().direction === 'increase') {
+          <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+        } @else if (analysis.incomeComparison().direction === 'decrease') {
+          <i class="bi bi-arrow-down-right" aria-hidden="true"></i>
+        } @else {
+          <i class="bi bi-dash" aria-hidden="true"></i>
+        }
+
+        {{ analysis.formatMoneyComparison(analysis.incomeComparison()) }}
+      </span>
+    } @else {
+      <span class="report-kpi-caption">Durante el periodo seleccionado</span>
+    }
+  </article>
+
+  <article class="report-kpi">
+    <div class="report-kpi-header">
+      <span>Gastos totales</span>
+
+      <div class="report-kpi-icon report-kpi-icon-expense">
+        <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <strong class="report-kpi-value report-kpi-value-expense">
+      {{ analysis.formattedExpenses() }}
+    </strong>
+
+    @if (state.comparisonEnabled()) {
+      <span
+        class="report-kpi-comparison"
+        [class.text-danger]="analysis.expenseComparison().direction === 'increase'"
+        [class.text-success]="analysis.expenseComparison().direction === 'decrease'"
+        [class.text-secondary]="analysis.expenseComparison().direction === 'same'"
+      >
+        @if (analysis.expenseComparison().direction === 'increase') {
+          <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+        } @else if (analysis.expenseComparison().direction === 'decrease') {
+          <i class="bi bi-arrow-down-right" aria-hidden="true"></i>
+        } @else {
+          <i class="bi bi-dash" aria-hidden="true"></i>
+        }
+
+        {{ analysis.formatMoneyComparison(analysis.expenseComparison()) }}
+      </span>
+    } @else {
+      <span class="report-kpi-caption">Durante el periodo seleccionado</span>
+    }
+  </article>
+
+  <article class="report-kpi">
+    <div class="report-kpi-header">
+      <span>Balance neto</span>
+
+      <div class="report-kpi-icon report-kpi-icon-balance">
+        <i class="bi bi-wallet2" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <strong
+      class="report-kpi-value"
+      [class.report-kpi-value-income]="analysis.netBalance() >= 0"
+      [class.report-kpi-value-expense]="analysis.netBalance() < 0"
+    >
+      {{ analysis.formattedBalance() }}
+    </strong>
+
+    @if (state.comparisonEnabled()) {
+      <span
+        class="report-kpi-comparison"
+        [class.text-success]="analysis.balanceComparison().direction === 'increase'"
+        [class.text-danger]="analysis.balanceComparison().direction === 'decrease'"
+        [class.text-secondary]="analysis.balanceComparison().direction === 'same'"
+      >
+        @if (analysis.balanceComparison().direction === 'increase') {
+          <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+        } @else if (analysis.balanceComparison().direction === 'decrease') {
+          <i class="bi bi-arrow-down-right" aria-hidden="true"></i>
+        } @else {
+          <i class="bi bi-dash" aria-hidden="true"></i>
+        }
+
+        {{ analysis.formatMoneyComparison(analysis.balanceComparison()) }}
+      </span>
+    } @else {
+      <span class="report-kpi-caption">Ingresos menos gastos</span>
+    }
+  </article>
+
+  <article class="report-kpi">
+    <div class="report-kpi-header">
+      <span>Tasa de ahorro</span>
+
+      <div class="report-kpi-icon report-kpi-icon-savings">
+        <i class="bi bi-piggy-bank" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <strong
+      class="report-kpi-value"
+      [class.report-kpi-value-income]="
+        analysis.savingsRate() !== null && (analysis.savingsRate() ?? 0) >= 0
+      "
+      [class.report-kpi-value-expense]="
+        analysis.savingsRate() !== null && (analysis.savingsRate() ?? 0) < 0
+      "
+    >
+      {{ analysis.formattedSavingsRate() }}
+    </strong>
+
+    @if (state.comparisonEnabled()) {
+      <span
+        class="report-kpi-comparison"
+        [class.text-success]="
+          analysis.savingsRate() !== null &&
+          analysis.savingsRateComparison().points !== null &&
+          analysis.savingsRateComparison().direction === 'increase'
+        "
+        [class.text-danger]="
+          analysis.savingsRate() !== null &&
+          analysis.savingsRateComparison().points !== null &&
+          analysis.savingsRateComparison().direction === 'decrease'
+        "
+        [class.text-secondary]="
+          analysis.savingsRate() === null ||
+          analysis.savingsRateComparison().points === null ||
+          analysis.savingsRateComparison().direction === 'same'
+        "
+      >
+        @if (analysis.savingsRate() === null || analysis.savingsRateComparison().points === null) {
+          <i class="bi bi-dash" aria-hidden="true"></i>
+        } @else if (analysis.savingsRateComparison().direction === 'increase') {
+          <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+        } @else if (analysis.savingsRateComparison().direction === 'decrease') {
+          <i class="bi bi-arrow-down-right" aria-hidden="true"></i>
+        } @else {
+          <i class="bi bi-dash" aria-hidden="true"></i>
+        }
+
+        {{ analysis.formatSavingsComparison(analysis.savingsRateComparison()) }}
+      </span>
+    } @else {
+      @if (analysis.savingsRate() === null) {
+        <span class="report-kpi-caption">Sin ingresos en este periodo</span>
+      } @else {
+        <span class="report-kpi-caption">Porcentaje de ingresos conservado</span>
+      }
+    }
+  </article>
+</section>

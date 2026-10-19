@@ -1,0 +1,87 @@
+<article class="report-card">
+  <header class="report-card-header">
+    <div>
+      <span class="report-card-eyebrow">RANKING</span>
+      <h2>Principales categorías de gasto</h2>
+      <p>Las categorías que más peso tienen en tus gastos.</p>
+    </div>
+
+    @if (state.selectedCategoryIds().length > 0) {
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm top-categories-clear no-export"
+        (click)="state.clearRankingCategorySelection()"
+      >
+        <i class="bi bi-x-circle" aria-hidden="true"></i>
+        Limpiar selección
+      </button>
+    }
+  </header>
+
+  @if (charts.topExpenseCategories().length > 0) {
+    <div class="top-categories">
+      @for (
+        category of charts.topExpenseCategories();
+        track category.categoryId;
+        let position = $index
+      ) {
+        <div
+          class="top-category"
+          [class.top-category-selected]="state.isCategorySelected(category.categoryId)"
+        >
+          <span class="top-category-position">
+            {{ position + 1 }}
+          </span>
+
+          <span class="top-category-color" [style.backgroundColor]="category.color"></span>
+
+          <div class="top-category-info">
+            <div class="top-category-heading">
+              <strong>
+                {{ category.categoryName }}
+              </strong>
+
+              <span>
+                {{ analysis.formatCurrency(category.amount) }}
+              </span>
+            </div>
+
+            <div class="top-category-progress">
+              <div
+                class="top-category-progress-value"
+                [style.width.%]="category.percentage"
+                [style.backgroundColor]="category.color"
+              ></div>
+            </div>
+
+            <div class="top-category-footer">
+              <small>
+                {{ category.percentage.toFixed(1) }}
+                % de tus gastos
+              </small>
+
+              <button
+                type="button"
+                class="top-category-filter no-export"
+                [attr.aria-pressed]="state.isCategorySelected(category.categoryId)"
+                (click)="state.toggleRankingCategory(category.categoryId)"
+              >
+                @if (state.isCategorySelected(category.categoryId)) {
+                  <i class="bi bi-check-circle" aria-hidden="true"></i>
+                  Quitar filtro
+                } @else {
+                  Filtrar
+                }
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="report-empty report-empty-small">
+      <i class="bi bi-bar-chart" aria-hidden="true"></i>
+      <strong>No hay categorías que analizar</strong>
+    </div>
+  }
+</article>

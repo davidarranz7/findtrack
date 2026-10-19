@@ -1,0 +1,87 @@
+<article class="report-card">
+  <header class="report-card-header">
+    <div>
+      <span class="report-card-eyebrow">RESUMEN</span>
+      <h2>Resumen del periodo</h2>
+      <p>Una visión rápida de tu actividad financiera.</p>
+    </div>
+  </header>
+
+  <div class="report-summary-list">
+    <div class="report-summary-item">
+      <div class="report-summary-icon">
+        <i class="bi bi-receipt" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <span>Movimientos analizados</span>
+        <strong>
+          {{ analysis.filteredTransactions().length }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="report-summary-item">
+      <div class="report-summary-icon">
+        <i class="bi bi-calculator" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <span>Gasto medio mensual</span>
+        <strong>
+          {{ analysis.formattedAverageMonthlyExpenses() }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="report-summary-item">
+      <div class="report-summary-icon">
+        <i class="bi bi-trophy" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <span>Mayor categoría de gasto</span>
+        <strong>
+          {{ charts.topExpenseCategory()?.categoryName }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="report-summary-item">
+      <div class="report-summary-icon">
+        <i class="bi bi-calendar-event" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <span>Mes con mayor gasto</span>
+
+        <strong>
+          @if (charts.highestExpenseMonth()) {
+            {{ charts.highestExpenseMonth()?.label }}
+            ·
+            {{ analysis.formatCurrency(charts.highestExpenseMonth()?.expense ?? 0) }}
+          } @else {
+            Sin datos
+          }
+        </strong>
+      </div>
+    </div>
+
+    <div class="report-summary-item">
+      <div class="report-summary-icon">
+        <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+      </div>
+
+      <div>
+        <span>Resultado del periodo</span>
+
+        <strong
+          [class.balance-positive]="analysis.netBalance() >= 0"
+          [class.balance-negative]="analysis.netBalance() < 0"
+        >
+          {{ analysis.netBalance() >= 0 ? 'Positivo' : 'Negativo' }}
+        </strong>
+      </div>
+    </div>
+  </div>
+</article>
