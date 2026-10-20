@@ -1,0 +1,89 @@
+<section class="summary-grid" aria-label="Resumen financiero">
+  <article class="summary-card">
+    <div class="summary-card-header">
+      <span class="summary-label">Balance disponible</span>
+
+      <span class="summary-icon summary-icon-balance">
+        <i class="bi bi-wallet2" aria-hidden="true"></i>
+      </span>
+    </div>
+
+    @if (state.isLoading()) {
+      <div class="spinner-border spinner-border-sm text-primary my-2" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    } @else {
+      <p class="summary-value mb-1">
+        {{ analysis.formattedBalance() }}
+      </p>
+    }
+
+    <p class="summary-description mb-0">Balance acumulado de tus movimientos</p>
+  </article>
+
+  <article class="summary-card">
+    <div class="summary-card-header">
+      <span class="summary-label">Ingresos totales</span>
+
+      <span class="summary-icon summary-icon-income">
+        <i class="bi bi-arrow-down" aria-hidden="true"></i>
+      </span>
+    </div>
+
+    @if (state.isLoading()) {
+      <div class="spinner-border spinner-border-sm text-success my-2" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    } @else {
+      <p class="summary-value mb-1">
+        {{ analysis.formattedIncome() }}
+      </p>
+    }
+
+    <p class="summary-description mb-0">Ingresos de {{ state.currentMonthLabel() }}</p>
+  </article>
+
+  <article class="summary-card">
+    <div class="summary-card-header">
+      <span class="summary-label">Gastos totales</span>
+
+      <span class="summary-icon summary-icon-expense">
+        <i class="bi bi-arrow-up" aria-hidden="true"></i>
+      </span>
+    </div>
+
+    @if (state.isLoading()) {
+      <div class="spinner-border spinner-border-sm text-danger my-2" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    } @else {
+      <p class="summary-value mb-1">
+        {{ analysis.formattedExpenses() }}
+      </p>
+    }
+
+    <p class="summary-description mb-0">Gastos de {{ state.currentMonthLabel() }}</p>
+  </article>
+
+  <article class="summary-card">
+    <div class="summary-card-header">
+      <span class="summary-label">Ahorro del mes</span>
+
+      <span class="summary-icon summary-icon-saving">
+        <i class="bi bi-piggy-bank" aria-hidden="true"></i>
+      </span>
+    </div>
+
+    @if (state.isLoading()) {
+      <div class="spinner-border spinner-border-sm text-primary my-2" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    } @else {
+      <p class="summary-value mb-1">
+        {{ analysis.formattedSavings() }}
+      </p>
+    }
+
+    <p class="summary-description mb-0">Ingresos menos gastos del mes</p>
+  </article>
+</section>

@@ -1,0 +1,86 @@
+<section class="charts-grid">
+  <article class="overview-card income-expense-card">
+    <header class="card-heading">
+      <div>
+        <h2 class="card-title">Ingresos vs Gastos</h2>
+        <p class="card-subtitle mb-0">Evolución de los últimos 6 meses</p>
+      </div>
+
+      <div class="chart-legend">
+        <span>
+          <span class="legend-dot legend-income"></span>
+          Ingresos
+        </span>
+
+        <span>
+          <span class="legend-dot legend-expense"></span>
+          Gastos
+        </span>
+      </div>
+    </header>
+
+    @if (state.isLoading()) {
+      <div class="chart-placeholder">
+        <span class="spinner-border spinner-border-sm text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </span>
+
+        <p class="chart-placeholder-text mb-0">Cargando histórico...</p>
+      </div>
+    } @else if (!analysis.hasIncomeExpenseData()) {
+      <div class="chart-placeholder">
+        <i class="bi bi-bar-chart" aria-hidden="true"></i>
+
+        <div>
+          <p class="chart-placeholder-title mb-1">Todavía no hay datos para mostrar</p>
+
+          <p class="chart-placeholder-text mb-0">
+            Aquí aparecerá la evolución mensual de ingresos y gastos.
+          </p>
+        </div>
+      </div>
+    } @else {
+      <app-income-expense-chart [items]="analysis.incomeExpenseHistory()" />
+    }
+  </article>
+
+  <article class="overview-card expense-distribution-card">
+    <header class="card-heading">
+      <div>
+        <h2 class="card-title">Distribución de Gastos</h2>
+
+        <p class="card-subtitle mb-0">
+          Desglose por categoría de
+          {{ state.currentMonthLabel() }}
+        </p>
+      </div>
+    </header>
+
+    @if (state.isLoading()) {
+      <div class="chart-placeholder">
+        <span class="spinner-border spinner-border-sm text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </span>
+
+        <p class="chart-placeholder-text mb-0">Cargando distribución...</p>
+      </div>
+    } @else if (analysis.expenseDistribution().length === 0) {
+      <div class="chart-placeholder">
+        <i class="bi bi-pie-chart" aria-hidden="true"></i>
+
+        <div>
+          <p class="chart-placeholder-title mb-1">Sin distribución disponible</p>
+
+          <p class="chart-placeholder-text mb-0">
+            Los gastos se agruparán automáticamente por categoría.
+          </p>
+        </div>
+      </div>
+    } @else {
+      <app-expense-distribution-chart
+        [items]="analysis.expenseDistribution()"
+        [total]="analysis.monthlyExpenses()"
+      />
+    }
+  </article>
+</section>
