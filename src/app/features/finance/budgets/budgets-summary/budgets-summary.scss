@@ -1,0 +1,94 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.budgets-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.budget-summary-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  min-height: 125px;
+  padding: 1.25rem;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border-subtle);
+  border-radius: 0.9rem;
+  box-shadow: var(--app-shadow);
+}
+
+.budget-summary-label {
+  color: var(--app-text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.budget-summary-value {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--app-text);
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-summary-detail {
+  color: var(--app-text-muted);
+  font-size: 0.76rem;
+}
+
+.budget-summary-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.8rem;
+  font-size: 1.05rem;
+}
+
+.budget-summary-icon-primary {
+  color: var(--app-primary);
+  background: var(--app-primary-soft);
+}
+
+.budget-summary-icon-expense {
+  color: var(--app-danger);
+  background: var(--app-danger-soft);
+}
+
+.budget-summary-icon-success {
+  color: var(--app-success);
+  background: var(--app-success-soft);
+}
+
+@media (max-width: 991.98px) {
+  .budgets-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .budget-summary-card:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .budgets-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-summary-card:last-child {
+    grid-column: auto;
+  }
+}

@@ -1,0 +1,76 @@
+<section class="budgets-summary" aria-label="Resumen de presupuestos">
+  <article class="budget-summary-card">
+    <div>
+      <p class="budget-summary-label mb-1">Presupuesto total</p>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <strong class="budget-summary-value">
+          {{ formatCurrency(totalBudget()) }}
+        </strong>
+      }
+
+      <p class="budget-summary-detail mb-0">
+        {{ selectedMonthLabel() }}
+      </p>
+    </div>
+
+    <div class="budget-summary-icon budget-summary-icon-primary">
+      <i class="bi bi-wallet2" aria-hidden="true"></i>
+    </div>
+  </article>
+
+  <article class="budget-summary-card">
+    <div>
+      <p class="budget-summary-label mb-1">Gastado</p>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-danger" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <strong class="budget-summary-value">
+          {{ formatCurrency(totalSpent()) }}
+        </strong>
+      }
+
+      <p class="budget-summary-detail mb-0">
+        {{ formatPercentage(totalPercentage()) }}
+        del presupuesto
+      </p>
+    </div>
+
+    <div class="budget-summary-icon budget-summary-icon-expense">
+      <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+    </div>
+  </article>
+
+  <article class="budget-summary-card">
+    <div>
+      <p class="budget-summary-label mb-1">Restante</p>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-success" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <strong
+          class="budget-summary-value"
+          [class.text-danger]="totalRemaining() < 0"
+          [class.text-success]="totalRemaining() >= 0"
+        >
+          {{ formatCurrency(totalRemaining()) }}
+        </strong>
+      }
+
+      <p class="budget-summary-detail mb-0">Disponible este mes</p>
+    </div>
+
+    <div class="budget-summary-icon budget-summary-icon-success">
+      <i class="bi bi-piggy-bank" aria-hidden="true"></i>
+    </div>
+  </article>
+</section>
