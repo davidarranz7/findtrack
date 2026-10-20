@@ -1,0 +1,104 @@
+<section class="categories-management">
+  <div class="categories-management-header">
+    <div>
+      <h2 class="section-title mb-1">Categorías de movimiento</h2>
+
+      <p class="section-description mb-0">
+        Organiza tus movimientos utilizando tus propias categorías.
+      </p>
+    </div>
+
+    <span class="categories-count">
+      {{ state.totalCategories() }}
+
+      @if (state.totalCategories() === 1) {
+        categoría
+      } @else {
+        categorías
+      }
+    </span>
+  </div>
+
+  @if (state.isLoadingCategories()) {
+    <div class="categories-loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando categorías...</span>
+      </div>
+    </div>
+  } @else if (state.categories().length === 0) {
+    <div class="categories-empty">
+      <div class="categories-empty-icon">
+        <i class="bi bi-grid" aria-hidden="true"></i>
+      </div>
+
+      <h3>No tienes categorías</h3>
+
+      <p>Crea tu primera categoría para organizar tus movimientos.</p>
+
+      <button type="button" class="btn btn-primary mt-3" (click)="createRequested.emit()">
+        Crear mi primera categoría
+      </button>
+    </div>
+  } @else {
+    <div class="categories-grid">
+      @for (category of state.categories(); track category.id) {
+        <article class="category-card">
+          <div class="category-card-header">
+            <div
+              class="category-icon"
+              [style.color]="category.color"
+              [style.backgroundColor]="category.color + '18'"
+            >
+              <i [class]="getCategoryIconClass(category)" aria-hidden="true"></i>
+            </div>
+
+            <div class="category-card-main">
+              <h3 class="category-name mb-1">
+                {{ category.name }}
+              </h3>
+
+              <p class="category-usage mb-0">
+                {{ state.getTransactionCount(category.id) }}
+
+                @if (state.getTransactionCount(category.id) === 1) {
+                  transacción
+                } @else {
+                  transacciones
+                }
+              </p>
+            </div>
+          </div>
+
+          <div class="category-card-footer">
+            <span
+              class="category-color"
+              [style.backgroundColor]="category.color"
+              aria-hidden="true"
+            ></span>
+
+            <div class="category-actions">
+              <button
+                type="button"
+                class="category-action-button"
+                [attr.aria-label]="'Editar categoría ' + category.name"
+                (click)="editRequested.emit(category)"
+              >
+                <i class="bi bi-pencil" aria-hidden="true"></i>
+              </button>
+
+              <button
+                type="button"
+                class="category-action-button category-action-delete"
+                [attr.aria-label]="'Eliminar categoría ' + category.name"
+                [disabled]="state.isLoadingBudgets() || deletingCategoryId() !== null"
+                (click)="deleteRequested.emit(category)"
+              >
+                <i class="bi bi-trash" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>

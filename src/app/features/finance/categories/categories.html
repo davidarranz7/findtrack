@@ -12,185 +12,22 @@
     </div>
   </app-page-header>
 
-  @if (loadError()) {
+  @if (state.loadError()) {
     <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
       <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-      <span>
-        {{ loadError() }}
-      </span>
+
+      <span>{{ state.loadError() }}</span>
     </div>
   }
 
-  <section class="categories-summary" aria-label="Resumen de categorías">
-    <article class="summary-card">
-      <div>
-        <p class="summary-label mb-1">Total categorías</p>
+  <app-categories-summary />
 
-        @if (isLoading()) {
-          <div class="spinner-border spinner-border-sm text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-          </div>
-        } @else {
-          <strong class="summary-value">
-            {{ totalCategories() }}
-          </strong>
-        }
-
-        <p class="summary-detail mb-0">Categorías disponibles</p>
-      </div>
-
-      <div class="summary-icon summary-icon-primary">
-        <i class="bi bi-grid" aria-hidden="true"></i>
-      </div>
-    </article>
-
-    <article class="summary-card">
-      <div>
-        <p class="summary-label mb-1">Movimientos categorizados</p>
-
-        @if (isLoading()) {
-          <div class="spinner-border spinner-border-sm text-success" role="status">
-            <span class="visually-hidden">Cargando...</span>
-          </div>
-        } @else {
-          <strong class="summary-value">
-            {{ categorizedTransactions() }}
-          </strong>
-        }
-
-        <p class="summary-detail mb-0">Con categoría asignada</p>
-      </div>
-
-      <div class="summary-icon summary-icon-success">
-        <i class="bi bi-check-circle" aria-hidden="true"></i>
-      </div>
-    </article>
-
-    <article class="summary-card">
-      <div>
-        <p class="summary-label mb-1">Sin categoría</p>
-
-        @if (isLoading()) {
-          <div class="spinner-border spinner-border-sm text-warning" role="status">
-            <span class="visually-hidden">Cargando...</span>
-          </div>
-        } @else {
-          <strong class="summary-value">
-            {{ uncategorizedTransactions() }}
-          </strong>
-        }
-
-        <p class="summary-detail mb-0">Movimientos pendientes</p>
-      </div>
-
-      <div class="summary-icon summary-icon-warning">
-        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-      </div>
-    </article>
-  </section>
-
-  <section class="categories-management">
-    <div class="categories-management-header">
-      <div>
-        <h2 class="section-title mb-1">Categorías de movimiento</h2>
-
-        <p class="section-description mb-0">
-          Organiza tus movimientos utilizando tus propias categorías.
-        </p>
-      </div>
-
-      <span class="categories-count">
-        {{ totalCategories() }}
-        @if (totalCategories() === 1) {
-          categoría
-        } @else {
-          categorías
-        }
-      </span>
-    </div>
-
-    @if (isLoadingCategories()) {
-      <div class="categories-loading">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Cargando categorías...</span>
-        </div>
-      </div>
-    } @else if (categories().length === 0) {
-      <div class="categories-empty">
-        <div class="categories-empty-icon">
-          <i class="bi bi-grid" aria-hidden="true"></i>
-        </div>
-
-        <h3>No tienes categorías</h3>
-
-        <p>Crea tu primera categoría para organizar tus movimientos.</p>
-
-        <button type="button" class="btn btn-primary mt-3" (click)="openCategoryForm()">
-          Crear mi primera categoría
-        </button>
-      </div>
-    } @else {
-      <div class="categories-grid">
-        @for (category of categories(); track category.id) {
-          <article class="category-card">
-            <div class="category-card-header">
-              <div
-                class="category-icon"
-                [style.color]="category.color"
-                [style.backgroundColor]="category.color + '18'"
-              >
-                <i [class]="getCategoryIconClass(category)" aria-hidden="true"></i>
-              </div>
-
-              <div class="category-card-main">
-                <h3 class="category-name mb-1">
-                  {{ category.name }}
-                </h3>
-
-                <p class="category-usage mb-0">
-                  {{ getTransactionCount(category.id) }}
-                  @if (getTransactionCount(category.id) === 1) {
-                    transacción
-                  } @else {
-                    transacciones
-                  }
-                </p>
-              </div>
-            </div>
-
-            <div class="category-card-footer">
-              <span
-                class="category-color"
-                [style.backgroundColor]="category.color"
-                aria-hidden="true"
-              ></span>
-
-              <div class="category-actions">
-                <button
-                  type="button"
-                  class="category-action-button"
-                  [attr.aria-label]="'Editar categoría ' + category.name"
-                  (click)="openEditCategory(category)"
-                >
-                  <i class="bi bi-pencil" aria-hidden="true"></i>
-                </button>
-
-                <button
-                  type="button"
-                  class="category-action-button category-action-delete"
-                  [attr.aria-label]="'Eliminar categoría ' + category.name"
-                  [disabled]="isLoadingBudgets() || deletingCategoryId() !== null"
-                  (click)="requestDeleteCategory(category)"
-                >
-                  <i class="bi bi-trash" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-          </article>
-        }
-      </div>
-    }
-  </section>
+  <app-categories-list
+    [deletingCategoryId]="deletingCategoryId()"
+    (createRequested)="openCategoryForm()"
+    (editRequested)="openEditCategory($event)"
+    (deleteRequested)="requestDeleteCategory($event)"
+  />
 </section>
 
 @if (isCategoryFormOpen()) {
@@ -282,12 +119,11 @@
         </div>
 
         <div>
-          <strong>
-            {{ category.name }}
-          </strong>
+          <strong>{{ category.name }}</strong>
 
           <p class="text-body-secondary small mb-0">
             {{ affectedTransactions().length }}
+
             @if (affectedTransactions().length === 1) {
               transacción asociada
             } @else {
@@ -319,6 +155,7 @@
     @if (deleteError()) {
       <div class="alert alert-danger small mb-0" role="alert" aria-live="assertive">
         <i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>
+
         {{ deleteError() }}
       </div>
     }
