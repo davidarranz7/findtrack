@@ -1,0 +1,77 @@
+<article class="overview-card overview-card-transactions">
+  <header class="card-heading">
+    <div>
+      <h2 class="card-title">Últimas Transacciones</h2>
+      <p class="card-subtitle mb-0">Movimientos registrados recientemente</p>
+    </div>
+
+    <a routerLink="/transactions" class="view-all-button">
+      Ver todas
+      <i class="bi bi-arrow-right" aria-hidden="true"></i>
+    </a>
+  </header>
+
+  @if (state.isLoading()) {
+    <div class="transactions-loading">
+      <span class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></span>
+      <span>Cargando movimientos...</span>
+    </div>
+  } @else if (analysis.latestTransactions().length === 0) {
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <i class="bi bi-receipt" aria-hidden="true"></i>
+      </div>
+
+      <p class="empty-state-title mb-1">Sin transacciones disponibles</p>
+
+      <p class="empty-state-text mb-0">Tus últimos movimientos aparecerán en esta sección.</p>
+    </div>
+  } @else {
+    <div class="recent-transactions">
+      @for (transaction of analysis.latestTransactions(); track transaction.id) {
+        <div class="recent-transaction">
+          <div
+            class="transaction-icon"
+            [class.transaction-icon-income]="transaction.type === 'income'"
+            [class.transaction-icon-expense]="transaction.type === 'expense'"
+          >
+            <i
+              class="bi"
+              [class.bi-arrow-down-left]="transaction.type === 'income'"
+              [class.bi-arrow-up-right]="transaction.type === 'expense'"
+              aria-hidden="true"
+            ></i>
+          </div>
+
+          <div class="transaction-information">
+            <p class="transaction-description mb-0">
+              {{ transaction.description }}
+            </p>
+
+            <div class="transaction-meta">
+              <span>
+                {{ analysis.formatTransactionDate(transaction.date) }}
+              </span>
+
+              <span aria-hidden="true"> · </span>
+
+              <span>
+                {{
+                  analysis.getCategoryName(transaction.categoryId, transaction.categoryNameSnapshot)
+                }}
+              </span>
+            </div>
+          </div>
+
+          <span
+            class="transaction-amount"
+            [class.transaction-amount-income]="transaction.type === 'income'"
+            [class.transaction-amount-expense]="transaction.type === 'expense'"
+          >
+            {{ analysis.formatTransactionAmount(transaction) }}
+          </span>
+        </div>
+      }
+    </div>
+  }
+</article>

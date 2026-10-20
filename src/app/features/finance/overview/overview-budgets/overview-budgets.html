@@ -1,0 +1,103 @@
+<article class="overview-card">
+  <header class="card-heading">
+    <div>
+      <h2 class="card-title">Presupuestos del Mes</h2>
+      <p class="card-subtitle mb-0">
+        Límites y consumo de
+        {{ state.currentMonthLabel() }}
+      </p>
+    </div>
+
+    <button type="button" class="card-action-button" aria-label="Opciones de presupuestos" disabled>
+      <i class="bi bi-sliders2" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  @if (state.isLoadingBudgets()) {
+    <div class="transactions-loading">
+      <span class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </span>
+      <span>Cargando presupuestos...</span>
+    </div>
+  } @else if (state.budgetLoadError()) {
+    <div class="alert alert-danger mt-3 mb-0" role="alert">
+      {{ state.budgetLoadError() }}
+    </div>
+  } @else if (analysis.budgetProgress().length === 0) {
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <i class="bi bi-wallet2" aria-hidden="true"></i>
+      </div>
+
+      <p class="empty-state-title mb-1">Sin presupuestos disponibles</p>
+
+      <p class="empty-state-text mb-0">
+        Aquí podrás consultar el progreso de tus presupuestos mensuales.
+      </p>
+    </div>
+  } @else {
+    <div class="budget-list">
+      @for (budget of analysis.budgetProgress(); track budget.budgetId) {
+        <div class="budget-item">
+          <div class="budget-item-header">
+            <div class="budget-information">
+              <div class="budget-category-row">
+                <span
+                  class="budget-category-color"
+                  [style.background-color]="budget.categoryColor"
+                ></span>
+
+                <p class="budget-category mb-0">
+                  {{ budget.categoryName }}
+                </p>
+              </div>
+
+              <p class="budget-values mb-0">
+                {{ analysis.formatCurrency(budget.spent) }}
+                de
+                {{ analysis.formatCurrency(budget.limit) }}
+              </p>
+            </div>
+
+            <span
+              class="budget-percentage"
+              [class.text-success]="budget.status === 'safe'"
+              [class.text-warning]="budget.status === 'warning'"
+              [class.text-danger]="budget.status === 'exceeded'"
+            >
+              {{ budget.percentage.toFixed(0) }}%
+            </span>
+          </div>
+
+          <div
+            class="progress budget-progress"
+            role="progressbar"
+            [attr.aria-label]="'Presupuesto de ' + budget.categoryName"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            [attr.aria-valuenow]="budget.percentage > 100 ? 100 : budget.percentage"
+          >
+            <div
+              class="progress-bar"
+              [class.bg-success]="budget.status === 'safe'"
+              [class.bg-warning]="budget.status === 'warning'"
+              [class.bg-danger]="budget.status === 'exceeded'"
+              [style.width.%]="budget.percentage > 100 ? 100 : budget.percentage"
+            ></div>
+          </div>
+
+          <p class="budget-remaining mb-0" [class.text-danger]="budget.status === 'exceeded'">
+            @if (budget.remaining >= 0) {
+              Quedan
+              {{ analysis.formatCurrency(budget.remaining) }}
+            } @else {
+              Excedido en
+              {{ analysis.formatCurrency(-budget.remaining) }}
+            }
+          </p>
+        </div>
+      }
+    </div>
+  }
+</article>
