@@ -7,37 +7,23 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { catchError, EMPTY, finalize, forkJoin, switchMap, tap, timer } from 'rxjs';
+import { finalize, forkJoin, timer } from 'rxjs';
 
 import { AppBrand } from '../../../shared/app-brand/app-brand';
 import { AuthBackground } from '../auth-background/auth-background';
 import { AuthService } from '../services/auth.service';
-
-type AvailabilityStatus = 'idle' | 'checking' | 'available' | 'unavailable' | 'error';
+import { passwordsMatchValidator } from '../validators/passwords-match.validator';
+import { RegisterAvailabilityService } from './services/register-availability';
+import { getPasswordRequirements, getPasswordStrength } from './utils/password-strength.utils';
 
 const USERNAME_PATTERN = /^[a-z0-9._]+$/;
-
-const passwordsMatchValidator: ValidatorFn = (
-  control: AbstractControl,
-): ValidationErrors | null => {
-  const password = control.get('password')?.value;
-  const confirmPassword = control.get('confirmPassword')?.value;
-
-  return password === confirmPassword ? null : { passwordsMismatch: true };
-};
 
 @Component({
   selector: 'app-register',
   imports: [ReactiveFormsModule, RouterLink, AuthBackground, AppBrand],
+  providers: [RegisterAvailabilityService],
   templateUrl: './register.html',
   styleUrl: './register.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,6 +31,7 @@ const passwordsMatchValidator: ValidatorFn = (
 export class Register {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly availability = inject(RegisterAvailabilityService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -54,12 +41,11 @@ export class Register {
   protected readonly isSubmitting = signal(false);
   protected readonly submitError = signal<string | null>(null);
 
-  protected readonly usernameAvailability = signal<AvailabilityStatus>('idle');
-  protected readonly emailAvailability = signal<AvailabilityStatus>('idle');
+  protected readonly usernameAvailability = this.availability.usernameAvailability;
 
-  protected readonly isCheckingAvailability = computed(
-    () => this.usernameAvailability() === 'checking' || this.emailAvailability() === 'checking',
-  );
+  protected readonly emailAvailability = this.availability.emailAvailability;
+
+  protected readonly isCheckingAvailability = this.availability.isCheckingAvailability;
 
   protected readonly registerForm = this.formBuilder.nonNullable.group(
     {
@@ -80,70 +66,16 @@ export class Register {
     initialValue: this.registerForm.controls.password.value,
   });
 
-  protected readonly passwordRequirements = computed(() => {
-    const password = this.passwordValue();
+  protected readonly passwordRequirements = computed(() =>
+    getPasswordRequirements(this.passwordValue()),
+  );
 
-    return {
-      length: password.length >= 8,
-      uppercase: /[A-Z]/.test(password),
-      number: /\d/.test(password),
-      specialCharacter: /[^A-Za-z0-9]/.test(password),
-    };
-  });
-
-  protected readonly passwordStrength = computed(() => {
-    const password = this.passwordValue();
-
-    if (password.length < 8) {
-      return {
-        percentage: 25,
-        label: 'Débil',
-        level: 'weak',
-      };
-    }
-
-    const requirements = this.passwordRequirements();
-
-    const improvements = [
-      requirements.uppercase,
-      requirements.number,
-      requirements.specialCharacter,
-    ].filter(Boolean).length;
-
-    if (improvements === 0) {
-      return {
-        percentage: 50,
-        label: 'Mínima',
-        level: 'minimum',
-      };
-    }
-
-    if (improvements === 1) {
-      return {
-        percentage: 75,
-        label: 'Media',
-        level: 'medium',
-      };
-    }
-
-    if (improvements === 2) {
-      return {
-        percentage: 90,
-        label: 'Fuerte',
-        level: 'strong',
-      };
-    }
-
-    return {
-      percentage: 100,
-      label: 'Excelente',
-      level: 'excellent',
-    };
-  });
+  protected readonly passwordStrength = computed(() => getPasswordStrength(this.passwordValue()));
 
   constructor() {
-    this.watchUsernameAvailability();
-    this.watchEmailAvailability();
+    this.availability.watchUsernameAvailability(this.registerForm.controls.username);
+
+    this.availability.watchEmailAvailability(this.registerForm.controls.email);
   }
 
   protected togglePasswordVisibility(): void {
@@ -186,136 +118,22 @@ export class Register {
           void this.router.navigate(['/login']);
         },
         error: (error: Error) => {
-          if (error.message === 'USERNAME_ALREADY_EXISTS') {
-            const usernameControl = this.registerForm.controls.username;
-
-            usernameControl.setErrors({
-              ...(usernameControl.errors ?? {}),
-              usernameTaken: true,
-            });
-
-            this.usernameAvailability.set('unavailable');
-            return;
-          }
-
-          if (error.message === 'EMAIL_ALREADY_EXISTS') {
-            const emailControl = this.registerForm.controls.email;
-
-            emailControl.setErrors({
-              ...(emailControl.errors ?? {}),
-              emailTaken: true,
-            });
-
-            this.emailAvailability.set('unavailable');
-            return;
-          }
-
-          this.submitError.set('No se ha podido crear la cuenta. Inténtalo de nuevo.');
+          this.handleRegistrationError(error);
         },
       });
   }
 
-  private watchUsernameAvailability(): void {
-    const usernameControl = this.registerForm.controls.username;
-
-    usernameControl.valueChanges
-      .pipe(
-        tap(() => {
-          this.usernameAvailability.set('idle');
-          this.removeControlError(usernameControl, 'usernameTaken');
-        }),
-        switchMap((username) => {
-          if (
-            username.length < 4 ||
-            !USERNAME_PATTERN.test(username) ||
-            usernameControl.hasError('required') ||
-            usernameControl.hasError('minlength') ||
-            usernameControl.hasError('pattern')
-          ) {
-            return EMPTY;
-          }
-
-          return timer(1000).pipe(
-            tap(() => this.usernameAvailability.set('checking')),
-            switchMap(() => this.authService.checkUsernameAvailability(username)),
-            catchError(() => {
-              this.usernameAvailability.set('error');
-              return EMPTY;
-            }),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((available) => {
-        if (available) {
-          this.usernameAvailability.set('available');
-          return;
-        }
-
-        usernameControl.setErrors({
-          ...(usernameControl.errors ?? {}),
-          usernameTaken: true,
-        });
-
-        this.usernameAvailability.set('unavailable');
-      });
-  }
-
-  private watchEmailAvailability(): void {
-    const emailControl = this.registerForm.controls.email;
-
-    emailControl.valueChanges
-      .pipe(
-        tap(() => {
-          this.emailAvailability.set('idle');
-          this.removeControlError(emailControl, 'emailTaken');
-        }),
-        switchMap((email) => {
-          const normalizedEmail = email.trim();
-
-          if (
-            !normalizedEmail ||
-            emailControl.hasError('required') ||
-            emailControl.hasError('email')
-          ) {
-            return EMPTY;
-          }
-
-          return timer(1000).pipe(
-            tap(() => this.emailAvailability.set('checking')),
-            switchMap(() => this.authService.checkEmailAvailability(normalizedEmail)),
-            catchError(() => {
-              this.emailAvailability.set('error');
-              return EMPTY;
-            }),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((available) => {
-        if (available) {
-          this.emailAvailability.set('available');
-          return;
-        }
-
-        emailControl.setErrors({
-          ...(emailControl.errors ?? {}),
-          emailTaken: true,
-        });
-
-        this.emailAvailability.set('unavailable');
-      });
-  }
-
-  private removeControlError(control: AbstractControl, errorKey: string): void {
-    if (!control.hasError(errorKey)) {
+  private handleRegistrationError(error: Error): void {
+    if (error.message === 'USERNAME_ALREADY_EXISTS') {
+      this.availability.markUsernameUnavailable(this.registerForm.controls.username);
       return;
     }
 
-    const errors = { ...(control.errors ?? {}) };
+    if (error.message === 'EMAIL_ALREADY_EXISTS') {
+      this.availability.markEmailUnavailable(this.registerForm.controls.email);
+      return;
+    }
 
-    delete errors[errorKey];
-
-    control.setErrors(Object.keys(errors).length > 0 ? errors : null);
+    this.submitError.set('No se ha podido crear la cuenta. Inténtalo de nuevo.');
   }
 }
