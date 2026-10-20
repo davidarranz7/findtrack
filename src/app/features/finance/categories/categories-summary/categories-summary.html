@@ -1,0 +1,67 @@
+<section class="categories-summary" aria-label="Resumen de categorías">
+  <article class="summary-card">
+    <div>
+      <p class="summary-label mb-1">Total categorías</p>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <strong class="summary-value">
+          {{ state.totalCategories() }}
+        </strong>
+      }
+
+      <p class="summary-detail mb-0">Categorías disponibles</p>
+    </div>
+
+    <div class="summary-icon summary-icon-primary">
+      <i class="bi bi-grid" aria-hidden="true"></i>
+    </div>
+  </article>
+
+  <article class="summary-card">
+    <div>
+      <p class="summary-label mb-1">Movimientos categorizados</p>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-success" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <strong class="summary-value">
+          {{ state.categorizedTransactions() }}
+        </strong>
+      }
+
+      <p class="summary-detail mb-0">Con categoría asignada</p>
+    </div>
+
+    <div class="summary-icon summary-icon-success">
+      <i class="bi bi-check-circle" aria-hidden="true"></i>
+    </div>
+  </article>
+
+  <article class="summary-card">
+    <div>
+      <p class="summary-label mb-1">Sin categoría</p>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-warning" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <strong class="summary-value">
+          {{ state.uncategorizedTransactions() }}
+        </strong>
+      }
+
+      <p class="summary-detail mb-0">Movimientos pendientes</p>
+    </div>
+
+    <div class="summary-icon summary-icon-warning">
+      <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+    </div>
+  </article>
+</section>
