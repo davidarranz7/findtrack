@@ -1,0 +1,252 @@
+<section class="transactions-content" aria-labelledby="transactions-table-title">
+  <header class="transactions-table-header">
+    <div>
+      <h2 id="transactions-table-title" class="transactions-table-title">Movimientos</h2>
+
+      <p class="transactions-table-subtitle mb-0">
+        Consulta y gestiona las transacciones de
+        {{ filters.currentMonthLabel() }}
+      </p>
+    </div>
+
+    @if (!state.isLoading() && !state.loadError()) {
+      <span class="transactions-table-count">
+        {{ filters.filteredTransactions().length }}
+        @if (filters.filteredTransactions().length === 1) {
+          movimiento
+        } @else {
+          movimientos
+        }
+      </span>
+    }
+  </header>
+
+  @if (state.isLoading()) {
+    <div class="transactions-placeholder">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando transacciones...</span>
+      </div>
+
+      <p class="transactions-placeholder-text mt-3 mb-0">Cargando tus movimientos...</p>
+    </div>
+  } @else if (!state.loadError() && filters.filteredTransactions().length === 0) {
+    <div class="transactions-placeholder">
+      <div class="transactions-placeholder-icon">
+        <i class="bi bi-receipt" aria-hidden="true"></i>
+      </div>
+
+      <h3 class="transactions-placeholder-title">No se han encontrado transacciones</h3>
+
+      <p class="transactions-placeholder-text mb-0">
+        No hay movimientos que coincidan con los filtros seleccionados.
+      </p>
+
+      @if (filters.hasActiveFilters()) {
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm mt-3"
+          (click)="filters.clearFilters()"
+        >
+          Limpiar filtros
+        </button>
+      }
+    </div>
+  } @else if (!state.loadError()) {
+    <div class="transactions-table-wrapper">
+      <table class="transactions-table">
+        <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Método de pago</th>
+            <th scope="col" class="text-end">Importe</th>
+            <th scope="col" class="text-end">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (transaction of filters.paginatedTransactions(); track transaction.id) {
+            <tr>
+              <td>
+                <span class="transaction-date">
+                  {{ formatTransactionDate(transaction.date) }}
+                </span>
+              </td>
+
+              <td>
+                <div class="transaction-description">
+                  <div
+                    class="transaction-description-icon"
+                    [class.transaction-description-icon-income]="transaction.type === 'income'"
+                    [class.transaction-description-icon-expense]="transaction.type === 'expense'"
+                  >
+                    @if (transaction.type === 'income') {
+                      <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+                    } @else {
+                      <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                    }
+                  </div>
+
+                  <div class="transaction-description-content">
+                    <span class="transaction-description-title">
+                      {{ transaction.description }}
+                    </span>
+
+                    @if (transaction.notes) {
+                      <span class="transaction-description-notes">
+                        {{ transaction.notes }}
+                      </span>
+                    }
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span
+                  class="transaction-type-badge"
+                  [class.transaction-type-income]="transaction.type === 'income'"
+                  [class.transaction-type-expense]="transaction.type === 'expense'"
+                >
+                  @if (transaction.type === 'income') {
+                    Ingreso
+                  } @else {
+                    Gasto
+                  }
+                </span>
+              </td>
+
+              <td>
+                <span class="transaction-category">
+                  {{ getCategoryName(transaction, state.categories()) }}
+                </span>
+              </td>
+
+              <td>
+                <div class="transaction-payment-method">
+                  <i
+                    class="bi {{ getPaymentMethodIcon(transaction.paymentMethod) }}"
+                    aria-hidden="true"
+                  ></i>
+
+                  <span>
+                    {{ getPaymentMethodLabel(transaction.paymentMethod) }}
+                  </span>
+                </div>
+              </td>
+
+              <td class="text-end">
+                <span
+                  class="transaction-amount"
+                  [class.transaction-amount-income]="transaction.type === 'income'"
+                  [class.transaction-amount-expense]="transaction.type === 'expense'"
+                >
+                  {{ formatTransactionAmount(transaction) }}
+                </span>
+              </td>
+
+              <td class="text-end">
+                <div class="transaction-actions">
+                  <button
+                    type="button"
+                    class="transaction-action-button"
+                    aria-label="Editar transacción"
+                    title="Editar transacción"
+                    (click)="editRequested.emit(transaction)"
+                  >
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="transaction-action-button transaction-delete-button"
+                    aria-label="Eliminar transacción"
+                    title="Eliminar transacción"
+                    [disabled]="deletingTransactionId() === transaction.id"
+                    (click)="deleteRequested.emit(transaction)"
+                  >
+                    @if (deletingTransactionId() === transaction.id) {
+                      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    } @else {
+                      <i class="bi bi-trash3" aria-hidden="true"></i>
+                    }
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="transactions-pagination" aria-label="Paginación de transacciones">
+      <div class="pagination-summary">
+        Mostrando
+        <strong>
+          {{ filters.firstVisibleTransaction() }}-{{ filters.lastVisibleTransaction() }}
+        </strong>
+        de
+        <strong>{{ filters.filteredTransactions().length }}</strong>
+        movimientos
+      </div>
+
+      <div class="pagination-controls">
+        <label for="pageSize" class="page-size-label"> Filas por página </label>
+
+        <select
+          #pageSizeSelect
+          id="pageSize"
+          class="page-size-select"
+          [value]="filters.pageSize()"
+          (change)="filters.changePageSize(pageSizeSelect.value)"
+        >
+          @for (option of filters.pageSizeOptions; track option) {
+            <option [value]="option">
+              {{ option }}
+            </option>
+          }
+        </select>
+
+        <div class="pagination-navigation" role="group" aria-label="Cambiar página">
+          <button
+            type="button"
+            class="pagination-button pagination-direction-button"
+            aria-label="Página anterior"
+            [disabled]="!filters.hasPreviousPage()"
+            (click)="filters.previousPage()"
+          >
+            <i class="bi bi-chevron-left" aria-hidden="true"></i>
+            <span class="pagination-direction-text">Anterior</span>
+          </button>
+
+          <div class="pagination-pages">
+            @for (page of filters.visiblePages(); track page) {
+              <button
+                type="button"
+                class="pagination-button pagination-page-button"
+                [class.active]="filters.currentPage() === page"
+                [attr.aria-current]="filters.currentPage() === page ? 'page' : null"
+                [attr.aria-label]="'Ir a la página ' + page"
+                (click)="filters.goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="pagination-button pagination-direction-button"
+            aria-label="Página siguiente"
+            [disabled]="!filters.hasNextPage()"
+            (click)="filters.nextPage()"
+          >
+            <span class="pagination-direction-text">Siguiente</span>
+            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </footer>
+  }
+</section>
