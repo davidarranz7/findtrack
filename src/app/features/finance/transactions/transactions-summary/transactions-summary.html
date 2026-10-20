@@ -1,0 +1,75 @@
+<section class="transactions-summary" aria-label="Resumen de transacciones">
+  <article class="transaction-summary-card">
+    <div>
+      <span class="transaction-summary-label">Ingresos del mes</span>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-success mt-2" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <p class="transaction-summary-value text-success mb-0">
+          {{ summary.formattedMonthlyIncome() }}
+        </p>
+      }
+
+      <span class="transaction-summary-period">
+        {{ filters.currentMonthLabel() }}
+      </span>
+    </div>
+
+    <div class="transaction-summary-icon transaction-summary-icon-income">
+      <i class="bi bi-arrow-down-left" aria-hidden="true"></i>
+    </div>
+  </article>
+
+  <article class="transaction-summary-card">
+    <div>
+      <span class="transaction-summary-label">Gastos del mes</span>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-danger mt-2" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <p class="transaction-summary-value text-danger mb-0">
+          {{ summary.formattedMonthlyExpenses() }}
+        </p>
+      }
+
+      <span class="transaction-summary-period">
+        {{ filters.currentMonthLabel() }}
+      </span>
+    </div>
+
+    <div class="transaction-summary-icon transaction-summary-icon-expense">
+      <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+    </div>
+  </article>
+
+  <article class="transaction-summary-card">
+    <div>
+      <span class="transaction-summary-label">Balance operativo</span>
+
+      @if (state.isLoading()) {
+        <div class="spinner-border spinner-border-sm text-primary mt-2" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      } @else {
+        <p
+          class="transaction-summary-value mb-0"
+          [class.text-success]="summary.operatingBalance() > 0"
+          [class.text-danger]="summary.operatingBalance() < 0"
+        >
+          {{ summary.formattedOperatingBalance() }}
+        </p>
+      }
+
+      <span class="transaction-summary-period">Ingresos menos gastos</span>
+    </div>
+
+    <div class="transaction-summary-icon transaction-summary-icon-balance">
+      <i class="bi bi-bank" aria-hidden="true"></i>
+    </div>
+  </article>
+</section>

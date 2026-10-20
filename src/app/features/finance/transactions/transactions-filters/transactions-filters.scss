@@ -1,0 +1,360 @@
+:host {
+  display: block;
+}
+
+.transactions-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--app-border-subtle);
+  border-radius: 0.875rem;
+  background: var(--app-surface);
+}
+
+.filters-primary-row,
+.filters-secondary-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.transaction-search {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 260px;
+  min-height: 42px;
+  flex: 1;
+  padding: 0 0.85rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.65rem;
+  background: var(--app-surface-secondary);
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.transaction-search:focus-within {
+  border-color: var(--app-primary);
+  background: var(--app-surface);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.08);
+}
+
+.transaction-search-icon {
+  flex-shrink: 0;
+  color: var(--app-text-secondary);
+  font-size: 0.85rem;
+}
+
+.transaction-search-input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.65rem 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--app-text);
+  font-size: 0.8rem;
+}
+
+.transaction-search-input::placeholder {
+  color: var(--app-text-secondary);
+}
+
+.transaction-search-input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.month-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 42px;
+  padding: 0 0.8rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.65rem;
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.month-filter:focus-within {
+  border-color: var(--app-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.08);
+}
+
+.month-filter i {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+}
+
+.month-filter-input {
+  min-width: 135px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--app-text);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.transaction-type-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 42px;
+  padding: 0.25rem;
+  border-radius: 0.65rem;
+  background: var(--app-surface-secondary);
+}
+
+.transaction-type-filter-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 34px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--app-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.transaction-type-filter-button:hover {
+  color: var(--app-text);
+}
+
+.transaction-type-filter-button.active {
+  border-color: var(--app-border-subtle);
+  background: var(--app-surface);
+  color: var(--app-primary);
+  box-shadow: var(--app-shadow);
+}
+
+.filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: var(--app-surface-secondary);
+  color: var(--app-text-secondary);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.transaction-type-filter-button.active .filter-count {
+  background: var(--bs-primary-bg-subtle);
+  color: var(--app-primary);
+}
+
+.filters-secondary-row {
+  padding-top: 1rem;
+  border-top: 1px solid var(--app-border-subtle);
+}
+
+.filter-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 40px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.65rem;
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.filter-select-wrapper:focus-within {
+  border-color: var(--app-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.08);
+}
+
+.filter-select-wrapper i {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+}
+
+.filter-select {
+  min-width: 150px;
+  padding: 0.55rem 1.5rem 0.55rem 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--app-text);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.filter-select option {
+  background-color: var(--app-surface);
+  color: var(--app-text);
+}
+
+.filter-select option:checked {
+  background-color: var(--bs-primary-bg-subtle);
+  color: var(--app-primary);
+}
+
+:host-context([data-bs-theme='dark']) .filter-select,
+:host-context([data-theme='dark']) .filter-select,
+:host-context(.dark) .filter-select {
+  color-scheme: dark;
+}
+
+.filter-select:disabled {
+  cursor: not-allowed;
+  color: var(--app-text-secondary);
+}
+
+.filters-result {
+  margin-left: auto;
+  color: var(--app-text-secondary);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.clear-filters-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 38px;
+  padding: 0.5rem 0.65rem;
+  border: 0;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: var(--app-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.clear-filters-button:hover:not(:disabled) {
+  background: var(--bs-primary-bg-subtle);
+}
+
+.clear-filters-button:disabled {
+  cursor: default;
+  color: var(--app-text-secondary);
+  opacity: 0.45;
+}
+
+.filters-error {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--app-danger);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 1199.98px) {
+  .filters-primary-row {
+    flex-wrap: wrap;
+  }
+
+  .transaction-search {
+    flex: 1 1 100%;
+  }
+
+  .month-filter,
+  .transaction-type-filter {
+    flex: 1;
+  }
+
+  .transaction-type-filter-button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .filters-secondary-row {
+    flex-wrap: wrap;
+  }
+
+  .filter-select-wrapper {
+    flex: 1;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .filters-result {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .filters-primary-row,
+  .filters-secondary-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .transaction-search,
+  .month-filter,
+  .transaction-type-filter,
+  .filter-select-wrapper {
+    width: 100%;
+  }
+
+  .transaction-search {
+    min-width: 0;
+  }
+
+  .month-filter-input,
+  .filter-select {
+    width: 100%;
+  }
+
+  .filters-result {
+    margin-left: 0;
+  }
+
+  .clear-filters-button {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .transactions-filters {
+    padding: 0.85rem;
+  }
+
+  .transaction-type-filter {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .transaction-type-filter-button {
+    min-width: 0;
+    padding-inline: 0.35rem;
+  }
+
+  .filter-count {
+    display: none;
+  }
+}
