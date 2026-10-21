@@ -1,12 +1,11 @@
-import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { map, Observable, switchMap, tap, throwError } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { User } from '../models/user';
+import { AuthenticatedUser, AuthSessionService } from './auth-session';
 
-type AuthenticatedUser = Omit<User, 'password'>;
 type RegisterUser = Omit<User, 'id'>;
 type UpdateProfilePayload = Pick<User, 'username' | 'email'>;
 
@@ -15,25 +14,13 @@ type UpdateProfilePayload = Pick<User, 'username' | 'email'>;
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly platformId = inject(PLATFORM_ID);
+  private readonly authSession = inject(AuthSessionService);
 
   private readonly apiUrl = `${environment.apiUrl}/users`;
 
-  private readonly sessionStorageKey = 'finora-auth-session';
-  private readonly rememberedAccountStorageKey = 'finora-remembered-account';
-
-  private readonly currentUserState = signal<AuthenticatedUser | null>(
-    this.restoreCurrentSession(),
-  );
-  private readonly rememberedAccountState = signal<AuthenticatedUser | null>(
-    this.restoreRememberedAccount(),
-  );
-
-  readonly currentUser = this.currentUserState.asReadonly();
-
-  readonly rememberedAccount = this.rememberedAccountState.asReadonly();
-
-  readonly isAuthenticated = computed(() => this.currentUser() !== null);
+  readonly currentUser = this.authSession.currentUser;
+  readonly rememberedAccount = this.authSession.rememberedAccount;
+  readonly isAuthenticated = this.authSession.isAuthenticated;
 
   checkUsernameAvailability(username: string, excludeUserId?: string): Observable<boolean> {
     const normalizedUsername = username.trim().toLowerCase();
@@ -117,12 +104,12 @@ export class AuthService {
         return this.toAuthenticatedUser(user);
       }),
       tap((user) => {
-        this.persistCurrentSession(user);
+        this.authSession.setCurrentUser(user);
 
         if (rememberMe) {
-          this.rememberAccount(user);
+          this.authSession.rememberAccount(user);
         } else {
-          this.clearRememberedAccount();
+          this.authSession.clearRememberedAccount();
         }
       }),
     );
@@ -158,10 +145,10 @@ export class AuthService {
       }),
       map((updatedUser) => this.toAuthenticatedUser(updatedUser)),
       tap((updatedUser) => {
-        this.persistCurrentSession(updatedUser);
+        this.authSession.setCurrentUser(updatedUser);
 
         if (this.rememberedAccount()?.id === updatedUser.id) {
-          this.rememberAccount(updatedUser);
+          this.authSession.rememberAccount(updatedUser);
         }
       }),
     );
@@ -183,89 +170,15 @@ export class AuthService {
   }
 
   setCurrentUser(user: AuthenticatedUser): void {
-    this.persistCurrentSession(user);
+    this.authSession.setCurrentUser(user);
   }
 
   clearCurrentUser(): void {
-    this.currentUserState.set(null);
-
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    sessionStorage.removeItem(this.sessionStorageKey);
+    this.authSession.clearCurrentUser();
   }
 
   clearRememberedAccount(): void {
-    this.rememberedAccountState.set(null);
-
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    localStorage.removeItem(this.rememberedAccountStorageKey);
-  }
-
-  private persistCurrentSession(user: AuthenticatedUser): void {
-    this.currentUserState.set(user);
-
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    sessionStorage.setItem(this.sessionStorageKey, JSON.stringify(user));
-  }
-
-  private rememberAccount(user: AuthenticatedUser): void {
-    this.rememberedAccountState.set(user);
-
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    localStorage.setItem(this.rememberedAccountStorageKey, JSON.stringify(user));
-  }
-
-  private restoreCurrentSession(): AuthenticatedUser | null {
-    if (!isPlatformBrowser(this.platformId)) {
-      return null;
-    }
-
-    return this.readStoredUser(sessionStorage.getItem(this.sessionStorageKey));
-  }
-
-  private restoreRememberedAccount(): AuthenticatedUser | null {
-    if (!isPlatformBrowser(this.platformId)) {
-      return null;
-    }
-
-    return this.readStoredUser(localStorage.getItem(this.rememberedAccountStorageKey));
-  }
-
-  private readStoredUser(storedUser: string | null): AuthenticatedUser | null {
-    if (!storedUser) {
-      return null;
-    }
-
-    try {
-      const user = JSON.parse(storedUser) as Partial<AuthenticatedUser>;
-
-      if (
-        typeof user.id !== 'string' ||
-        typeof user.username !== 'string' ||
-        typeof user.email !== 'string'
-      ) {
-        return null;
-      }
-
-      return {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      };
-    } catch {
-      return null;
-    }
+    this.authSession.clearRememberedAccount();
   }
 
   private toAuthenticatedUser(user: User): AuthenticatedUser {
