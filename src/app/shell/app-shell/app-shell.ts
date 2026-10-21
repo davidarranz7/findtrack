@@ -17,7 +17,7 @@ import { filter } from 'rxjs';
 
 import { AuthService } from '../../features/auth/services/auth.service';
 import { MobileLoginSplash } from '../../features/auth/mobile-login-splash/mobile-login-splash';
-import { MobileLoginSplashService } from '../../features/auth/services/mobile-login-splash.service';
+import { MobileLoginSplashService } from '../../features/auth/mobile-login-splash/services/mobile-login-splash.service';
 import { PreferencesService } from '../../features/finance/services/preferences.service';
 import { ThemeService } from '../../features/finance/services/theme.service';
 import { Toast } from '../../shared/ui/toast/toast';

@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 
-import type { MobileLoginSplash } from '../mobile-login-splash/mobile-login-splash';
+import type { MobileLoginSplash } from '../mobile-login-splash';
 
 @Injectable({
   providedIn: 'root',
@@ -54,9 +54,7 @@ export class MobileLoginSplashService {
 
     this.isVisible.set(true);
 
-    // Si el componente ya está en app.html, se reutiliza.
-    // Si no está montado, lo creamos temporalmente.
-    void import('../mobile-login-splash/mobile-login-splash')
+    void import('../mobile-login-splash')
       .then(({ MobileLoginSplash }) => {
         if (!this.isVisible() || this.playingComponent) {
           return;
