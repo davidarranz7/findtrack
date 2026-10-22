@@ -5,6 +5,12 @@
       "username": "demo",
       "email": "demo@finora.test",
       "password": "Demo123.!"
+    },
+    {
+      "username": "david",
+      "email": "david@gmail.com",
+      "password": "abc123!A",
+      "id": "p-XOvO4u8lo"
     }
   ],
   "transactions": [
@@ -1837,10 +1843,21 @@
       "currency": "EUR",
       "locale": "es-ES",
       "dateFormat": "DD/MM/YYYY",
-      "theme": "dark",
+      "theme": "light",
       "budgetWarningEnabled": true,
       "budgetExceededEnabled": true,
       "savingsGoalEnabled": true
+    },
+    {
+      "userId": "p-XOvO4u8lo",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "dateFormat": "DD/MM/YYYY",
+      "theme": "light",
+      "budgetWarningEnabled": true,
+      "budgetExceededEnabled": true,
+      "savingsGoalEnabled": true,
+      "id": "n3sc_XMM1RE"
     }
   ],
   "notifications": [
