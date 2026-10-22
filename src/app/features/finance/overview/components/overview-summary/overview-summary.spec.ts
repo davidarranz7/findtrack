@@ -1,8 +1,8 @@
 import { computed, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OverviewAnalysisService } from '../services/overview-analysis';
-import { OverviewStateService } from '../services/overview-state';
+import { OverviewAnalysisService } from '../../services/overview-analysis';
+import { OverviewStateService } from '../../services/overview-state';
 import { OverviewSummary } from './overview-summary';
 
 describe('OverviewSummary', () => {

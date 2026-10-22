@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { ExpenseDistributionChart } from '../../charts/expense-distribution-chart/expense-distribution-chart';
-import { IncomeExpenseChart } from '../../charts/income-expense-chart/income-expense-chart';
-import { OverviewAnalysisService } from '../services/overview-analysis';
-import { OverviewStateService } from '../services/overview-state';
+import { ExpenseDistributionChart } from '../../../charts/expense-distribution-chart/expense-distribution-chart';
+import { IncomeExpenseChart } from '../../../charts/income-expense-chart/income-expense-chart';
+import { OverviewAnalysisService } from '../../services/overview-analysis';
+import { OverviewStateService } from '../../services/overview-state';
 
 @Component({
   selector: 'app-overview-charts',

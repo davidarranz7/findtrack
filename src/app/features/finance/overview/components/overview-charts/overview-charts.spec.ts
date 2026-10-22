@@ -2,10 +2,10 @@ import { Component, computed, input, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { type ExpenseDistributionItem } from '../../charts/expense-distribution-chart/expense-distribution-chart';
-import { type IncomeExpenseChartItem } from '../../charts/income-expense-chart/income-expense-chart';
-import { OverviewAnalysisService } from '../services/overview-analysis';
-import { OverviewStateService } from '../services/overview-state';
+import { type ExpenseDistributionItem } from '../../../charts/expense-distribution-chart/expense-distribution-chart';
+import { type IncomeExpenseChartItem } from '../../../charts/income-expense-chart/income-expense-chart';
+import { OverviewAnalysisService } from '../../services/overview-analysis';
+import { OverviewStateService } from '../../services/overview-state';
 import { OverviewCharts } from './overview-charts';
 
 @Component({

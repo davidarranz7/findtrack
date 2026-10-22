@@ -2,9 +2,9 @@ import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { Transaction } from '../../models';
-import { OverviewAnalysisService } from '../services/overview-analysis';
-import { OverviewStateService } from '../services/overview-state';
+import { Transaction } from '../../../models';
+import { OverviewAnalysisService } from '../../services/overview-analysis';
+import { OverviewStateService } from '../../services/overview-state';
 import { OverviewRecentTransactions } from './overview-recent-transactions';
 
 describe('OverviewRecentTransactions', () => {

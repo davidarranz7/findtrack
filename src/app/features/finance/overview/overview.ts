@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-
 import { PageHeader } from '../../../shared/ui/page-header/page-header';
 import { Transaction } from '../models';
 import { TransactionForm } from '../transactions/transaction-form/transaction-form';
-import { OverviewBudgets } from './overview-budgets/overview-budgets';
-import { OverviewCharts } from './overview-charts/overview-charts';
-import { OverviewRecentTransactions } from './overview-recent-transactions/overview-recent-transactions';
-import { OverviewSummary } from './overview-summary/overview-summary';
+import { OverviewBudgets } from './components/overview-budgets/overview-budgets';
+import { OverviewCharts } from './components/overview-charts/overview-charts';
+import { OverviewRecentTransactions } from './components/overview-recent-transactions/overview-recent-transactions';
+import { OverviewSummary } from './components/overview-summary/overview-summary';
 import { OverviewAnalysisService } from './services/overview-analysis';
 import { OverviewStateService } from './services/overview-state';
 
