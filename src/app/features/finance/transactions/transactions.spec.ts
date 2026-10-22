@@ -152,9 +152,7 @@ describe('Transactions', () => {
     expect(element.textContent).toContain('Nómina');
     expect(element.textContent).toContain('Supermercado');
 
-    const exportButton = element.querySelector('.export-button') as HTMLButtonElement;
-
-    expect(exportButton.disabled).toBe(true);
+    expect(element.querySelector('.export-button')).toBeNull();
     expect(state.totalTransactions()).toBe(3);
   });
 
