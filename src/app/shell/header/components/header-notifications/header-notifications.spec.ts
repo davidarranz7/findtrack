@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { AuthService } from '../../../features/auth/services/auth.service';
-import { NotificationService } from '../../../features/finance/services/notification.service';
-import { TransactionService } from '../../../features/finance/services/transaction.service';
+import { AuthService } from '../../../../features/auth/services/auth.service';
+import { NotificationService } from '../../../../features/finance/services/notification.service';
+import { TransactionService } from '../../../../features/finance/services/transaction.service';
 import { HeaderNotifications } from './header-notifications';
 
 describe('HeaderNotifications', () => {

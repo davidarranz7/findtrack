@@ -14,10 +14,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { catchError, filter, finalize, forkJoin, of, switchMap } from 'rxjs';
 
-import { AuthService } from '../../../features/auth/services/auth.service';
-import { Notification } from '../../../features/finance/models/notification';
-import { NotificationService } from '../../../features/finance/services/notification.service';
-import { TransactionService } from '../../../features/finance/services/transaction.service';
+import { AuthService } from '../../../../features/auth/services/auth.service';
+import { Notification } from '../../../../features/finance/models/notification';
+import { NotificationService } from '../../../../features/finance/services/notification.service';
+import { TransactionService } from '../../../../features/finance/services/transaction.service';
 import { NotificationPanel } from './notification-panel/notification-panel';
 
 @Component({

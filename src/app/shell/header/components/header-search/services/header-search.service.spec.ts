@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { Category, Transaction } from '../../../../features/finance/models';
+import { Category, Transaction } from '../../../../../features/finance/models';
 import { HeaderSearchService } from './header-search.service';
 
 describe('HeaderSearchService', () => {

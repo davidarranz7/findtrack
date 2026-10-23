@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 
-import { Category, Transaction } from '../../../../features/finance/models';
-import { CategoryService } from '../../../../features/finance/services/category.service';
-import { TransactionService } from '../../../../features/finance/services/transaction.service';
+import { Category, Transaction } from '../../../../../features/finance/models';
+import { CategoryService } from '../../../../../features/finance/services/category.service';
+import { TransactionService } from '../../../../../features/finance/services/transaction.service';
 
 export interface HeaderSearchData {
   transactions: Transaction[];

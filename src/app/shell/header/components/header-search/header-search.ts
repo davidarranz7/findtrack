@@ -14,8 +14,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, finalize } from 'rxjs';
 
-import { AuthService } from '../../../features/auth/services/auth.service';
-import { Category, Transaction } from '../../../features/finance/models';
+import { AuthService } from '../../../../features/auth/services/auth.service';
+import { Category, Transaction } from '../../../../features/finance/models';
 import { HeaderSearchService } from './services/header-search.service';
 
 @Component({

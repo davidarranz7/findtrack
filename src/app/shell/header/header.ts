@@ -14,8 +14,8 @@ import { AuthService } from '../../features/auth/services/auth.service';
 import { PreferencesService } from '../../features/finance/services/preferences.service';
 import { ThemeService } from '../../features/finance/services/theme.service';
 import { ToastService } from '../../shared/ui/toast/toast.service';
-import { HeaderNotifications } from './header-notifications/header-notifications';
-import { HeaderSearch } from './header-search/header-search';
+import { HeaderNotifications } from './components/header-notifications/header-notifications';
+import { HeaderSearch } from './components/header-search/header-search';
 
 @Component({
   selector: 'app-header',
