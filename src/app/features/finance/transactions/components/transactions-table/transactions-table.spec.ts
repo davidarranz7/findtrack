@@ -1,9 +1,9 @@
 import { computed, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Category, Transaction } from '../../models';
-import { TransactionsFiltersService } from '../services/transactions-filters';
-import { TransactionsStateService } from '../services/transactions-state';
+import { Category, Transaction } from '../../../models';
+import { TransactionsFiltersService } from '../../services/transactions-filters';
+import { TransactionsStateService } from '../../services/transactions-state';
 import { TransactionsTable } from './transactions-table';
 
 describe('TransactionsTable', () => {

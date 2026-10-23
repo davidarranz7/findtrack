@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
-import { TransactionsFiltersService } from '../services/transactions-filters';
-import { TransactionsStateService } from '../services/transactions-state';
-import { TransactionsSummaryService } from '../services/transactions-summary';
+import { TransactionsFiltersService } from '../../services/transactions-filters';
+import { TransactionsStateService } from '../../services/transactions-state';
+import { TransactionsSummaryService } from '../../services/transactions-summary';
 import { TransactionsSummary } from './transactions-summary';
 
 describe('TransactionsSummary', () => {

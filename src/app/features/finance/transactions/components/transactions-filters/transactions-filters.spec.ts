@@ -1,10 +1,10 @@
 import { computed, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Category, Transaction } from '../../models';
-import { TransactionsFiltersService } from '../services/transactions-filters';
-import { TransactionsStateService } from '../services/transactions-state';
-import { TransactionsSummaryService } from '../services/transactions-summary';
+import { Category, Transaction } from '../../../models';
+import { TransactionsFiltersService } from '../../services/transactions-filters';
+import { TransactionsStateService } from '../../services/transactions-state';
+import { TransactionsSummaryService } from '../../services/transactions-summary';
 import { TransactionsFilters } from './transactions-filters';
 
 describe('TransactionsFilters', () => {

@@ -10,9 +10,9 @@ import { TransactionsFiltersService } from './services/transactions-filters';
 import { TransactionsStateService } from './services/transactions-state';
 import { TransactionsSummaryService } from './services/transactions-summary';
 import { TransactionForm } from './transaction-form/transaction-form';
-import { TransactionsFilters } from './transactions-filters/transactions-filters';
-import { TransactionsSummary } from './transactions-summary/transactions-summary';
-import { TransactionsTable } from './transactions-table/transactions-table';
+import { TransactionsFilters } from './components/transactions-filters/transactions-filters';
+import { TransactionsSummary } from './components/transactions-summary/transactions-summary';
+import { TransactionsTable } from './components/transactions-table/transactions-table';
 import { getTransactionCategoryName } from './utils/transaction-category.utils';
 import { formatTransactionAmount, formatTransactionDate } from './utils/transaction-display.utils';
 

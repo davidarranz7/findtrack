@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 
-import { Transaction } from '../../models';
-import { TransactionsFiltersService } from '../services/transactions-filters';
-import { TransactionsStateService } from '../services/transactions-state';
-import { getTransactionCategoryName } from '../utils/transaction-category.utils';
+import { Transaction } from '../../../models';
+import { TransactionsFiltersService } from '../../services/transactions-filters';
+import { TransactionsStateService } from '../../services/transactions-state';
+import { getTransactionCategoryName } from '../../utils/transaction-category.utils';
 import {
   formatTransactionAmount,
   formatTransactionDate,
   getPaymentMethodIcon,
   getPaymentMethodLabel,
-} from '../utils/transaction-display.utils';
+} from '../../utils/transaction-display.utils';
 
 @Component({
   selector: 'app-transactions-table',
