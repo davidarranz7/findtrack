@@ -16,8 +16,8 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 
 import { AuthService } from '../../features/auth/services/auth.service';
-import { MobileLoginSplash } from '../../features/auth/mobile-login-splash/mobile-login-splash';
-import { MobileLoginSplashService } from '../../features/auth/mobile-login-splash/services/mobile-login-splash.service';
+import { MobileLoginSplash } from '../../features/auth/components/mobile-login-splash/mobile-login-splash';
+import { MobileLoginSplashService } from '../../features/auth/components/mobile-login-splash/services/mobile-login-splash.service';
 import { PreferencesService } from '../../features/finance/services/preferences.service';
 import { ThemeService } from '../../features/finance/services/theme.service';
 import { Toast } from '../../shared/ui/toast/toast';

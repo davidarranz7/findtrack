@@ -12,7 +12,7 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize, forkJoin, timer } from 'rxjs';
 
 import { AppBrand } from '../../../shared/app-brand/app-brand';
-import { AuthBackground } from '../auth-background/auth-background';
+import { AuthBackground } from '../components/auth-background/auth-background';
 import { AuthService } from '../services/auth.service';
 import { passwordsMatchValidator } from '../validators/passwords-match.validator';
 import { RegisterAvailabilityService } from './services/register-availability';

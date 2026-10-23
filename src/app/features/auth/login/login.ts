@@ -4,9 +4,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { AppBrand } from '../../../shared/app-brand/app-brand';
-import { AuthBackground } from '../auth-background/auth-background';
+import { AuthBackground } from '../components/auth-background/auth-background';
 import { AuthService } from '../services/auth.service';
-import { MobileLoginSplashService } from '../mobile-login-splash/services/mobile-login-splash.service';
+import { MobileLoginSplashService } from '../components/mobile-login-splash/services/mobile-login-splash.service';
 
 type LoginView = 'remembered-account' | 'remembered-password' | 'credentials';
 
