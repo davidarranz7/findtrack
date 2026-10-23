@@ -1,9 +1,9 @@
 import { computed, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Budget, Category, Transaction } from '../../models';
-import { BudgetAnalysisService } from '../../services/budget-analysis.service';
-import { BudgetsStateService } from '../services/budgets-state';
+import { Budget, Category, Transaction } from '../../../models';
+import { BudgetAnalysisService } from '../../../services/budget-analysis.service';
+import { BudgetsStateService } from '../../services/budgets-state';
 import { BudgetsList } from './budgets-list';
 
 describe('BudgetsList', () => {

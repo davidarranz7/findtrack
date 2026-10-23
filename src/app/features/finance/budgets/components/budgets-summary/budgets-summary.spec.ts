@@ -1,10 +1,10 @@
 import { signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Budget, Category, Transaction } from '../../models';
-import { BudgetAnalysisService } from '../../services/budget-analysis.service';
-import { BudgetsStateService } from '../services/budgets-state';
-import { formatBudgetCurrency } from '../utils/budget-format.utils';
+import { Budget, Category, Transaction } from '../../../models';
+import { BudgetAnalysisService } from '../../../services/budget-analysis.service';
+import { BudgetsStateService } from '../../services/budgets-state';
+import { formatBudgetCurrency } from '../../utils/budget-format.utils';
 import { BudgetsSummary } from './budgets-summary';
 
 describe('BudgetsSummary', () => {

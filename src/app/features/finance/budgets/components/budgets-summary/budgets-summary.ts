@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
-import { BudgetAnalysisService } from '../../services/budget-analysis.service';
-import { BudgetsStateService } from '../services/budgets-state';
+import { BudgetAnalysisService } from '../../../services/budget-analysis.service';
+import { BudgetsStateService } from '../../services/budgets-state';
 import {
   formatBudgetCurrency,
   formatBudgetMonth,
   formatBudgetPercentage,
-} from '../utils/budget-format.utils';
+} from '../../utils/budget-format.utils';
 
 @Component({
   selector: 'app-budgets-summary',

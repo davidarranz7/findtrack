@@ -12,10 +12,10 @@ import { finalize, Observable } from 'rxjs';
 import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog';
 import { PageHeader } from '../../../shared/ui/page-header/page-header';
 import { Budget } from '../models';
-import { BudgetForm, BudgetFormValue } from './budget-form/budget-form';
-import { BudgetsList } from './budgets-list/budgets-list';
+import { BudgetForm, BudgetFormValue } from './components/budget-form/budget-form';
+import { BudgetsList } from './components/budgets-list/budgets-list';
 import { BudgetsStateService } from './services/budgets-state';
-import { BudgetsSummary } from './budgets-summary/budgets-summary';
+import { BudgetsSummary } from './components/budgets-summary/budgets-summary';
 import { formatBudgetMonth } from './utils/budget-format.utils';
 
 @Component({

@@ -9,7 +9,7 @@ import { Budget, Category, Transaction } from '../models';
 import { BudgetService } from '../services/budget.service';
 import { CategoryService } from '../services/category.service';
 import { TransactionService } from '../services/transaction.service';
-import { BudgetForm } from './budget-form/budget-form';
+import { BudgetForm } from './components/budget-form/budget-form';
 import { BudgetsStateService } from './services/budgets-state';
 import { Budgets } from './budgets';
 

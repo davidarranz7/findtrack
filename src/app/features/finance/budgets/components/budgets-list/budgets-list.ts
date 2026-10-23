@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 
-import { Budget, Category } from '../../models';
-import { BudgetAnalysisService } from '../../services/budget-analysis.service';
-import { BudgetsStateService } from '../services/budgets-state';
+import { Budget, Category } from '../../../models';
+import { BudgetAnalysisService } from '../../../services/budget-analysis.service';
+import { BudgetsStateService } from '../../services/budgets-state';
 import {
   formatBudgetCurrency,
   formatBudgetMonth,
   formatBudgetPercentage,
-} from '../utils/budget-format.utils';
+} from '../../utils/budget-format.utils';
 
 type BudgetListStatus = 'normal' | 'warning' | 'exceeded';
 
