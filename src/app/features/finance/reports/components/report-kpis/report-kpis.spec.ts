@@ -1,8 +1,8 @@
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReportAnalysisService } from '../services/report-analysis';
-import { ReportStateService } from '../services/report-state';
+import { ReportAnalysisService } from '../../services/report-analysis';
+import { ReportStateService } from '../../services/report-state';
 import { ReportKpis } from './report-kpis';
 
 describe('ReportKpis', () => {

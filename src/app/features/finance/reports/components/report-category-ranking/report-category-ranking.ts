@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { ReportAnalysisService } from '../services/report-analysis';
-import { ReportChartDataService } from '../services/report-chart-data';
-import { ReportStateService } from '../services/report-state';
+import { ReportAnalysisService } from '../../services/report-analysis';
+import { ReportChartDataService } from '../../services/report-chart-data';
+import { ReportStateService } from '../../services/report-state';
 
 @Component({
   selector: 'app-report-category-ranking',

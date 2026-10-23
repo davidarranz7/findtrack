@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { ReportAnalysisService } from '../services/report-analysis';
-import { ReportChartDataService } from '../services/report-chart-data';
+import { ReportAnalysisService } from '../../services/report-analysis';
+import { ReportChartDataService } from '../../services/report-chart-data';
 
 @Component({
   selector: 'app-report-summary',

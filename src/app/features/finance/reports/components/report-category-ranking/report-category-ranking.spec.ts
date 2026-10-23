@@ -1,9 +1,9 @@
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReportAnalysisService } from '../services/report-analysis';
-import { ReportChartDataService } from '../services/report-chart-data';
-import { ReportStateService } from '../services/report-state';
+import { ReportAnalysisService } from '../../services/report-analysis';
+import { ReportChartDataService } from '../../services/report-chart-data';
+import { ReportStateService } from '../../services/report-state';
 import { ReportCategoryRanking } from './report-category-ranking';
 
 describe('ReportCategoryRanking', () => {
