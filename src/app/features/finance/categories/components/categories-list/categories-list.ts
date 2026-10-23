@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 
-import { Category } from '../../models';
-import { CategoriesStateService } from '../services/categories-state';
-import { getCategoryIconClass } from '../utils/category-icon.utils';
+import { Category } from '../../../models';
+import { CategoriesStateService } from '../../services/categories-state';
+import { getCategoryIconClass } from '../../utils/category-icon.utils';
 
 @Component({
   selector: 'app-categories-list',

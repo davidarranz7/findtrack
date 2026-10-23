@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { CategoriesStateService } from '../services/categories-state';
+import { CategoriesStateService } from '../../services/categories-state';
 
 @Component({
   selector: 'app-categories-summary',

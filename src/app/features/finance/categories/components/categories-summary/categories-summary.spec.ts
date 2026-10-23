@@ -1,7 +1,7 @@
 import { computed, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CategoriesStateService } from '../services/categories-state';
+import { CategoriesStateService } from '../../services/categories-state';
 import { CategoriesSummary } from './categories-summary';
 
 describe('CategoriesSummary', () => {

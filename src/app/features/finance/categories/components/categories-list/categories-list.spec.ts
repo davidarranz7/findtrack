@@ -1,8 +1,8 @@
 import { computed, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Category, Transaction } from '../../models';
-import { CategoriesStateService } from '../services/categories-state';
+import { Category, Transaction } from '../../../models';
+import { CategoriesStateService } from '../../services/categories-state';
 import { CategoriesList } from './categories-list';
 
 describe('CategoriesList', () => {

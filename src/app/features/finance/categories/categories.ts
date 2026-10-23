@@ -13,9 +13,9 @@ import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog'
 import { PageHeader } from '../../../shared/ui/page-header/page-header';
 import { ToastService } from '../../../shared/ui/toast/toast.service';
 import { Category } from '../models';
-import { CategoryForm, CategoryFormValue } from './category-form/category-form';
-import { CategoriesList } from './categories-list/categories-list';
-import { CategoriesSummary } from './categories-summary/categories-summary';
+import { CategoryForm, CategoryFormValue } from './components/category-form/category-form';
+import { CategoriesList } from './components/categories-list/categories-list';
+import { CategoriesSummary } from './components/categories-summary/categories-summary';
 import { CategoryDeletionService } from './services/category-deletion';
 import { CategoriesStateService } from './services/categories-state';
 import { getCategoryIconClass } from './utils/category-icon.utils';

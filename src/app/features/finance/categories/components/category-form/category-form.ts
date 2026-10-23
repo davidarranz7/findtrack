@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { Category } from '../../models';
+import { Category } from '../../../models';
 
 export interface CategoryFormValue {
   name: string;

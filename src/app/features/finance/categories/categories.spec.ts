@@ -11,7 +11,7 @@ import { BudgetService } from '../services/budget.service';
 import { CategoryService } from '../services/category.service';
 import { TransactionService } from '../services/transaction.service';
 import { CategoriesStateService } from './services/categories-state';
-import { CategoryForm } from './category-form/category-form';
+import { CategoryForm } from './components/category-form/category-form';
 import { Categories } from './categories';
 
 describe('Categories', () => {
