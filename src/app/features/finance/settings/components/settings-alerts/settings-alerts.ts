@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { SettingsPreferencesService } from '../services/settings-preferences';
+import { SettingsPreferencesService } from '../../services/settings-preferences';
 
 @Component({
-  selector: 'app-settings-preferences',
+  selector: 'app-settings-alerts',
   imports: [ReactiveFormsModule],
-  templateUrl: './settings-preferences.html',
-  styleUrl: './settings-preferences.scss',
+  templateUrl: './settings-alerts.html',
+  styleUrl: './settings-alerts.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsPreferences {
+export class SettingsAlerts {
   protected readonly preferences = inject(SettingsPreferencesService);
 }

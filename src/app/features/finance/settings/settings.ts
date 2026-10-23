@@ -17,9 +17,9 @@ import { PreferencesService } from '../services/preferences.service';
 import { SettingsProfileService } from './services/settings-profile';
 import { SettingsPreferencesService } from './services/settings-preferences';
 import { SettingsPasswordService } from './services/settings-password';
-import { SettingsProfile } from './settings-profile/settings-profile';
-import { SettingsPreferences } from './settings-preferences/settings-preferences';
-import { SettingsAlerts } from './settings-alerts/settings-alerts';
+import { SettingsProfile } from './components/settings-profile/settings-profile';
+import { SettingsPreferences } from './components/settings-preferences/settings-preferences';
+import { SettingsAlerts } from './components/settings-alerts/settings-alerts';
 
 @Component({
   selector: 'app-settings',

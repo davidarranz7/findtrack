@@ -2,10 +2,10 @@ import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
-import { AuthService } from '../../../auth/services/auth.service';
-import { PreferencesService } from '../../services/preferences.service';
-import { SettingsPreferencesService } from '../services/settings-preferences';
-import { UserPreferences } from '../user-preferences';
+import { AuthService } from '../../../../auth/services/auth.service';
+import { PreferencesService } from '../../../services/preferences.service';
+import { SettingsPreferencesService } from '../../services/settings-preferences';
+import { UserPreferences } from '../../user-preferences';
 import { SettingsPreferences } from './settings-preferences';
 
 describe('SettingsPreferences', () => {

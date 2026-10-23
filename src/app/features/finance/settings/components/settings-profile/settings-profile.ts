@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { SettingsProfileService } from '../services/settings-profile';
+import { SettingsProfileService } from '../../services/settings-profile';
 import { SettingsPassword } from '../settings-password/settings-password';
 
 @Component({

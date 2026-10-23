@@ -2,10 +2,10 @@ import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
-import { AuthService } from '../../../auth/services/auth.service';
-import { SettingsPasswordService } from '../services/settings-password';
-import { SettingsProfileService } from '../services/settings-profile';
+import { ToastService } from '../../../../../shared/ui/toast/toast.service';
+import { AuthService } from '../../../../auth/services/auth.service';
+import { SettingsPasswordService } from '../../services/settings-password';
+import { SettingsProfileService } from '../../services/settings-profile';
 import { SettingsProfile } from './settings-profile';
 
 describe('SettingsProfile', () => {

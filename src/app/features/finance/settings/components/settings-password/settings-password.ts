@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { SettingsPasswordService } from '../services/settings-password';
+import { SettingsPasswordService } from '../../services/settings-password';
 
 @Component({
   selector: 'app-settings-password',

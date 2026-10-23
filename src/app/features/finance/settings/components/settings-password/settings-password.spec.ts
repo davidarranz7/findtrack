@@ -2,9 +2,9 @@ import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of, throwError } from 'rxjs';
 
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
-import { AuthService } from '../../../auth/services/auth.service';
-import { SettingsPasswordService } from '../services/settings-password';
+import { ToastService } from '../../../../../shared/ui/toast/toast.service';
+import { AuthService } from '../../../../auth/services/auth.service';
+import { SettingsPasswordService } from '../../services/settings-password';
 import { SettingsPassword } from './settings-password';
 
 describe('SettingsPassword', () => {
